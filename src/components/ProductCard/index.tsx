@@ -3,6 +3,7 @@ import Layout from "./layout";
 import { BsX, BsPencil, BsSave, BsTrash } from "@qwikest/icons/bootstrap";
 import type { ProductCardPropsType } from "~/types";
 import { $ } from "@builder.io/qwik";
+import { Form } from "@builder.io/qwik-city";
 
 export default component$<ProductCardPropsType>(({ product, handleSave }) => {
   const imageStyles = {
@@ -75,7 +76,7 @@ export default component$<ProductCardPropsType>(({ product, handleSave }) => {
       </div>
 
       {editing.value ? (
-        <form q:slot="brand" class="text-center" onSubmit$={handleSubmit}>
+        <Form q:slot="brand" class="text-center" onSubmit$={handleSubmit}>
           <input
             name="brand"
             class="font-underdog text-subtitle text-center text-title shadowing rounded"
@@ -84,7 +85,7 @@ export default component$<ProductCardPropsType>(({ product, handleSave }) => {
               (brand.value = (e.target as HTMLInputElement).value)
             }
           />
-        </form>
+        </Form>
       ) : (
         <h1 q:slot="brand" class="text-center">
           {product.brand}
