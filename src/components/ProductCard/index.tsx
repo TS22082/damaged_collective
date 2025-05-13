@@ -1,6 +1,6 @@
 import { component$, useSignal } from "@builder.io/qwik";
 import Layout from "./layout";
-import { BsCart, BsPencil, BsSave, BsTrash } from "@qwikest/icons/bootstrap";
+import { BsX, BsPencil, BsSave, BsTrash } from "@qwikest/icons/bootstrap";
 
 type ProductCardProps = {
   product: {
@@ -8,9 +8,10 @@ type ProductCardProps = {
     brand: string;
     img: string;
   };
+  handleSave: any;
 };
 
-export default component$<ProductCardProps>(({ product }) => {
+export default component$<ProductCardProps>(({ product, handleSave }) => {
   const imageStyles = {
     height: "600px",
     backgroundImage: `url(${product.img})`,
@@ -25,39 +26,56 @@ export default component$<ProductCardProps>(({ product }) => {
 
   const editing = useSignal(false);
 
+  const iconStyles = {
+    transform: "translateY(1px)",
+  };
+
+  const brand = useSignal(product.brand);
+
   return (
     <Layout>
       <div q:slot="image" style={imageStyles}>
         {editing.value ? (
           <button
             class="icon-btn-base b-green"
-            onClick$={() => {
+            onClick$={async () => {
+              await handleSave({ ...product, brand: brand.value });
               editing.value = false;
             }}
           >
-            <BsSave />
+            <BsSave style={iconStyles} /> Save
           </button>
         ) : (
           <button
             class="icon-btn-base b-orange"
-            onClick$={() => {
-              editing.value = true;
-            }}
+            onClick$={() => (editing.value = true)}
           >
-            <BsPencil />
+            <BsPencil style={iconStyles} /> Edit
           </button>
         )}
 
-        <button class="icon-btn-base b-red">
-          <BsTrash />
-        </button>
+        {editing.value ? (
+          <button
+            onClick$={() => (editing.value = false)}
+            class="icon-btn-base b-red"
+          >
+            <BsX style={iconStyles} /> Cancel
+          </button>
+        ) : (
+          <button class="icon-btn-base b-red">
+            <BsTrash style={iconStyles} /> Delete
+          </button>
+        )}
       </div>
-      {!editing.value ? "true" : "false"}
+
       {editing.value ? (
         <form q:slot="brand" class="text-center">
           <input
-            class="font-underdog text-subtitle text-center text-title"
-            value={product.brand}
+            class="font-underdog text-subtitle text-center text-title shadowing rounded"
+            value={brand.value}
+            onInput$={(e) =>
+              (brand.value = (e.target as HTMLInputElement).value)
+            }
           />
         </form>
       ) : (

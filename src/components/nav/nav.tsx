@@ -3,7 +3,7 @@ import { Link } from "@builder.io/qwik-city";
 
 export default component$(() => {
   const styles = {
-    nav: "h-30v flex flex-column justify-center items-center bg-dark",
+    nav: "h-50v flex flex-column justify-center items-center bg-dark",
     linkSection: "flex",
     link: "style-none text-light",
   };

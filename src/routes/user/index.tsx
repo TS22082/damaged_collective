@@ -1,4 +1,4 @@
-import { DocumentHead } from "@builder.io/qwik-city";
+import type { DocumentHead } from "@builder.io/qwik-city";
 import { component$ } from "@builder.io/qwik";
 
 export default component$(() => {
@@ -11,7 +11,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Home",
+  title: "User",
   meta: [
     {
       name: "User page",
