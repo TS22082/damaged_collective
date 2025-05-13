@@ -1,17 +1,10 @@
 import { component$, useSignal } from "@builder.io/qwik";
 import Layout from "./layout";
 import { BsX, BsPencil, BsSave, BsTrash } from "@qwikest/icons/bootstrap";
+import type { ProductCardPropsType } from "~/types";
+import { $ } from "@builder.io/qwik";
 
-type ProductCardProps = {
-  product: {
-    _id: string;
-    brand: string;
-    img: string;
-  };
-  handleSave: any;
-};
-
-export default component$<ProductCardProps>(({ product, handleSave }) => {
+export default component$<ProductCardPropsType>(({ product, handleSave }) => {
   const imageStyles = {
     height: "600px",
     backgroundImage: `url(${product.img})`,
@@ -31,6 +24,16 @@ export default component$<ProductCardProps>(({ product, handleSave }) => {
   };
 
   const brand = useSignal(product.brand);
+
+  const handleSubmit = $(async (e: Event) => {
+    try {
+      e.preventDefault();
+      await handleSave({ ...product, brand: brand.value });
+      editing.value = false;
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   return (
     <Layout>
@@ -56,7 +59,10 @@ export default component$<ProductCardProps>(({ product, handleSave }) => {
 
         {editing.value ? (
           <button
-            onClick$={() => (editing.value = false)}
+            onClick$={() => {
+              brand.value = product.brand;
+              editing.value = false;
+            }}
             class="icon-btn-base b-red"
           >
             <BsX style={iconStyles} /> Cancel
@@ -69,8 +75,9 @@ export default component$<ProductCardProps>(({ product, handleSave }) => {
       </div>
 
       {editing.value ? (
-        <form q:slot="brand" class="text-center">
+        <form q:slot="brand" class="text-center" onSubmit$={handleSubmit}>
           <input
+            name="brand"
             class="font-underdog text-subtitle text-center text-title shadowing rounded"
             value={brand.value}
             onInput$={(e) =>

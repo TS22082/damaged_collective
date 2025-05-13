@@ -5,6 +5,10 @@ body {
   padding: 0;
 }
 
+.overfolw-hidden {
+  overflow: hidden;
+}
+
 .font-underdog {
   font-family: "Underdog", system-ui;
 }

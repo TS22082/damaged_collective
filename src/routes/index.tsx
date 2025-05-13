@@ -1,11 +1,10 @@
 import { component$, useSignal } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
-import { routeLoader$, server$ } from "@builder.io/qwik-city";
+import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { getDb } from "~/db/mongodb";
 import ProductCard from "~/components/ProductCard";
-import Types from "mongodb";
 import { $ } from "@builder.io/qwik";
-import { Board } from "~/types";
+import type { BoardType } from "~/types";
+import { saveProduct } from "~/server/saveProduct";
 
 export const useProducts = routeLoader$(async () => {
   try {
@@ -24,24 +23,11 @@ export const useProducts = routeLoader$(async () => {
   return [];
 });
 
-export const saveProduct = server$(async (product: Board) => {
-  try {
-    const db = await getDb();
-    const filter = { _id: new Types.ObjectId(product._id as string) };
-    const update = { $set: { brand: product.brand, img: product.img } };
-    const result = await db.collection("products").updateOne(filter, update);
-
-    return result;
-  } catch (e) {
-    console.error(e);
-  }
-});
-
 export default component$(() => {
   const products = useProducts();
-  const localProducts = useSignal<Board[]>(products.value);
+  const localProducts = useSignal<BoardType[]>(products.value);
 
-  const handleSave = $(async (product: Board) => {
+  const handleSave = $(async (product: BoardType) => {
     await saveProduct(product);
 
     localProducts.value = products.value.map((p) => {
