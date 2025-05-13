@@ -12,6 +12,7 @@ export default component$(() => {
     { label: "Home", path: "/" },
     { label: "User", path: "/user" },
     { label: "Cart", path: "/cart" },
+    { label: "New Board", path: "/new_board" },
   ];
 
   return (

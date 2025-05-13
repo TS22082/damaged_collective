@@ -4,7 +4,7 @@ import { getDb } from "~/db/mongodb";
 import ProductCard from "~/components/ProductCard";
 import { $ } from "@builder.io/qwik";
 import type { BoardType } from "~/types";
-import { saveProduct } from "~/server/saveProduct";
+import { updateProduct } from "~/server/updateProduct";
 import { deleteProduct } from "~/server/deleteProduct";
 
 export const useProducts = routeLoader$(async () => {
@@ -29,7 +29,7 @@ export default component$(() => {
   const localProducts = useSignal<BoardType[]>(products.value);
 
   const handleSave = $(async (product: BoardType) => {
-    await saveProduct(product);
+    await updateProduct(product);
 
     localProducts.value = products.value.map((p) => {
       if (p._id === product._id) {

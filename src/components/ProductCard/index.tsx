@@ -75,7 +75,6 @@ export default component$<ProductCardPropsType>(
               onClick$={async () => {
                 if (window.confirm("Are you sure you want to delete?")) {
                   await handleDelete(product._id);
-                  editing.value = false;
                 }
               }}
               class="icon-btn-base b-red"
