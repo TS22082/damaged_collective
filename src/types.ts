@@ -11,4 +11,5 @@ export type ProductCardPropsType = {
     img: string;
   };
   handleSave: any;
+  handleDelete: any;
 };

@@ -5,6 +5,7 @@ import ProductCard from "~/components/ProductCard";
 import { $ } from "@builder.io/qwik";
 import type { BoardType } from "~/types";
 import { saveProduct } from "~/server/saveProduct";
+import { deleteProduct } from "~/server/deleteProduct";
 
 export const useProducts = routeLoader$(async () => {
   try {
@@ -39,6 +40,11 @@ export default component$(() => {
     });
   });
 
+  const handleDelete = $(async (id: string) => {
+    await deleteProduct(id);
+    localProducts.value = products.value.filter((p) => p._id !== id);
+  });
+
   return (
     <>
       <div class="flex justify-center flex-wrap gap-2 mt-2">
@@ -47,6 +53,7 @@ export default component$(() => {
             key={product._id}
             product={product}
             handleSave={handleSave}
+            handleDelete={handleDelete}
           />
         ))}
       </div>
