@@ -35,7 +35,7 @@ export default component$<ProductCardPropsType>(
       const formState = track(() => updateItem.value);
 
       if (formState?.success === true) {
-        handleUiUpdate(product);
+        handleUiUpdate({ ...product, brand: brand.value });
         editing.value = false;
       }
     });
