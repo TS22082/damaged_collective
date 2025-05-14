@@ -1,9 +1,4 @@
-import {
-  component$,
-  useSignal,
-  useTask$,
-  useVisibleTask$,
-} from "@builder.io/qwik";
+import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 import Layout from "./layout";
 import { BsX, BsPencil, BsSave, BsTrash } from "@qwikest/icons/bootstrap";
 import type { ProductCardPropsType } from "~/types";
