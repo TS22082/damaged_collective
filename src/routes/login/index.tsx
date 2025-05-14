@@ -10,7 +10,7 @@ export default component$(() => {
       <Form action={signIn}>
         <input type="hidden" name="providerId" value="github" />
         <input type="hidden" name="options.redirectTo" value="/" />
-        <button>Sign In</button>
+        <button>Sign In With Github</button>
       </Form>
     </>
   );

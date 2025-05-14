@@ -1,12 +1,16 @@
-import { component$, useSignal } from "@builder.io/qwik";
+import {
+  component$,
+  useSignal,
+  useTask$,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import Layout from "./layout";
 import { BsX, BsPencil, BsSave, BsTrash } from "@qwikest/icons/bootstrap";
 import type { ProductCardPropsType } from "~/types";
-import { $ } from "@builder.io/qwik";
 import { Form } from "@builder.io/qwik-city";
 
 export default component$<ProductCardPropsType>(
-  ({ product, handleSave, handleDelete }) => {
+  ({ product, handleUiUpdate, handleDelete, updateItem }) => {
     const imageStyles = {
       height: "600px",
       backgroundImage: `url(${product.img})`,
@@ -27,13 +31,12 @@ export default component$<ProductCardPropsType>(
 
     const brand = useSignal(product.brand);
 
-    const handleSubmit = $(async (e: Event) => {
-      try {
-        e.preventDefault();
-        await handleSave({ ...product, brand: brand.value });
+    useTask$(({ track }) => {
+      const formState = track(() => updateItem.value);
+
+      if (formState?.success === true) {
+        handleUiUpdate(product);
         editing.value = false;
-      } catch (error) {
-        console.error(error);
       }
     });
 
@@ -43,11 +46,8 @@ export default component$<ProductCardPropsType>(
           {editing.value ? (
             <button
               class="icon-btn-base b-green"
-              onClick$={async () => {
-                if (brand.value === product.brand) return;
-                await handleSave({ ...product, brand: brand.value });
-                editing.value = false;
-              }}
+              type="submit"
+              form="edit-form"
             >
               <BsSave style={iconStyles} /> Save
             </button>
@@ -85,7 +85,13 @@ export default component$<ProductCardPropsType>(
         </div>
 
         {editing.value ? (
-          <Form q:slot="brand" class="text-center" onSubmit$={handleSubmit}>
+          <Form
+            q:slot="brand"
+            class="text-center"
+            id="edit-form"
+            action={updateItem}
+          >
+            <input type="hidden" name="_id" value={product._id} />
             <input
               name="brand"
               class="font-underdog text-subtitle text-center text-title shadowing rounded"

@@ -4,5 +4,11 @@ import GitHub from "@auth/qwik/providers/github";
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   () => ({
     providers: [GitHub],
+    callbacks: {
+      signIn: (args) => {
+        console.log("signing in", args);
+        return true;
+      },
+    },
   })
 );

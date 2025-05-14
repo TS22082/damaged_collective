@@ -1,11 +1,16 @@
 import { component$, useSignal } from "@builder.io/qwik";
-import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
+import {
+  type JSONObject,
+  type DocumentHead,
+  routeAction$,
+  routeLoader$,
+} from "@builder.io/qwik-city";
 import { getDb } from "~/db/mongodb";
 import ProductCard from "~/components/ProductCard";
 import { $ } from "@builder.io/qwik";
 import type { BoardType } from "~/types";
-import { updateProduct } from "~/server/updateProduct";
 import { deleteProduct } from "~/server/deleteProduct";
+import Types from "mongodb";
 
 export const useProducts = routeLoader$(async () => {
   try {
@@ -24,17 +29,30 @@ export const useProducts = routeLoader$(async () => {
   return [];
 });
 
+export const useUpdateDbItem = routeAction$(async (data: JSONObject) => {
+  try {
+    const db = await getDb();
+    const filter = { _id: new Types.ObjectId(data._id as string) };
+    const update = { $set: { brand: data.brand } };
+    await db.collection("products").updateOne(filter, update);
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 export default component$(() => {
   const products = useProducts();
   const localProducts = useSignal<BoardType[]>(products.value);
+  const handleUpdate = useUpdateDbItem();
 
-  const handleSave = $(async (product: BoardType) => {
-    await updateProduct(product);
-
+  const handleUiUpdate = $((product: BoardType) => {
     localProducts.value = products.value.map((p) => {
       if (p._id === product._id) {
-        p.brand = product.brand;
-        p.img = product.img;
+        return {
+          ...p,
+          brand: product.brand,
+        };
       }
       return p;
     });
@@ -52,7 +70,8 @@ export default component$(() => {
           <ProductCard
             key={product._id}
             product={product}
-            handleSave={handleSave}
+            handleUiUpdate={handleUiUpdate}
+            updateItem={handleUpdate}
             handleDelete={handleDelete}
           />
         ))}

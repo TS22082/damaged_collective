@@ -10,6 +10,7 @@ export type ProductCardPropsType = {
     brand: string;
     img: string;
   };
-  handleSave: any;
+  handleUiUpdate: any;
   handleDelete: any;
+  updateItem: any;
 };

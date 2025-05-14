@@ -7,7 +7,7 @@ let db: Db | null = null;
 export async function getDb(): Promise<Db> {
   if (db) return db;
 
-  const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/damaged";
+  const uri = import.meta.env.PUBLIC_MONGO_URI;
   if (!uri) throw new Error("Missing URI");
 
   client = new MongoClient(uri);
