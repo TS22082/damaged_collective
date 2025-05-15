@@ -12,5 +12,5 @@ export type ProductCardPropsType = {
   };
   handleUiUpdate: any;
   handleDelete: any;
-  updateItem: any;
+  handleUpdate: any;
 };

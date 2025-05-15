@@ -5,7 +5,7 @@ import type { ProductCardPropsType } from "~/types";
 import { Form } from "@builder.io/qwik-city";
 
 export default component$<ProductCardPropsType>(
-  ({ product, handleUiUpdate, handleDelete, updateItem }) => {
+  ({ product, handleUiUpdate, handleDelete, handleUpdate }) => {
     const imageStyles = {
       height: "600px",
       backgroundImage: `url(${product.img})`,
@@ -27,9 +27,9 @@ export default component$<ProductCardPropsType>(
     const brand = useSignal(product.brand);
 
     useTask$(({ track }) => {
-      const formState = track(() => updateItem.value);
+      const update = track(() => handleUpdate.value);
 
-      if (formState?.success === true) {
+      if (update?.success === true) {
         handleUiUpdate({ ...product, brand: brand.value });
         editing.value = false;
       }
@@ -84,7 +84,7 @@ export default component$<ProductCardPropsType>(
             q:slot="brand"
             class="text-center"
             id="edit-form"
-            action={updateItem}
+            action={handleUpdate}
           >
             <input type="hidden" name="_id" value={product._id} />
             <input

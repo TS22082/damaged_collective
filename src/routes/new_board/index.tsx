@@ -1,30 +1,44 @@
-import { component$, useSignal } from "@builder.io/qwik";
-import { Form, useNavigate } from "@builder.io/qwik-city";
-import { $ } from "@builder.io/qwik";
-import { createProduct } from "~/server/createProduct";
+import { component$, useSignal, useTask$ } from "@builder.io/qwik";
+import {
+  Form,
+  type JSONObject,
+  routeAction$,
+  useNavigate,
+} from "@builder.io/qwik-city";
+import { getDb } from "~/db/mongodb";
+
+export const useCreateProduct = routeAction$(async (data: JSONObject) => {
+  try {
+    const db = await getDb();
+    await db.collection("products").insertOne({ ...data, type: "board" });
+
+    return {
+      success: true,
+    };
+  } catch (e) {
+    console.error(e);
+  }
+});
 
 export default component$(() => {
   const nav = useNavigate();
-  const form = useSignal({ img: "", brand: "" });
+  const updateProduct = useCreateProduct();
 
-  const handleSubmit = $(async (e: Event) => {
-    try {
-      e.preventDefault();
-      await createProduct({
-        img: form.value.img,
-        brand: form.value.brand,
-      });
+  useTask$(({ track }) => {
+    const update = track(() => updateProduct.value);
+
+    if (update?.success === true) {
       nav("/");
-    } catch (error) {
-      console.error(error);
     }
   });
+
+  const form = useSignal({ img: "", brand: "" });
 
   return (
     <>
       <h1>New Board Page</h1>
       <div>This is the new board page</div>
-      <Form onSubmit$={handleSubmit}>
+      <Form action={updateProduct}>
         <label>Image</label>
         <input
           type="text"

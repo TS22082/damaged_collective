@@ -71,7 +71,7 @@ export default component$(() => {
             key={product._id}
             product={product}
             handleUiUpdate={handleUiUpdate}
-            updateItem={handleUpdate}
+            handleUpdate={handleUpdate}
             handleDelete={handleDelete}
           />
         ))}
