@@ -35,7 +35,7 @@ export default component$(() => {
     <>
       <h1>New Board Page</h1>
       <div>This is the new board page</div>
-      <Form action={updateProduct}>
+      <Form action={createProduct}>
         <label>Image</label>
         <input
           type="text"
