@@ -22,14 +22,11 @@ export const useCreateProduct = routeAction$(async (data: JSONObject) => {
 
 export default component$(() => {
   const nav = useNavigate();
-  const updateProduct = useCreateProduct();
+  const createProduct = useCreateProduct();
 
   useTask$(({ track }) => {
-    const update = track(() => updateProduct.value);
-
-    if (update?.success === true) {
-      nav("/");
-    }
+    const created = track(() => createProduct.value);
+    if (created?.success === true) nav("/");
   });
 
   const form = useSignal({ img: "", brand: "" });
