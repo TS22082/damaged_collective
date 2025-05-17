@@ -4,6 +4,8 @@ import {
   type DocumentHead,
   routeAction$,
   routeLoader$,
+  type RequestEventLoader,
+  RequestEventAction,
 } from "@builder.io/qwik-city";
 import { getDb } from "~/db/mongodb";
 import ProductCard from "~/components/ProductCard";
@@ -12,34 +14,40 @@ import type { BoardType } from "~/types";
 import { deleteProduct } from "~/server/deleteProduct";
 import Types from "mongodb";
 
-export const useProducts = routeLoader$(async () => {
-  try {
-    const db = await getDb();
-    const mongoProducts = await db.collection("products").find().toArray();
+export const useProducts = routeLoader$(
+  async (requestEvent: RequestEventLoader) => {
+    try {
+      const uri = requestEvent.env.get("MONGO_URI") || "";
+      const db = await getDb(uri);
+      const mongoProducts = await db.collection("products").find().toArray();
 
-    return mongoProducts.map((product) => ({
-      brand: product.brand,
-      img: product.img,
-      _id: product._id.toString(),
-    }));
-  } catch (e) {
-    console.error(e);
+      return mongoProducts.map((product) => ({
+        brand: product.brand,
+        img: product.img,
+        _id: product._id.toString(),
+      }));
+    } catch (e) {
+      console.error(e);
+    }
+
+    return [];
   }
+);
 
-  return [];
-});
-
-export const useUpdateDbItem = routeAction$(async (data: JSONObject) => {
-  try {
-    const db = await getDb();
-    const filter = { _id: new Types.ObjectId(data._id as string) };
-    const update = { $set: { brand: data.brand } };
-    await db.collection("products").updateOne(filter, update);
-    return { success: true };
-  } catch (error) {
-    console.error(error);
+export const useUpdateDbItem = routeAction$(
+  async (data: JSONObject, requestEvent: RequestEventAction) => {
+    try {
+      const uri = requestEvent.env.get("MONGO_URI") || "";
+      const db = await getDb(uri);
+      const filter = { _id: new Types.ObjectId(data._id as string) };
+      const update = { $set: { brand: data.brand } };
+      await db.collection("products").updateOne(filter, update);
+      return { success: true };
+    } catch (error) {
+      console.error(error);
+    }
   }
-});
+);
 
 export default component$(() => {
   const products = useProducts();

@@ -4,10 +4,8 @@ import { MongoClient } from "mongodb";
 let client: MongoClient | null = null;
 let db: Db | null = null;
 
-export async function getDb(): Promise<Db> {
+export async function getDb(uri: string): Promise<Db> {
   if (db) return db;
-
-  const uri = import.meta.env.PUBLIC_MONGO_URI;
   if (!uri) throw new Error("Missing URI");
 
   client = new MongoClient(uri);

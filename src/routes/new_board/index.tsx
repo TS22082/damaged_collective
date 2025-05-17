@@ -1,24 +1,28 @@
 import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 import {
-  Form,
   type JSONObject,
+  type RequestEventAction,
+  Form,
   routeAction$,
   useNavigate,
 } from "@builder.io/qwik-city";
 import { getDb } from "~/db/mongodb";
 
-export const useCreateProduct = routeAction$(async (data: JSONObject) => {
-  try {
-    const db = await getDb();
-    await db.collection("products").insertOne({ ...data, type: "board" });
+export const useCreateProduct = routeAction$(
+  async (data: JSONObject, requestEvent: RequestEventAction) => {
+    try {
+      const uri = requestEvent.env.get("MONGO_URI") || "";
+      const db = await getDb(uri);
+      await db.collection("products").insertOne({ ...data, type: "board" });
 
-    return {
-      success: true,
-    };
-  } catch (e) {
-    console.error(e);
+      return {
+        success: true,
+      };
+    } catch (e) {
+      console.error(e);
+    }
   }
-});
+);
 
 export default component$(() => {
   const nav = useNavigate();
