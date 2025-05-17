@@ -67,8 +67,12 @@ export default component$(() => {
   });
 
   const handleDelete = $(async (id: string) => {
-    await deleteProduct(id);
-    localProducts.value = products.value.filter((p) => p._id !== id);
+    try {
+      await deleteProduct(id);
+      localProducts.value = products.value.filter((p) => p._id !== id);
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   return (
