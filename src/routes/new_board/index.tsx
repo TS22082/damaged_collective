@@ -1,4 +1,4 @@
-import { Session } from "@auth/qwik";
+import { type Session } from "@auth/qwik";
 import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 import {
   type JSONObject,
