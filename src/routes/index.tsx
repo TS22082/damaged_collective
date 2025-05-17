@@ -2,10 +2,10 @@ import { component$, useSignal } from "@builder.io/qwik";
 import {
   type JSONObject,
   type DocumentHead,
+  type RequestEventLoader,
+  type RequestEventAction,
   routeAction$,
   routeLoader$,
-  type RequestEventLoader,
-  RequestEventAction,
 } from "@builder.io/qwik-city";
 import { getDb } from "~/db/mongodb";
 import ProductCard from "~/components/ProductCard";
@@ -92,8 +92,8 @@ export const head: DocumentHead = {
   title: "The Damaged Collective",
   meta: [
     {
-      name: "description",
-      content: "Qwik site description",
+      name: "Damaged Collective home page",
+      content: "We sell skater owned skateboarding products",
     },
   ],
 };
