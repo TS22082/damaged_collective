@@ -1,3 +1,4 @@
+import { Session } from "@auth/qwik";
 import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 import {
   type JSONObject,
@@ -11,6 +12,12 @@ import { getDb } from "~/db/mongodb";
 export const useCreateProduct = routeAction$(
   async (data: JSONObject, requestEvent: RequestEventAction) => {
     try {
+      const session: Session | null = requestEvent.sharedMap.get("session");
+
+      if (!session || session.user?.email !== "ts22082@gmail.com") {
+        return { success: false };
+      }
+
       const uri = requestEvent.env.get("MONGO_URI") || "";
       const db = await getDb(uri);
       await db.collection("products").insertOne({ ...data, type: "board" });

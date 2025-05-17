@@ -13,6 +13,7 @@ import { $ } from "@builder.io/qwik";
 import type { BoardType } from "~/types";
 import { deleteProduct } from "~/server/deleteProduct";
 import Types from "mongodb";
+import { type Session } from "@auth/qwik";
 
 export const useProducts = routeLoader$(
   async (requestEvent: RequestEventLoader) => {
@@ -38,6 +39,12 @@ export const useUpdateDbItem = routeAction$(
   async (data: JSONObject, requestEvent: RequestEventAction) => {
     try {
       const uri = requestEvent.env.get("MONGO_URI") || "";
+      const session: Session | null = requestEvent.sharedMap.get("session");
+
+      if (!session || session.user?.email !== "ts22082@gmail.com") {
+        return { success: false };
+      }
+
       const db = await getDb(uri);
       const filter = { _id: new Types.ObjectId(data._id as string) };
       const update = { $set: { brand: data.brand } };
