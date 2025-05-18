@@ -1,23 +1,18 @@
-import { type Session } from "@auth/qwik";
 import { component$, useSignal, useTask$ } from "@builder.io/qwik";
+import type { RequestEvent } from "@builder.io/qwik-city";
 import {
   type JSONObject,
   type RequestEventAction,
   Form,
   routeAction$,
   useNavigate,
+  validator$,
 } from "@builder.io/qwik-city";
 import { getDb } from "~/db/mongodb";
 
 export const useCreateProduct = routeAction$(
   async (data: JSONObject, requestEvent: RequestEventAction) => {
     try {
-      const session: Session | null = requestEvent.sharedMap.get("session");
-
-      if (!session || session.user?.email !== "ts22082@gmail.com") {
-        return { success: false };
-      }
-
       const uri = requestEvent.env.get("MONGO_URI") || "";
       const db = await getDb(uri);
       await db.collection("products").insertOne({ ...data, type: "board" });
@@ -28,7 +23,19 @@ export const useCreateProduct = routeAction$(
     } catch (e) {
       console.error(e);
     }
-  }
+  },
+  validator$((requestEvent: RequestEvent, data: any) => {
+    const session = requestEvent.sharedMap.get("session");
+    if (!session || session.user?.email !== "ts22082@gmail.com") {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    if (!data?.img || !data?.brand) {
+      return { success: false, error: "Missing data" };
+    }
+
+    return { success: true, data };
+  })
 );
 
 export default component$(() => {
