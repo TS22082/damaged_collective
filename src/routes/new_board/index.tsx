@@ -1,4 +1,4 @@
-import { component$, useSignal } from "@builder.io/qwik";
+import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 import type { RequestEvent } from "@builder.io/qwik-city";
 import {
   type JSONObject,
@@ -42,7 +42,10 @@ export default component$(() => {
   const nav = useNavigate();
   const createProduct = useCreateProduct();
 
-  if (createProduct.value?.success === true) nav("/");
+  useTask$(({ track }) => {
+    const created = track(() => createProduct.value);
+    if (created?.success === true) nav("/");
+  });
 
   const form = useSignal({ img: "", brand: "" });
 
