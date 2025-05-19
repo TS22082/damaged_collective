@@ -1,26 +1,23 @@
 import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
+import { navContainer, linkSection, navLink, titleLink } from "./nav.css";
 
 export default component$(() => {
-  const styles = {
-    nav: "h-50v flex flex-column justify-center items-center bg-dark",
-    linkSection: "flex",
-    link: "style-none text-light",
-  };
-
   const navItems = [
     { label: "Home", path: "/" },
+    { label: "New Board", path: "/new_board" },
     { label: "User", path: "/user" },
     { label: "Cart", path: "/cart" },
-    { label: "New Board", path: "/new_board" },
   ];
 
   return (
-    <nav class={styles.nav}>
-      <h1 class="text-title text-light">The Damaged Collective</h1>
-      <section class={styles.linkSection}>
+    <nav class={navContainer}>
+      <Link href="/" class={titleLink}>
+        The Damaged Collective
+      </Link>
+      <section class={linkSection}>
         {navItems.map((item) => (
-          <Link key={item.label} class={styles.link} href={item.path}>
+          <Link key={item.label} class={navLink} href={item.path}>
             {item.label}
           </Link>
         ))}
