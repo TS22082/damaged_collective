@@ -8,7 +8,7 @@ import {
   routeLoader$,
 } from "@builder.io/qwik-city";
 import { getDb } from "~/db/mongodb";
-import ProductCard from "~/components/ProductCard";
+import ProductCard from "~/components/product-card";
 import { $ } from "@builder.io/qwik";
 import type { BoardType } from "~/types";
 import { deleteProduct } from "~/server/deleteProduct";
