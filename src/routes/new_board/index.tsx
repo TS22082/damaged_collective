@@ -8,6 +8,7 @@ import {
   useNavigate,
   validator$,
 } from "@builder.io/qwik-city";
+import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 import { getDb } from "~/db/mongodb";
 
 export const useCreateProduct = routeAction$(
@@ -21,17 +22,17 @@ export const useCreateProduct = routeAction$(
         success: true,
       };
     } catch (e) {
-      console.error(e);
+      throw new ServerError(500, e);
     }
   },
   validator$((requestEvent: RequestEvent, data: any) => {
     const session = requestEvent.sharedMap.get("session");
     if (!session || session.user?.email !== "ts22082@gmail.com") {
-      return { success: false, error: "Unauthorized" };
+      throw new ServerError(401, "Unauthorized");
     }
 
     if (!data?.img || !data?.brand) {
-      return { success: false, error: "Missing data" };
+      throw new ServerError(400, "Missing required fields");
     }
 
     return { success: true, data };

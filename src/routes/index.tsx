@@ -15,6 +15,7 @@ import { deleteProduct } from "~/server/deleteProduct";
 import Types from "mongodb";
 import { type Session } from "@auth/qwik";
 import Stripe from "stripe";
+import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 
 export const useProducts = routeLoader$(
   async (requestEvent: RequestEventLoader) => {
@@ -29,7 +30,7 @@ export const useProducts = routeLoader$(
         _id: product._id.toString(),
       }));
     } catch (e) {
-      console.error(e);
+      throw new ServerError(500, e);
     }
 
     return [];
@@ -46,13 +47,15 @@ export const useStripeProducts = routeLoader$(
       const products = await stripe.products.list();
       return products.data;
     } catch (e) {
-      console.error(e);
+      throw new ServerError(500, e);
     }
 
     return [];
   }
 );
 
+// TODO: This needs a validator
+// TODO: THis neds to update an item in stripe
 export const useUpdateDbItem = routeAction$(
   async (data: JSONObject, requestEvent: RequestEventAction) => {
     try {
@@ -69,7 +72,7 @@ export const useUpdateDbItem = routeAction$(
       await db.collection("products").updateOne(filter, update);
       return { success: true };
     } catch (error) {
-      console.error(error);
+      throw new ServerError(500, error);
     }
   }
 );
