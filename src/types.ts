@@ -31,3 +31,9 @@ export type NavItemType = {
   path: string;
   icon: (props: IconProps) => JSXNode;
 };
+
+export type CartItem = { price_id: string; product_id: string; qty: number };
+
+export type CartState = {
+  items: CartItem[];
+};

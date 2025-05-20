@@ -1,7 +1,14 @@
-import { component$, Slot } from "@builder.io/qwik";
+import {
+  component$,
+  Slot,
+  useContextProvider,
+  useSignal,
+} from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
 import Nav from "~/components/nav/nav";
 import Footer from "~/components/footer/footer";
+import { CartContext } from "~/contexts/CartContext";
+import type { CartItem, CartState } from "~/types";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -15,6 +22,12 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 };
 
 export default component$(() => {
+  const cart = useSignal<CartState>({
+    items: [] as CartItem[],
+  });
+
+  useContextProvider(CartContext, cart);
+
   return (
     <>
       <Nav />
