@@ -12,7 +12,6 @@ import ProductCard from "~/components/product-card";
 import { $ } from "@builder.io/qwik";
 import type { StripeProductType, StripMetadataType } from "~/types";
 import { deleteProduct } from "~/routes/api/deleteProduct";
-import { type Session } from "@auth/qwik";
 import Stripe from "stripe";
 import {
   type RequestEvent,
