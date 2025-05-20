@@ -96,7 +96,9 @@ export default component$(() => {
             (form.value.name = (e.target as HTMLInputElement).value)
           }
         />
-        <button type="submit">Submit</button>
+        <button disabled={createProduct.isRunning} type="submit">
+          Submit
+        </button>
       </Form>
     </>
   );
