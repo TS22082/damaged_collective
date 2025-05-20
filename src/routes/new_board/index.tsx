@@ -21,13 +21,23 @@ export const useCreateProduct = routeAction$(
         }
       );
 
-      await stripe.products.create({
+      const product = await stripe.products.create({
         name: data.name as string,
         images: [data.img as string],
         metadata: {
           brand: data.brand as string,
           primaryImg: data.img as string,
         },
+      });
+
+      const price = await stripe.prices.create({
+        product: product.id as string,
+        currency: "usd",
+        unit_amount: 60.0 * 100,
+      });
+
+      await stripe.products.update(product.id as string, {
+        default_price: price.id as string,
       });
 
       return {

@@ -22,7 +22,10 @@ export const useStripeProducts = routeLoader$(
     });
 
     try {
-      const products = await stripe.products.list();
+      const products = await stripe.products.list({
+        limit: 100,
+        active: true,
+      });
 
       return products.data.map((product) => ({
         id: product.id as string,
@@ -59,7 +62,6 @@ export const useUpdateDbItem = routeAction$(
 
       return { success: true };
     } catch (error) {
-      console.log("This is the error", error);
       throw new ServerError(500, error);
     }
   }
