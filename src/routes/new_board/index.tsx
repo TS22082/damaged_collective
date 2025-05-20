@@ -49,6 +49,7 @@ export const useCreateProduct = routeAction$(
   },
   validator$((requestEvent: RequestEvent, data: any) => {
     const session = requestEvent.sharedMap.get("session");
+
     if (!session || session.user?.email !== "ts22082@gmail.com") {
       throw new ServerError(401, "Unauthorized");
     }

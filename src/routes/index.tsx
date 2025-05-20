@@ -6,6 +6,7 @@ import {
   type RequestEventAction,
   routeAction$,
   routeLoader$,
+  validator$,
 } from "@builder.io/qwik-city";
 import ProductCard from "~/components/product-card";
 import { $ } from "@builder.io/qwik";
@@ -13,7 +14,10 @@ import type { StripeProductType, StripMetadataType } from "~/types";
 import { deleteProduct } from "~/routes/api/deleteProduct";
 import { type Session } from "@auth/qwik";
 import Stripe from "stripe";
-import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
+import {
+  type RequestEvent,
+  ServerError,
+} from "@builder.io/qwik-city/middleware/request-handler";
 
 export const useStripeProducts = routeLoader$(
   async (requestEvent: RequestEventLoader) => {
@@ -40,16 +44,9 @@ export const useStripeProducts = routeLoader$(
   }
 );
 
-// TODO: This needs a validator
 export const useUpdateDbItem = routeAction$(
   async (data: JSONObject, requestEvent: RequestEventAction) => {
     try {
-      const session: Session | null = requestEvent.sharedMap.get("session");
-
-      if (!session || session.user?.email !== "ts22082@gmail.com") {
-        throw new ServerError(401, "Not authorized");
-      }
-
       const stripe = new Stripe(
         requestEvent.env.get("SECRET_STRIPE_KEY") || "",
         {
@@ -65,7 +62,27 @@ export const useUpdateDbItem = routeAction$(
     } catch (error) {
       throw new ServerError(500, error);
     }
-  }
+  },
+  validator$((requestEvent: RequestEvent, data: any) => {
+    const session = requestEvent.sharedMap.get("session");
+
+    if (!session || session.user?.email !== "ts22082@gmail.com") {
+      throw new ServerError(401, "Unauthorized");
+    }
+
+    if (!data.name || !data.id) {
+      throw new ServerError(400, "Missing name or id");
+    }
+
+    if (typeof data.name !== "string" || typeof data.id !== "string") {
+      throw new ServerError(400, "Invalid name or id");
+    }
+
+    return {
+      success: true,
+      data,
+    };
+  })
 );
 
 export default component$(() => {
