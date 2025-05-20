@@ -9,14 +9,26 @@ import {
   validator$,
 } from "@builder.io/qwik-city";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
-import { getDb } from "~/db/mongodb";
+import Stripe from "stripe";
 
 export const useCreateProduct = routeAction$(
   async (data: JSONObject, requestEvent: RequestEventAction) => {
     try {
-      const uri = requestEvent.env.get("MONGO_URI") || "";
-      const db = await getDb(uri);
-      await db.collection("products").insertOne({ ...data, type: "board" });
+      const stripe = new Stripe(
+        requestEvent.env.get("SECRET_STRIPE_KEY") || "",
+        {
+          apiVersion: "2025-04-30.basil",
+        }
+      );
+
+      await stripe.products.create({
+        name: data.name as string,
+        images: [data.img as string],
+        metadata: {
+          brand: data.brand as string,
+          primaryImg: data.img as string,
+        },
+      });
 
       return {
         success: true,
@@ -31,7 +43,7 @@ export const useCreateProduct = routeAction$(
       throw new ServerError(401, "Unauthorized");
     }
 
-    if (!data?.img || !data?.brand) {
+    if (!data?.img || !data?.name) {
       throw new ServerError(400, "Missing required fields");
     }
 
@@ -48,7 +60,7 @@ export default component$(() => {
     if (created?.success === true) nav("/");
   });
 
-  const form = useSignal({ img: "", brand: "" });
+  const form = useSignal({ img: "", name: "" });
 
   return (
     <>
@@ -67,10 +79,10 @@ export default component$(() => {
         <label>Brand</label>
         <input
           type="text"
-          name="brand"
-          value={form.value.brand}
+          name="name"
+          value={form.value.name}
           onInput$={(e) =>
-            (form.value.brand = (e.target as HTMLInputElement).value)
+            (form.value.name = (e.target as HTMLInputElement).value)
           }
         />
         <button type="submit">Submit</button>
