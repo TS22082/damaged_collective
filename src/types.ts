@@ -8,24 +8,22 @@ export type BoardType = {
 };
 
 export type ProductCardPropsType = {
-  product: {
-    _id: string;
-    brand: string;
-    img: string;
-  };
+  product: StripeProductType;
   handleUiUpdate: any;
   handleDelete: any;
   handleUpdate: any;
+};
+
+export type StripMetadataType = {
+  brand: string;
+  img: string;
 };
 
 export type StripeProductType = {
   id: string;
   name: string;
   images: string[];
-  metadata: {
-    brand: string;
-    img: string;
-  };
+  metadata: StripMetadataType;
 };
 
 export type NavItemType = {

@@ -8,7 +8,7 @@ export default component$<ProductCardPropsType>(
   ({ product, handleUiUpdate, handleDelete, handleUpdate }) => {
     const imageStyles = {
       height: "600px",
-      backgroundImage: `url(${product.img})`,
+      backgroundImage: `url(${product.images[0]})`,
       backgroundSize: "fill",
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
@@ -24,13 +24,13 @@ export default component$<ProductCardPropsType>(
       transform: "translateY(1px)",
     };
 
-    const brand = useSignal(product.brand);
+    const name = useSignal(product.name);
 
     useTask$(({ track }) => {
       const update = track(() => handleUpdate.value);
 
       if (update?.success === true) {
-        handleUiUpdate({ ...product, brand: brand.value });
+        handleUiUpdate({ ...product, name: name.value });
         editing.value = false;
       }
     });
@@ -58,7 +58,7 @@ export default component$<ProductCardPropsType>(
           {editing.value ? (
             <button
               onClick$={() => {
-                brand.value = product.brand;
+                name.value = product.name;
                 editing.value = false;
               }}
               class="icon-btn-base b-red"
@@ -69,7 +69,7 @@ export default component$<ProductCardPropsType>(
             <button
               onClick$={async () => {
                 if (window.confirm("Are you sure you want to delete?")) {
-                  await handleDelete(product._id);
+                  await handleDelete(product.id);
                 }
               }}
               class="icon-btn-base b-red"
@@ -81,24 +81,24 @@ export default component$<ProductCardPropsType>(
 
         {editing.value ? (
           <Form
-            q:slot="brand"
+            q:slot="name"
             class="text-center"
             id="edit-form"
             action={handleUpdate}
           >
-            <input type="hidden" name="_id" value={product._id} />
+            <input type="hidden" name="id" value={product.id} />
             <input
-              name="brand"
+              name="name"
               class="font-underdog text-subtitle text-center text-title shadowing rounded"
-              value={brand.value}
+              value={name.value}
               onInput$={(e) =>
-                (brand.value = (e.target as HTMLInputElement).value)
+                (name.value = (e.target as HTMLInputElement).value)
               }
             />
           </Form>
         ) : (
-          <h1 q:slot="brand" class="text-center">
-            {product.brand}
+          <h1 q:slot="name" class="text-center">
+            {product.name}
           </h1>
         )}
       </Layout>
