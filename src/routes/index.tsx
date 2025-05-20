@@ -1,4 +1,4 @@
-import { component$, useSignal } from "@builder.io/qwik";
+import { component$, useSignal, useTask$ } from "@builder.io/qwik";
 import {
   type JSONObject,
   type DocumentHead,
@@ -14,6 +14,7 @@ import type { BoardType } from "~/types";
 import { deleteProduct } from "~/server/deleteProduct";
 import Types from "mongodb";
 import { type Session } from "@auth/qwik";
+import Stripe from "stripe";
 
 export const useProducts = routeLoader$(
   async (requestEvent: RequestEventLoader) => {
@@ -27,6 +28,23 @@ export const useProducts = routeLoader$(
         img: product.img,
         _id: product._id.toString(),
       }));
+    } catch (e) {
+      console.error(e);
+    }
+
+    return [];
+  }
+);
+
+export const useStripeProducts = routeLoader$(
+  async (requestEvent: RequestEventLoader) => {
+    const stripe = new Stripe(requestEvent.env.get("SECRET_STRIPE_KEY") || "", {
+      apiVersion: "2025-04-30.basil",
+    });
+
+    try {
+      const products = await stripe.products.list();
+      return products.data;
     } catch (e) {
       console.error(e);
     }
@@ -58,8 +76,14 @@ export const useUpdateDbItem = routeAction$(
 
 export default component$(() => {
   const products = useProducts();
+  const stripeProducts = useStripeProducts();
   const localProducts = useSignal<BoardType[]>(products.value);
   const handleUpdate = useUpdateDbItem();
+
+  useTask$(() => {
+    // TODO: Need to change out "products" with stripeProducts across the app
+    console.log("Stripe products ==>", stripeProducts.value);
+  });
 
   const handleUiUpdate = $((product: BoardType) => {
     localProducts.value = products.value.map((p) => {

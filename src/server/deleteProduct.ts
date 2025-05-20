@@ -3,6 +3,8 @@ import { getDb } from "~/db/mongodb";
 import Types from "mongodb";
 import { Session } from "@auth/qwik";
 
+// TODO: Need this to delete items from stripe
+// TODO: Need to move this file to "routes/api"
 export const deleteProduct = server$(async function (id: string )  {
   try {
     const uri = this.env.get("MONGO_URI") || "";
