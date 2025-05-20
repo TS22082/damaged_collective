@@ -18,6 +18,16 @@ export type ProductCardPropsType = {
   handleUpdate: any;
 };
 
+export type StripeProductType = {
+  id: string;
+  name: string;
+  images: string[];
+  metadata: {
+    brand: string;
+    img: string;
+  };
+};
+
 export type NavItemType = {
   label: string;
   path: string;

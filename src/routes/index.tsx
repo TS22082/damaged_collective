@@ -63,7 +63,7 @@ export const useUpdateDbItem = routeAction$(
       const session: Session | null = requestEvent.sharedMap.get("session");
 
       if (!session || session.user?.email !== "ts22082@gmail.com") {
-        return { success: false };
+        throw new ServerError(401, "Not authorized");
       }
 
       const db = await getDb(uri);
