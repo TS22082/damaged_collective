@@ -3,7 +3,6 @@ import type { Session } from "@auth/qwik";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 import Stripe from "stripe";
 
-// TODO: Need to move this file to "routes/api"
 export const deleteProduct = server$(async function (id: string) {
   try {
     const session: Session | null = this.sharedMap.get("session");
