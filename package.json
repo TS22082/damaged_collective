@@ -43,6 +43,7 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
-    "mongodb": "^6.16.0"
+    "mongodb": "^6.16.0",
+    "stripe": "^18.1.1"
   }
 }

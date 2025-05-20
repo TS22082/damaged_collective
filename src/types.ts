@@ -1,3 +1,6 @@
+import { type JSXNode } from "@builder.io/qwik/jsx-runtime";
+import type { IconProps } from "@qwikest/icons";
+
 export type BoardType = {
   _id: string;
   brand: string;
@@ -13,4 +16,10 @@ export type ProductCardPropsType = {
   handleUiUpdate: any;
   handleDelete: any;
   handleUpdate: any;
+};
+
+export type NavItemType = {
+  label: string;
+  path: string;
+  icon: (props: IconProps) => JSXNode;
 };
