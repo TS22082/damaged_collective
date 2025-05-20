@@ -10,7 +10,7 @@ import {
 import ProductCard from "~/components/product-card";
 import { $ } from "@builder.io/qwik";
 import type { StripeProductType, StripMetadataType } from "~/types";
-import { deleteProduct } from "~/server/deleteProduct";
+import { deleteProduct } from "~/routes/api/deleteProduct";
 import { type Session } from "@auth/qwik";
 import Stripe from "stripe";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
@@ -31,6 +31,7 @@ export const useStripeProducts = routeLoader$(
         id: product.id as string,
         name: product.name as string,
         images: product.images as string[],
+        default_price: product.default_price as string,
         metadata: product.metadata as StripMetadataType,
       }));
     } catch (e) {
