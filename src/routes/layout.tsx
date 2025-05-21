@@ -3,11 +3,14 @@ import {
   Slot,
   useContextProvider,
   useSignal,
+  useOn,
+  useTask$,
+  useVisibleTask$,
 } from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
 import Nav from "~/components/nav/nav";
 import Footer from "~/components/footer/footer";
-import { CartContext } from "~/contexts/CartContext";
+import { CartContext } from "~/contexts";
 import type { CartItem, CartState } from "~/types";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
@@ -24,6 +27,13 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 export default component$(() => {
   const cart = useSignal<CartState>({
     items: [] as CartItem[],
+  });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) cart.value.items = JSON.parse(storedCart);
+    else localStorage.setItem("cart", JSON.stringify(cart.value.items));
   });
 
   useContextProvider(CartContext, cart);
