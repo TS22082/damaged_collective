@@ -11,10 +11,16 @@ export default component$(() => {
       <h1>The User page</h1>
       <div>This is the demo user page</div>
       {session.value?.user?.email}
-      <Form action={signOut}>
-        <input type="hidden" name="redirectTo" value="/" />
-        <button>Sign Out</button>
-      </Form>
+
+      <button
+        onClick$={() =>
+          signOut.submit({
+            redirectTo: "/",
+          })
+        }
+      >
+        Sign Out
+      </button>
     </>
   );
 });
