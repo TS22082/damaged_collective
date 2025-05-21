@@ -36,8 +36,8 @@ export const useCreateProduct = routeAction$(
       const product = await stripe.products.create({
         name: data.name as string,
         images: [data.img as string],
+        description: data.description as string,
         metadata: {
-          brand: data.brand as string,
           primaryImg: data.img as string,
         },
       });
