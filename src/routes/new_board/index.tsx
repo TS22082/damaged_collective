@@ -10,6 +10,17 @@ import {
 } from "@builder.io/qwik-city";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 import Stripe from "stripe";
+import {
+  container,
+  formInput,
+  formLabel,
+  formSubmitBtn,
+  newFormContainer,
+  nameAndPriceContainer,
+  btnOrange,
+  btnPink,
+  formBtnsContainer,
+} from "./new.css";
 
 export const useCreateProduct = routeAction$(
   async (data: JSONObject, requestEvent: RequestEventAction) => {
@@ -71,35 +82,81 @@ export default component$(() => {
     if (created?.success === true) nav("/");
   });
 
-  const form = useSignal({ img: "", name: "" });
+  const form = useSignal({ img: "", name: "", price: "", description: "" });
 
   return (
     <>
-      <h1>New Board Page</h1>
-      <div>This is the new board page</div>
-      <Form action={createProduct}>
-        <label>Image</label>
-        <input
-          type="text"
-          name="img"
-          value={form.value.img}
-          onInput$={(e) =>
-            (form.value.img = (e.target as HTMLInputElement).value)
-          }
-        />
-        <label>Brand</label>
-        <input
-          type="text"
-          name="name"
-          value={form.value.name}
-          onInput$={(e) =>
-            (form.value.name = (e.target as HTMLInputElement).value)
-          }
-        />
-        <button disabled={createProduct.isRunning} type="submit">
-          Submit
-        </button>
-      </Form>
+      <div class={container}>
+        <Form action={createProduct} class={newFormContainer}>
+          <div class={nameAndPriceContainer}>
+            <label class={formLabel} for="name">
+              Name
+            </label>
+            <label class={formLabel} for="price">
+              Price
+            </label>
+            <input
+              name="name"
+              type="text"
+              value={form.value.name}
+              class={formInput}
+              onInput$={(e) =>
+                (form.value.name = (e.target as HTMLInputElement).value)
+              }
+            />
+
+            <input
+              name="price"
+              type="number"
+              value={form.value.price}
+              class={formInput}
+              onInput$={(e) =>
+                (form.value.price = (e.target as HTMLInputElement).value)
+              }
+            />
+          </div>
+          <label class={formLabel} for="img">
+            Image
+          </label>
+          <input
+            name="img"
+            type="text"
+            value={form.value.img}
+            class={formInput}
+            onInput$={(e) =>
+              (form.value.img = (e.target as HTMLInputElement).value)
+            }
+          />
+          <label class={formLabel} for="description">
+            Description
+          </label>
+          <textarea
+            name="description"
+            rows={10}
+            cols={50}
+            class={formInput}
+          ></textarea>
+          <div class={formBtnsContainer}>
+            <button
+              disabled={createProduct.isRunning}
+              type="button"
+              onClick$={() => {
+                console.log("cancel");
+              }}
+              class={[formSubmitBtn, btnOrange]}
+            >
+              Cancel
+            </button>
+            <button
+              disabled={createProduct.isRunning}
+              type="submit"
+              class={[formSubmitBtn, btnPink]}
+            >
+              Submit
+            </button>
+          </div>
+        </Form>
+      </div>
     </>
   );
 });
