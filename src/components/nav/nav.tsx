@@ -1,4 +1,4 @@
-import { component$, useSignal } from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import {
   navContainer,
@@ -12,23 +12,16 @@ import {
 import { BsHouse, BsPlus, BsCart, BsPerson } from "@qwikest/icons/bootstrap";
 import type { NavItemType } from "~/types";
 import { useSession } from "~/routes/plugin@auth";
-import { useTask$ } from "@builder.io/qwik";
 
 export default component$(() => {
   const session = useSession();
-  const userSession = useSignal(session.value);
 
   const navItems: NavItemType[] = [
     { label: "Home", path: "/", icon: BsHouse },
     { label: "User", path: "/user", icon: BsPerson },
   ];
 
-  useTask$(({ track }) => {
-    const session = track(() => userSession.value);
-    if (session) userSession.value = session;
-  });
-
-  if (userSession.value?.user?.email === "ts22082@gmail.com") {
+  if (session.value?.user?.email === "ts22082@gmail.com") {
     navItems.push({ label: "New Board", path: "/new_board", icon: BsPlus });
   }
 
