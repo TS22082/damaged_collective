@@ -15,7 +15,7 @@ export const navContainer = style({
 export const linkSection = style({
   position: "absolute",
   display: "flex",
-  top: "10%",
+  top: "20px",
   right: "20px",
   flexDirection: "row",
   alignItems: "center",

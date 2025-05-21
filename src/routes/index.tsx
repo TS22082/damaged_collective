@@ -108,26 +108,24 @@ export default component$(() => {
   });
 
   return (
-    <>
-      <div class="flex justify-center flex-wrap gap-2 mt-2">
-        <Resource
-          value={stripeProducts}
-          onPending={() => <div>Loading...</div>}
-          onRejected={(error) => <div>{error.message}</div>}
-          onResolved={() =>
-            localProducts.value.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                handleUiUpdate={handleUiUpdate}
-                handleUpdate={handleUpdate}
-                handleDelete={handleDelete}
-              />
-            ))
-          }
-        />
-      </div>
-    </>
+    <div class="flex justify-center flex-wrap gap-2 mt-2">
+      <Resource
+        value={stripeProducts}
+        onPending={() => <div>Loading...</div>}
+        onRejected={(error) => <div>{error.message}</div>}
+        onResolved={() =>
+          localProducts.value.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              handleUiUpdate={handleUiUpdate}
+              handleUpdate={handleUpdate}
+              handleDelete={handleDelete}
+            />
+          ))
+        }
+      />
+    </div>
   );
 });
 
@@ -135,7 +133,20 @@ export const head: DocumentHead = {
   title: "The Damaged Collective",
   meta: [
     {
-      name: "Damaged Collective home page",
+      name: "viewport",
+      content: "width=device-width, initial-scale=1",
+    },
+    {
+      name: "description",
+      content: "We sell skater owned skateboarding products",
+    },
+
+    {
+      property: "og:title",
+      content: "The Damaged Collective",
+    },
+    {
+      property: "og:description",
       content: "We sell skater owned skateboarding products",
     },
   ],
