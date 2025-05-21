@@ -66,7 +66,7 @@ export const useCreateProduct = routeAction$(
       throw new ServerError(401, "Unauthorized");
     }
 
-    if (!data?.img || !data?.name) {
+    if (!data?.img || !data?.name || !data?.description || !data.price) {
       throw new ServerError(400, "Missing required fields");
     }
 
@@ -141,9 +141,7 @@ export default component$(() => {
             <button
               disabled={createProduct.isRunning}
               type="button"
-              onClick$={() => {
-                console.log("cancel");
-              }}
+              onClick$={() => nav("/")}
               class={[formSubmitBtn, btnOrange, iconHover]}
             >
               Cancel
