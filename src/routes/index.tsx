@@ -1,4 +1,4 @@
-import { component$, useSignal } from "@builder.io/qwik";
+import { component$, Resource, useSignal } from "@builder.io/qwik";
 import {
   type JSONObject,
   type DocumentHead,
@@ -110,15 +110,24 @@ export default component$(() => {
   return (
     <>
       <div class="flex justify-center flex-wrap gap-2 mt-2">
-        {localProducts.value.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            handleUiUpdate={handleUiUpdate}
-            handleUpdate={handleUpdate}
-            handleDelete={handleDelete}
-          />
-        ))}
+        <Resource
+          value={stripeProducts}
+          onPending={() => <div>Loading...</div>}
+          onRejected={(error) => <div>{error.message}</div>}
+          onResolved={() => (
+            <>
+              {localProducts.value.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  handleUiUpdate={handleUiUpdate}
+                  handleUpdate={handleUpdate}
+                  handleDelete={handleDelete}
+                />
+              ))}
+            </>
+          )}
+        />
       </div>
     </>
   );
