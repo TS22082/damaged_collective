@@ -3,8 +3,6 @@ import {
   Slot,
   useContextProvider,
   useSignal,
-  useOn,
-  useTask$,
   useVisibleTask$,
 } from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
