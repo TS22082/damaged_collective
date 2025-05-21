@@ -114,19 +114,17 @@ export default component$(() => {
           value={stripeProducts}
           onPending={() => <div>Loading...</div>}
           onRejected={(error) => <div>{error.message}</div>}
-          onResolved={() => (
-            <>
-              {localProducts.value.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  handleUiUpdate={handleUiUpdate}
-                  handleUpdate={handleUpdate}
-                  handleDelete={handleDelete}
-                />
-              ))}
-            </>
-          )}
+          onResolved={() =>
+            localProducts.value.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                handleUiUpdate={handleUiUpdate}
+                handleUpdate={handleUpdate}
+                handleDelete={handleDelete}
+              />
+            ))
+          }
         />
       </div>
     </>
