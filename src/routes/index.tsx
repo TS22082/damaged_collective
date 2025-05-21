@@ -138,11 +138,12 @@ export const head: DocumentHead = {
     },
     {
       name: "description",
-      content: "We sell skater owned skateboarding products",
+      content: "We sell skater owned products",
     },
     {
       name: "image",
-      content: "https://the-damaged-collective.vercel.app/og.png",
+      content:
+        "https://res.cloudinary.com/geek-centric/image/upload/v1747081873/damaged_collective/output_zjor1f.jpg",
     },
     {
       property: "og:title",
