@@ -38,6 +38,7 @@ export const formSubmitBtn = style({
   fontWeight: "bold",
   cursor: "pointer",
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",
+  transition: "0.25s",
 });
 
 export const formBtnsContainer = style({
@@ -69,6 +70,6 @@ export const btnPink = style({
 
 export const nameAndPriceContainer = style({
   display: "grid",
-  gridTemplateColumns: "75% 25%",
+  gridTemplateColumns: "3fr 1fr",
   gap: "10px",
 });
