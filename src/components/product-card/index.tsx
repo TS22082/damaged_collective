@@ -3,9 +3,23 @@ import Layout from "./layout";
 import { BsX, BsPencil, BsSave, BsTrash } from "@qwikest/icons/bootstrap";
 import type { ProductCardPropsType } from "~/types";
 import { Form } from "@builder.io/qwik-city";
+import { useSession } from "~/routes/plugin@auth";
 
 export default component$<ProductCardPropsType>(
   ({ product, handleUiUpdate, handleDelete, handleUpdate }) => {
+    const editing = useSignal(false);
+    const session = useSession();
+    const userSession = useSignal(session.value);
+    const isAdmin = useSignal(false);
+
+    useTask$(({ track }) => {
+      const session = track(() => userSession.value);
+      if (session) userSession.value = session;
+      if (session?.user?.email === "ts22082@gmail.com") {
+        isAdmin.value = true;
+      }
+    });
+
     const imageStyles = {
       height: "600px",
       backgroundImage: `url(${product.images[0]})`,
@@ -17,8 +31,6 @@ export default component$<ProductCardPropsType>(
       display: "flex",
       justifyContent: "space-between",
     };
-
-    const editing = useSignal(false);
 
     const iconStyles = {
       transform: "translateY(1px)",
