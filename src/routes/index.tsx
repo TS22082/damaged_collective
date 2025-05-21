@@ -40,7 +40,7 @@ export const useStripeProducts = routeLoader$(
     } catch (e) {
       throw new ServerError(500, e);
     }
-  },
+  }
 );
 
 export const useUpdateDbItem = routeAction$(
@@ -50,7 +50,7 @@ export const useUpdateDbItem = routeAction$(
         requestEvent.env.get("SECRET_STRIPE_KEY") || "",
         {
           apiVersion: "2025-04-30.basil",
-        },
+        }
       );
 
       await stripe.products.update(data.id as string, {
@@ -81,7 +81,7 @@ export const useUpdateDbItem = routeAction$(
       success: true,
       data,
     };
-  }),
+  })
 );
 
 export default component$(() => {
