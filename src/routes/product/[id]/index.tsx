@@ -17,5 +17,10 @@ export const head: DocumentHead = {
       name: "Specific Product",
       content: "Product Page",
     },
+    {
+      name: "image",
+      content:
+        "https://res.cloudinary.com/geek-centric/image/upload/v1747081873/damaged_collective/output_zjor1f.jpg",
+    },
   ],
 };

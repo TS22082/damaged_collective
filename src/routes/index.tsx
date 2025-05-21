@@ -140,7 +140,10 @@ export const head: DocumentHead = {
       name: "description",
       content: "We sell skater owned skateboarding products",
     },
-
+    {
+      name: "image",
+      content: "https://the-damaged-collective.vercel.app/og.png",
+    },
     {
       property: "og:title",
       content: "The Damaged Collective",
