@@ -9,7 +9,6 @@ import {
   validator$,
 } from "@builder.io/qwik-city";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
-import Stripe from "stripe";
 import {
   container,
   formInput,
@@ -19,17 +18,13 @@ import {
   nameAndPriceContainer,
   formBtnsContainer,
 } from "./new.css";
-import { btnOrange, btnPink, btnHover } from "~/shared/shared.css";
+import { btnOrange, btnPink, btnHover } from "~/shared/styles.css";
+import { getStripeClient } from "~/shared/stripeClient";
 
 export const useCreateProduct = routeAction$(
   async (data: JSONObject, requestEvent: RequestEventAction) => {
     try {
-      const stripe = new Stripe(
-        requestEvent.env.get("SECRET_STRIPE_KEY") || "",
-        {
-          apiVersion: "2025-04-30.basil",
-        }
-      );
+      const stripe = getStripeClient(requestEvent.env.get("SECRET_STRIPE_KEY"));
 
       const product = await stripe.products.create({
         name: data.name as string,
@@ -84,76 +79,73 @@ export default component$(() => {
   const form = useSignal({ img: "", name: "", price: "", description: "" });
 
   return (
-    <>
-      <div class={container}>
-        <Form action={createProduct} class={newFormContainer}>
-          <div class={nameAndPriceContainer}>
-            <label class={formLabel} for="name">
-              Name
-            </label>
-            <label class={formLabel} for="price">
-              Price
-            </label>
-            <input
-              name="name"
-              type="text"
-              value={form.value.name}
-              class={formInput}
-              onInput$={(e) =>
-                (form.value.name = (e.target as HTMLInputElement).value)
-              }
-            />
-
-            <input
-              name="price"
-              type="number"
-              value={form.value.price}
-              class={formInput}
-              onInput$={(e) =>
-                (form.value.price = (e.target as HTMLInputElement).value)
-              }
-            />
-          </div>
-          <label class={formLabel} for="img">
-            Image
+    <div class={container}>
+      <Form action={createProduct} class={newFormContainer}>
+        <div class={nameAndPriceContainer}>
+          <label class={formLabel} for="name">
+            Name
+          </label>
+          <label class={formLabel} for="price">
+            Price
           </label>
           <input
-            name="img"
+            name="name"
             type="text"
-            value={form.value.img}
+            value={form.value.name}
             class={formInput}
             onInput$={(e) =>
-              (form.value.img = (e.target as HTMLInputElement).value)
+              (form.value.name = (e.target as HTMLInputElement).value)
             }
           />
-          <label class={formLabel} for="description">
-            Description
-          </label>
-          <textarea
-            name="description"
-            rows={10}
-            cols={50}
+          <input
+            name="price"
+            type="number"
+            value={form.value.price}
             class={formInput}
-          ></textarea>
-          <div class={formBtnsContainer}>
-            <button
-              disabled={createProduct.isRunning}
-              type="button"
-              onClick$={() => nav("/")}
-              class={[formSubmitBtn, btnOrange, btnHover]}
-            >
-              Cancel
-            </button>
-            <button
-              disabled={createProduct.isRunning}
-              type="submit"
-              class={[formSubmitBtn, btnPink, btnHover]}
-            >
-              Submit
-            </button>
-          </div>
-        </Form>
-      </div>
-    </>
+            onInput$={(e) =>
+              (form.value.price = (e.target as HTMLInputElement).value)
+            }
+          />
+        </div>
+        <label class={formLabel} for="img">
+          Image
+        </label>
+        <input
+          name="img"
+          type="text"
+          value={form.value.img}
+          class={formInput}
+          onInput$={(e) =>
+            (form.value.img = (e.target as HTMLInputElement).value)
+          }
+        />
+        <label class={formLabel} for="description">
+          Description
+        </label>
+        <textarea
+          name="description"
+          rows={10}
+          cols={50}
+          class={formInput}
+        ></textarea>
+        <div class={formBtnsContainer}>
+          <button
+            disabled={createProduct.isRunning}
+            type="button"
+            onClick$={() => nav("/")}
+            class={[formSubmitBtn, btnOrange, btnHover]}
+          >
+            Cancel
+          </button>
+          <button
+            disabled={createProduct.isRunning}
+            type="submit"
+            class={[formSubmitBtn, btnPink, btnHover]}
+          >
+            Submit
+          </button>
+        </div>
+      </Form>
+    </div>
   );
 });

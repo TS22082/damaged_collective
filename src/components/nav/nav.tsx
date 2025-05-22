@@ -11,7 +11,7 @@ import {
 import { BsHouse, BsPlus, BsCart, BsPerson } from "@qwikest/icons/bootstrap";
 import type { NavItemType } from "~/types";
 import { useSession } from "~/routes/plugin@auth";
-import { btnPressed, btnHover } from "~/shared/shared.css";
+import { btnPressed, btnHover } from "~/shared/styles.css";
 
 export default component$(() => {
   const session = useSession();
