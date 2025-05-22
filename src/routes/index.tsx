@@ -17,12 +17,11 @@ import {
   type RequestEvent,
   ServerError,
 } from "@builder.io/qwik-city/middleware/request-handler";
+import { getStripeClient } from "~/shared/stripeClient";
 
 export const useStripeProducts = routeLoader$(
   async (requestEvent: RequestEventLoader) => {
-    const stripe = new Stripe(requestEvent.env.get("SECRET_STRIPE_KEY") || "", {
-      apiVersion: "2025-04-30.basil",
-    });
+    const stripe = getStripeClient(requestEvent.env.get("SECRET_STRIPE_KEY"));
 
     try {
       const products = await stripe.products.list({
