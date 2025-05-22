@@ -18,4 +18,12 @@ export const cardContainer = style({
   margin: "0px",
   border: "none",
   backgroundColor: "transparent",
+  "@media": {
+    "screen and (max-width: 768px)": {
+      width: "40%",
+    },
+    "screen and (max-width: 480px)": {
+      width: "300px",
+    },
+  },
 });
