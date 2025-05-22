@@ -6,12 +6,11 @@ import {
   navLink,
   titleLink,
   iconBtnBase,
-  bPink,
 } from "./nav.css";
 import { BsHouse, BsPlus, BsCart, BsPerson } from "@qwikest/icons/bootstrap";
 import type { NavItemType } from "~/types";
 import { useSession } from "~/routes/plugin@auth";
-import { btnPressed, btnHover } from "~/shared/styles.css";
+import { btnPressed, btnHover, btnPink } from "~/shared/styles.css";
 
 export default component$(() => {
   const session = useSession();
@@ -32,7 +31,7 @@ export default component$(() => {
     <nav class={navContainer}>
       <section class={linkSection}>
         {navItems.map((item) => {
-          const styleArr = [iconBtnBase, bPink];
+          const styleArr = [iconBtnBase, btnPink];
           location.url.pathname !== item.path
             ? styleArr.push(btnHover)
             : styleArr.push(btnPressed);

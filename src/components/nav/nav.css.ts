@@ -42,13 +42,6 @@ export const iconBtnBase = style({
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",
 });
 
-export const bPink = style({
-  background:
-    "linear-gradient(45deg, rgba(231, 72, 234, 1) 0%, rgba(75, 26, 188, 1) 100%)",
-  filter:
-    "progid:DXImageTransform.Microsoft.gradient( startColorstr='#e748ea', endColorstr='#4b1abc', GradientType=1 )",
-});
-
 export const navLink = style({
   textDecoration: "none",
   color: "#fff",
