@@ -24,8 +24,6 @@ export const useStripeProducts = routeLoader$(
         active: true,
       });
 
-      console.log("Products: ", products);
-
       return products.data.map((product) => ({
         id: product.id as string,
         name: product.name as string,
