@@ -17,11 +17,9 @@ import {
   formSubmitBtn,
   newFormContainer,
   nameAndPriceContainer,
-  btnOrange,
-  btnPink,
   formBtnsContainer,
 } from "./new.css";
-import { iconHover } from "~/components/nav/nav.css";
+import { btnOrange, btnPink, btnHover } from "~/shared/shared.css";
 
 export const useCreateProduct = routeAction$(
   async (data: JSONObject, requestEvent: RequestEventAction) => {
@@ -142,14 +140,14 @@ export default component$(() => {
               disabled={createProduct.isRunning}
               type="button"
               onClick$={() => nav("/")}
-              class={[formSubmitBtn, btnOrange, iconHover]}
+              class={[formSubmitBtn, btnOrange, btnHover]}
             >
               Cancel
             </button>
             <button
               disabled={createProduct.isRunning}
               type="submit"
-              class={[formSubmitBtn, btnPink, iconHover]}
+              class={[formSubmitBtn, btnPink, btnHover]}
             >
               Submit
             </button>

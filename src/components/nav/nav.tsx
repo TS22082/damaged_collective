@@ -1,4 +1,4 @@
-import { component$, useTask$, useVisibleTask$ } from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
 import { Link, useLocation } from "@builder.io/qwik-city";
 import {
   navContainer,
@@ -7,12 +7,11 @@ import {
   titleLink,
   iconBtnBase,
   bPink,
-  iconHover,
-  btnPressed,
 } from "./nav.css";
 import { BsHouse, BsPlus, BsCart, BsPerson } from "@qwikest/icons/bootstrap";
 import type { NavItemType } from "~/types";
 import { useSession } from "~/routes/plugin@auth";
+import { btnPressed, btnHover } from "~/shared/shared.css";
 
 export default component$(() => {
   const session = useSession();
@@ -35,7 +34,7 @@ export default component$(() => {
         {navItems.map((item) => {
           const styleArr = [iconBtnBase, bPink];
           location.url.pathname !== item.path
-            ? styleArr.push(iconHover)
+            ? styleArr.push(btnHover)
             : styleArr.push(btnPressed);
 
           return (
