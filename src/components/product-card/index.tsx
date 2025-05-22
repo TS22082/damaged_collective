@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import type { ProductCardPropsType } from "~/types";
+import type { ProductCardPropsType } from "~/shared/types";
 import { useNavigate } from "@builder.io/qwik-city";
 import { cardContainer, imageContainer } from "./product.css";
 

@@ -8,20 +8,22 @@ import {
   iconBtnBase,
 } from "./nav.css";
 import { BsHouse, BsPlus, BsCart, BsPerson } from "@qwikest/icons/bootstrap";
-import type { NavItemType } from "~/types";
+import type { NavItemType } from "~/shared/types";
 import { useSession } from "~/routes/plugin@auth";
 import { btnPressed, btnHover, btnPink } from "~/shared/styles.css";
+import checkIsAdmin from "~/shared/utils/isAdmin";
 
 export default component$(() => {
   const session = useSession();
   const location = useLocation();
 
-  const navItems: NavItemType[] = [
-    { label: "Home", path: "/", icon: BsHouse },
-    { label: "User", path: "/user/", icon: BsPerson },
-  ];
+  const navItems: NavItemType[] = [{ label: "Home", path: "/", icon: BsHouse }];
 
-  if (session.value?.user?.email === "ts22082@gmail.com") {
+  checkIsAdmin(session)
+    ? navItems.push({ label: "Admin", path: "/dashboard/", icon: BsPerson })
+    : navItems.push({ label: "User", path: "/user/", icon: BsPerson });
+
+  if (checkIsAdmin(session)) {
     navItems.push({ label: "New Board", path: "/new_board/", icon: BsPlus });
   }
 

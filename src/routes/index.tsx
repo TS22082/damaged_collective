@@ -10,7 +10,7 @@ import {
 } from "@builder.io/qwik-city";
 import ProductCard from "~/components/product-card";
 import { $ } from "@builder.io/qwik";
-import type { StripeProductType, StripMetadataType } from "~/types";
+import type { StripeProductType, StripMetadataType } from "~/shared/types";
 import { deleteProduct } from "~/routes/api/deleteProduct";
 import Stripe from "stripe";
 import {
