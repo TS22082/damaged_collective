@@ -7,8 +7,6 @@ export const deleteProduct = server$(async function (id: string) {
   try {
     const session: Session | null = this.sharedMap.get("session");
 
-    console.log("deleting ==>", id);
-
     if (!session || session.user?.email !== "ts22082@gmail.com") {
       throw new ServerError(401, "Not authorized");
     }
