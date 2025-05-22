@@ -42,6 +42,11 @@ export const iconBtnBase = style({
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",
 });
 
+export const btnPressed = style({
+  scale: "0.9",
+  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+});
+
 export const iconHover = style({
   ":hover": {
     scale: "0.9",

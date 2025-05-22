@@ -1,5 +1,5 @@
-import { component$ } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
+import { component$, useTask$, useVisibleTask$ } from "@builder.io/qwik";
+import { Link, useLocation } from "@builder.io/qwik-city";
 import {
   navContainer,
   linkSection,
@@ -8,6 +8,7 @@ import {
   iconBtnBase,
   bPink,
   iconHover,
+  btnPressed,
 } from "./nav.css";
 import { BsHouse, BsPlus, BsCart, BsPerson } from "@qwikest/icons/bootstrap";
 import type { NavItemType } from "~/types";
@@ -15,33 +16,41 @@ import { useSession } from "~/routes/plugin@auth";
 
 export default component$(() => {
   const session = useSession();
+  const location = useLocation();
 
   const navItems: NavItemType[] = [
     { label: "Home", path: "/", icon: BsHouse },
-    { label: "User", path: "/user", icon: BsPerson },
+    { label: "User", path: "/user/", icon: BsPerson },
   ];
 
   if (session.value?.user?.email === "ts22082@gmail.com") {
-    navItems.push({ label: "New Board", path: "/new_board", icon: BsPlus });
+    navItems.push({ label: "New Board", path: "/new_board/", icon: BsPlus });
   }
 
-  navItems.push({ label: "Cart", path: "/cart", icon: BsCart });
+  navItems.push({ label: "Cart", path: "/cart/", icon: BsCart });
 
   return (
     <nav class={navContainer}>
       <section class={linkSection}>
-        {navItems.map((item) => (
-          <Link key={item.label} class={navLink} href={item.path}>
-            <button class={[iconBtnBase, iconHover, bPink]}>
-              <item.icon
-                style={{
-                  height: "20px",
-                  width: "20px",
-                }}
-              />
-            </button>
-          </Link>
-        ))}
+        {navItems.map((item) => {
+          const styleArr = [iconBtnBase, bPink];
+          location.url.pathname !== item.path
+            ? styleArr.push(iconHover)
+            : styleArr.push(btnPressed);
+
+          return (
+            <Link key={item.label} class={navLink} href={item.path}>
+              <button class={styleArr}>
+                <item.icon
+                  style={{
+                    height: "20px",
+                    width: "20px",
+                  }}
+                />
+              </button>
+            </Link>
+          );
+        })}
       </section>
       <Link href="/" class={titleLink}>
         The Damaged Collective
