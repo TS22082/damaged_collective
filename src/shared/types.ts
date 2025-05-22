@@ -3,9 +3,7 @@ import type { IconProps } from "@qwikest/icons";
 
 export type ProductCardPropsType = {
   product: StripeProductType;
-  handleUiUpdate: any;
-  handleDelete: any;
-  handleUpdate: any;
+  priceMap: Map<string, StripePriceType>;
 };
 
 export type StripMetadataType = {
@@ -16,7 +14,9 @@ export type StripMetadataType = {
 export type StripeProductType = {
   id: string;
   name: string;
+  description: string;
   images: string[];
+  default_price: string;
   metadata: StripMetadataType;
 };
 
@@ -30,4 +30,11 @@ export type CartItem = { price_id: string; product_id: string; qty: number };
 
 export type CartState = {
   items: CartItem[];
+};
+
+export type StripePriceType = {
+  id: string;
+  product: string;
+  currency: string;
+  unit_amount: number;
 };
