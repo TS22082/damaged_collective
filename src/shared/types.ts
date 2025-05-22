@@ -31,9 +31,3 @@ export type CartItem = { price_id: string; product_id: string; qty: number };
 export type CartState = {
   items: CartItem[];
 };
-
-export type SessionEmail = {
-  user: {
-    email: string;
-  };
-};
