@@ -28,7 +28,7 @@ export const btnPressed = style({
 
 export const btnHover = style({
   ":hover": {
-    scale: "0.9",
+    scale: "0.99",
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
   },
 });
