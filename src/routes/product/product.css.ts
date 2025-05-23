@@ -9,7 +9,21 @@ export const productPageContainer = style({
 });
 
 export const productContainer = style({
+  marginTop: "50px",
+  width: "80%",
   display: "flex",
   flexDirection: "row",
-  justifyContent: "center",
+  justifyContent: "space-around",
+});
+
+export const productImage = style({
+  width: "300px",
+  height: "700px",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+});
+
+export const productInfo = style({
+  width: "300px",
 });

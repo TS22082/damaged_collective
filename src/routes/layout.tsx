@@ -30,7 +30,7 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const storedCart = localStorage.getItem("cart");
-    if (storedCart) cart.value.items = JSON.parse(storedCart);
+    if (storedCart) cart.value = { items: JSON.parse(storedCart) };
     else localStorage.setItem("cart", JSON.stringify(cart.value.items));
   });
 

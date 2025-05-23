@@ -1,15 +1,20 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useContext } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 import { getStripeClient } from "~/shared/stripeClient";
-import { productContainer, productPageContainer } from "../product.css";
+import {
+  productContainer,
+  productImage,
+  productInfo,
+  productPageContainer,
+} from "../product.css";
+import { CartContext } from "~/contexts";
 
 export const useProductLoader = routeLoader$(async (requestEvent) => {
   try {
     const stripe = getStripeClient(requestEvent.env.get("SECRET_STRIPE_KEY"));
     const product = await stripe.products.retrieve(requestEvent.params.id);
     const price = await stripe.prices.retrieve(product.default_price as string);
-    console.log("Price: ", price);
 
     const formattedPrice = new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -24,14 +29,37 @@ export const useProductLoader = routeLoader$(async (requestEvent) => {
 
 export default component$(() => {
   const product = useProductLoader();
+  const cart = useContext(CartContext);
   return (
-    <div class={[productPageContainer]}>
+    <div class={productPageContainer}>
       <div class={productContainer}>
-        <h1>Product Page</h1>
-        <div>
-          <p>{product.value.name}</p>
-          <p>{product.value.description}</p>
+        <div
+          style={{ backgroundImage: `url(${product.value.images[0]})` }}
+          class={productImage}
+        />
+        <div class={productInfo}>
+          <h1>{product.value.name}</h1>
+          <h2>{product.value.description}</h2>
           <p>{product.value.formattedPrice}</p>
+          <button
+            onClick$={() => {
+              cart.value = {
+                ...cart.value,
+                items: [
+                  ...cart.value.items,
+                  {
+                    price_id: product.value.id || "",
+                    product_id: product.value.name || "",
+                    qty: 1,
+                  },
+                ],
+              };
+
+              localStorage.setItem("cart", JSON.stringify(cart.value.items));
+            }}
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
     </div>

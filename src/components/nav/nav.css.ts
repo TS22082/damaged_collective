@@ -46,3 +46,22 @@ export const navLink = style({
   textDecoration: "none",
   color: "#fff",
 });
+
+export const cartHasItems = style({
+  position: "relative",
+});
+
+export const cartItemIndicator = style({
+  position: "absolute",
+  fontSize: "0.6rem",
+  top: "-5px",
+  right: "-5px",
+  background: "red",
+  color: "#fff",
+  borderRadius: "50%",
+  width: "20px",
+  height: "20px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+});
