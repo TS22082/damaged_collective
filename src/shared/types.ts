@@ -27,7 +27,15 @@ export type NavItemType = {
   items?: boolean;
 };
 
-export type CartItem = { price_id: string; product_id: string; qty: number };
+export type CartItem = {
+  price_id: string;
+  product_id: string;
+  name: string;
+  image: string;
+  description: string;
+  price: number;
+  qty: number;
+};
 
 export type CartState = {
   items: CartItem[];

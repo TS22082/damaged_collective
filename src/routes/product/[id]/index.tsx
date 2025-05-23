@@ -22,7 +22,11 @@ export const useProductLoader = routeLoader$(async (requestEvent) => {
       currency: "USD",
     }).format((price.unit_amount as number) * 0.01);
 
-    return { ...product, formattedPrice };
+    return {
+      ...product,
+      formattedPrice,
+      unformattedPrice: price.unit_amount,
+    };
   } catch (e) {
     throw new ServerError(500, e);
   }
@@ -31,6 +35,7 @@ export const useProductLoader = routeLoader$(async (requestEvent) => {
 export default component$(() => {
   const product = useProductLoader();
   const cart = useContext(CartContext);
+
   return (
     <div class={productPageContainer}>
       <div class={productContainer}>
@@ -45,13 +50,18 @@ export default component$(() => {
           <button
             class={[btn, btnPink, btnHover]}
             onClick$={() => {
+              console.log("product =>", product.value);
               cart.value = {
                 ...cart.value,
                 items: [
                   ...cart.value.items,
                   {
-                    price_id: product.value.id || "",
-                    product_id: product.value.name || "",
+                    price_id: (product.value.default_price as string) || "",
+                    product_id: product.value.id || "",
+                    name: product.value.name || "",
+                    image: product.value.images[0] || "",
+                    description: product.value.description || "",
+                    price: product.value.unformattedPrice || 0,
                     qty: 1,
                   },
                 ],
