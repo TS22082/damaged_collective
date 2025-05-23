@@ -1,4 +1,15 @@
-body {
+body,
+button,
+input,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li {
   font-family: "Underdog", system-ui;
   margin: 0;
   box-sizing: border-box;

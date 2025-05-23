@@ -29,6 +29,7 @@ export const formInput = style({
 
 export const formSubmitBtn = style({
   marginTop: "15px",
+  padding: "5px 10px",
   borderRadius: "5px",
   border: "none",
   color: "#fff",
