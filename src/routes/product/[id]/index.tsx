@@ -9,8 +9,7 @@ import {
   productPageContainer,
 } from "../product.css";
 import { CartContext } from "~/contexts";
-import { formSubmitBtn } from "~/routes/new_board/new.css";
-import { btnHover, btnPink } from "~/shared/styles.css";
+import { btn, btnHover, btnPink } from "~/shared/styles.css";
 
 export const useProductLoader = routeLoader$(async (requestEvent) => {
   try {
@@ -44,7 +43,7 @@ export default component$(() => {
           <h2 style={{ margin: 0 }}>{product.value.description}</h2>
           <p style={{ margin: 0 }}>{product.value.formattedPrice}</p>
           <button
-            class={[formSubmitBtn, btnPink, btnHover]}
+            class={[btn, btnPink, btnHover]}
             onClick$={() => {
               cart.value = {
                 ...cart.value,

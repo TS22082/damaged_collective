@@ -27,21 +27,11 @@ export const formInput = style({
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",
 });
 
-export const formSubmitBtn = style({
-  marginTop: "15px",
-  padding: "5px 10px",
-  borderRadius: "5px",
-  border: "none",
-  color: "#fff",
-  cursor: "pointer",
-  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",
-  transition: "0.25s",
-});
-
 export const formBtnsContainer = style({
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-between",
+  marginTop: "15px",
 });
 
 export const nameAndPriceContainer = style({

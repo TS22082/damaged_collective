@@ -13,12 +13,11 @@ import {
   container,
   formInput,
   formLabel,
-  formSubmitBtn,
   newFormContainer,
   nameAndPriceContainer,
   formBtnsContainer,
 } from "./new.css";
-import { btnOrange, btnPink, btnHover } from "~/shared/styles.css";
+import { btnOrange, btnPink, btnHover, btn } from "~/shared/styles.css";
 import { getStripeClient } from "~/shared/stripeClient";
 
 export const useCreateProduct = routeAction$(
@@ -133,14 +132,14 @@ export default component$(() => {
             disabled={createProduct.isRunning}
             type="button"
             onClick$={() => nav("/")}
-            class={[formSubmitBtn, btnOrange, btnHover]}
+            class={[btn, btnOrange, btnHover]}
           >
             Cancel
           </button>
           <button
             disabled={createProduct.isRunning}
             type="submit"
-            class={[formSubmitBtn, btnPink, btnHover]}
+            class={[btn, btnPink, btnHover]}
           >
             Submit
           </button>
