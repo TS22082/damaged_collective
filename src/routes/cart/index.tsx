@@ -1,4 +1,4 @@
-import type { DocumentHead } from "@builder.io/qwik-city";
+import { server$, useNavigate, type DocumentHead } from "@builder.io/qwik-city";
 import { component$, useContext } from "@builder.io/qwik";
 import { CartContext } from "~/contexts";
 import {
@@ -18,9 +18,35 @@ import {
   summary,
   checkoutBtn,
 } from "./cart.css";
+import { type CartState } from "~/shared/types";
+import { getStripeClient } from "~/shared/stripeClient";
+
+export const createCheckoutSession = server$(async function (cart: CartState) {
+  try {
+    const itemsForStripe = cart.items.map((item) => ({
+      price: item.price_id,
+      quantity: item.qty,
+    }));
+
+    const stripeSecretKey = this.env.get("SECRET_STRIPE_KEY");
+    const stripe = getStripeClient(stripeSecretKey);
+
+    const checkoutSession = await stripe.checkout.sessions.create({
+      line_items: itemsForStripe,
+      mode: "payment",
+      success_url: "http://localhost:5173/success",
+      cancel_url: "http://localhost:5173/",
+    });
+
+    return checkoutSession.url as string;
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 export default component$(() => {
   const cart = useContext(CartContext);
+  const navigate = useNavigate();
 
   const total = cart.value.items.reduce(
     (acc, item) => acc + item.qty * item.price,
@@ -73,7 +99,20 @@ export default component$(() => {
           </ul>
           <div class={summary}>
             <div>Total: ${total ? (total / 100).toFixed(2) : "0.00"}</div>
-            <button class={checkoutBtn}>Checkout</button>
+            <button
+              class={checkoutBtn}
+              type="button"
+              onClick$={async () => {
+                try {
+                  const checkoutUrl = await createCheckoutSession(cart.value);
+                  await navigate(checkoutUrl);
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
+            >
+              Checkout
+            </button>
           </div>
         </>
       )}

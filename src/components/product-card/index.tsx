@@ -22,7 +22,9 @@ export default component$<ProductCardPropsType>(({ product, priceMap }) => {
     <button
       aria-label="Product Card"
       class={cardContainer}
-      onClick$={() => nav(`/product/${product.id}`)}
+      onClick$={async () => {
+        await nav(`/product/${product.id}`);
+      }}
     >
       <div
         aria-label="Product Image"

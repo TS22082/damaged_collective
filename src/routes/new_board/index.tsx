@@ -131,7 +131,9 @@ export default component$(() => {
           <button
             disabled={createProduct.isRunning}
             type="button"
-            onClick$={() => nav("/")}
+            onClick$={async () => {
+              await nav("/");
+            }}
             class={[btn, btnOrange, btnHover]}
           >
             Cancel

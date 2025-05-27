@@ -50,7 +50,6 @@ export default component$(() => {
           <button
             class={[btn, btnPink, btnHover]}
             onClick$={() => {
-              console.log("product =>", product.value);
               cart.value = {
                 ...cart.value,
                 items: [
