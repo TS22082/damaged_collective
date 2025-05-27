@@ -29,13 +29,14 @@ export const createCheckoutSession = server$(async function (cart: CartState) {
     }));
 
     const stripeSecretKey = this.env.get("SECRET_STRIPE_KEY");
+    const domain = this.env.get("DOMAIN");
     const stripe = getStripeClient(stripeSecretKey);
 
     const checkoutSession = await stripe.checkout.sessions.create({
       line_items: itemsForStripe,
       mode: "payment",
-      success_url: "http://localhost:5173/success",
-      cancel_url: "http://localhost:5173/",
+      success_url: `${domain}success`,
+      cancel_url: domain,
     });
 
     return checkoutSession.url as string;
