@@ -1,7 +1,7 @@
 import { style } from "@vanilla-extract/css";
 
 export const cartWrapper = style({
-  maxWidth: 800,
+  maxWidth: "80%",
   margin: "0 auto",
   padding: "2rem",
   background: "#fff",
@@ -108,4 +108,25 @@ export const checkoutBtn = style({
   fontWeight: 600,
   fontSize: "1rem",
   cursor: "pointer",
+});
+
+export const formContainer = style({
+  display: "flex",
+  width: "100%",
+  justifyContent: "center",
+});
+
+export const formInputs = style({
+  width: "50%",
+  display: "flex",
+  gap: "2rem",
+  flexDirection: "column",
+  alignItems: "center",
+});
+
+export const cartItems = style({
+  width: "50%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
 });
