@@ -19,7 +19,9 @@ import {
   checkoutBtn,
   formContainer,
   cartItems,
-  formInputs,
+  checkoutFormInputs,
+  checkoutFormItem,
+  cityStateContainer,
 } from "./cart.css";
 import { formInput } from "../new_board/new.css";
 import { createCheckoutSession } from "../api/createCheckoutSession";
@@ -40,14 +42,71 @@ export default component$(() => {
         <p class={emptyCart}>Your cart is empty.</p>
       ) : (
         <Form class={formContainer}>
-          <div class={formInputs}>
+          <div class={checkoutFormInputs}>
             <p>Fill out your shipping details</p>
-            <input name="street" class={formInput} type="text" value={""} />
-            <input name="street2" class={formInput} type="text" value={""} />
-            <input name="city" class={formInput} type="text" value={""} />
-            <input name="zip" class={formInput} type="text" value={""} />
-            <input name="country" class={formInput} type="text" value={""} />
-            <input class={formInput} type="text" value={""} />
+            <div
+              style={{
+                width: "80%",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <input
+                style={{
+                  width: "45%",
+                }}
+                name="firstName"
+                placeholder="First Name"
+                class={[formInput, checkoutFormItem]}
+                type="text"
+                value={""}
+              />
+              <input
+                style={{
+                  width: "45%",
+                }}
+                name="lastName"
+                placeholder="Last Name"
+                class={[formInput, checkoutFormItem]}
+                type="text"
+                value={""}
+              />
+            </div>
+            <input
+              name="street"
+              placeholder="Street"
+              class={[formInput, checkoutFormItem]}
+              type="text"
+              value={""}
+            />
+            <input
+              name="street2"
+              placeholder="Street 2"
+              class={[formInput, checkoutFormItem]}
+              type="text"
+              value={""}
+            />
+
+            <div class={cityStateContainer}>
+              <input
+                name="city"
+                placeholder="City"
+                class={formInput}
+                type="text"
+                value={""}
+              />
+              <input
+                name="zip"
+                placeholder="Zip"
+                class={formInput}
+                type="text"
+                value={""}
+              />
+              <select value={"AK"} name="state" class={formInput}>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+              </select>
+            </div>
           </div>
           <div class={cartItems}>
             <ul class={cartList}>
