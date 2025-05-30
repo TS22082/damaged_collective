@@ -1,5 +1,5 @@
 import { Form, useNavigate, type DocumentHead } from "@builder.io/qwik-city";
-import { component$, useContext, useSignal } from "@builder.io/qwik";
+import { $, component$, useContext, useSignal } from "@builder.io/qwik";
 import { CartContext } from "~/contexts";
 import {
   cartWrapper,
@@ -39,6 +39,13 @@ export default component$(() => {
     zip: "",
   });
 
+  const updateForm = $((key: string, value: string) => {
+    formSignal.value = {
+      ...formSignal.value,
+      [key]: value,
+    };
+  });
+
   const total = cart.value.items.reduce(
     (acc, item) => acc + item.qty * item.price,
     0
@@ -72,12 +79,9 @@ export default component$(() => {
                 style={{
                   width: "45%",
                 }}
-                onInput$={(e) => {
-                  formSignal.value = {
-                    ...formSignal.value,
-                    firstName: (e.target as HTMLInputElement).value,
-                  };
-                }}
+                onInput$={(e) =>
+                  updateForm("firstName", (e.target as HTMLInputElement).value)
+                }
                 name="firstName"
                 placeholder="First Name"
                 class={[formInput, checkoutFormItem]}
@@ -89,10 +93,7 @@ export default component$(() => {
                   width: "45%",
                 }}
                 onInput$={(e) =>
-                  (formSignal.value = {
-                    ...formSignal.value,
-                    lastName: (e.target as HTMLInputElement).value,
-                  })
+                  updateForm("lastName", (e.target as HTMLInputElement).value)
                 }
                 name="lastName"
                 placeholder="Last Name"
@@ -104,10 +105,7 @@ export default component$(() => {
             <input
               name="address"
               onInput$={(e) =>
-                (formSignal.value = {
-                  ...formSignal.value,
-                  address: (e.target as HTMLInputElement).value,
-                })
+                updateForm("address", (e.target as HTMLInputElement).value)
               }
               placeholder="Address"
               class={[formInput, checkoutFormItem]}
@@ -117,12 +115,9 @@ export default component$(() => {
             <input
               name="street2"
               onInput$={(e) =>
-                (formSignal.value = {
-                  ...formSignal.value,
-                  address2: (e.target as HTMLInputElement).value,
-                })
+                updateForm("address2", (e.target as HTMLInputElement).value)
               }
-              placeholder="Street 2"
+              placeholder="Apt, PO box, etc"
               class={[formInput, checkoutFormItem]}
               type="text"
               value={formSignal.value.address2}
@@ -132,10 +127,7 @@ export default component$(() => {
               <input
                 name="city"
                 onInput$={(e) =>
-                  (formSignal.value = {
-                    ...formSignal.value,
-                    city: (e.target as HTMLInputElement).value,
-                  })
+                  updateForm("city", (e.target as HTMLInputElement).value)
                 }
                 placeholder="City"
                 class={formInput}
@@ -145,10 +137,7 @@ export default component$(() => {
               <input
                 name="zip"
                 onInput$={(e) =>
-                  (formSignal.value = {
-                    ...formSignal.value,
-                    zip: (e.target as HTMLInputElement).value,
-                  })
+                  updateForm("zip", (e.target as HTMLInputElement).value)
                 }
                 placeholder="Zip"
                 class={formInput}
@@ -158,10 +147,7 @@ export default component$(() => {
               <select
                 value={formSignal.value.state}
                 onInput$={(e) =>
-                  (formSignal.value = {
-                    ...formSignal.value,
-                    state: (e.target as HTMLInputElement).value,
-                  })
+                  updateForm("state", (e.target as HTMLInputElement).value)
                 }
                 name="state"
                 class={formInput}

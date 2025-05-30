@@ -1,4 +1,10 @@
-import { component$, useContext } from "@builder.io/qwik";
+import {
+  component$,
+  JSXNode,
+  useContext,
+  useSignal,
+  useTask$,
+} from "@builder.io/qwik";
 import { Link, useLocation } from "@builder.io/qwik-city";
 import {
   navContainer,
@@ -15,28 +21,47 @@ import { useSession } from "~/routes/plugin@auth";
 import { btnPressed, btnHover, btnPink } from "~/shared/styles.css";
 import checkIsAdmin from "~/shared/utils/isAdmin";
 import { CartContext } from "~/contexts";
+import { IconProps } from "@qwikest/icons";
 
 export default component$(() => {
   const session = useSession();
   const location = useLocation();
   const cart = useContext(CartContext);
+  const navItemsSignal = useSignal<NavItemType[]>([]);
 
-  const navItems: NavItemType[] = [{ label: "Home", path: "/", icon: BsHouse }];
+  const navItems: NavItemType[] = [
+    { label: "Home", path: "/" },
+    { label: "User", path: "/user/" },
+    { label: "Cart", path: "/cart/", items: false },
+  ];
+  const navItemsAdmin: NavItemType[] = [
+    { label: "Home", path: "/" },
+    { label: "New Board", path: "/new_board/" },
+    { label: "Admin", path: "/dashboard/" },
+    { label: "Cart", path: "/cart/", items: false },
+  ];
 
-  checkIsAdmin(session)
-    ? navItems.push({ label: "Admin", path: "/dashboard/", icon: BsPerson })
-    : navItems.push({ label: "User", path: "/user/", icon: BsPerson });
+  useTask$(({ track }) => {
+    const sessionTracking = track(() => session);
+    if (checkIsAdmin(sessionTracking)) {
+      navItemsSignal.value = navItemsAdmin;
+    } else {
+      navItemsSignal.value = navItems;
+    }
+  });
 
-  if (checkIsAdmin(session)) {
-    navItems.push({ label: "New Board", path: "/new_board/", icon: BsPlus });
-  }
-
-  navItems.push({ label: "Cart", path: "/cart/", icon: BsCart, items: false });
+  const iconMap = {
+    Home: BsHouse as (props: IconProps) => JSXNode,
+    User: BsPerson as (props: IconProps) => JSXNode,
+    Admin: BsPerson as (props: IconProps) => JSXNode,
+    Cart: BsCart as (props: IconProps) => JSXNode,
+    "New Board": BsPlus as (props: IconProps) => JSXNode,
+  };
 
   return (
     <nav class={navContainer}>
       <section class={linkSection}>
-        {navItems.map((item) => {
+        {navItemsSignal.value.map((item) => {
           const styleArr = [iconBtnBase, btnPink];
           location.url.pathname !== item.path
             ? styleArr.push(btnHover)
@@ -49,12 +74,13 @@ export default component$(() => {
           return (
             <Link key={item.label} class={navLink} href={item.path}>
               <button class={styleArr}>
-                <item.icon
+                {/* <item.icon
                   style={{
                     height: "20px",
                     width: "20px",
                   }}
-                />
+                /> */}
+                {item.label}
               </button>
               {cart.value.items.length > 0 && item.label === "Cart" && (
                 <div class={cartItemIndicator}>{cart.value.items.length}</div>
