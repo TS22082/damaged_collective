@@ -1,5 +1,5 @@
 import { Form, useNavigate, type DocumentHead } from "@builder.io/qwik-city";
-import { component$, useContext } from "@builder.io/qwik";
+import { component$, useContext, useSignal } from "@builder.io/qwik";
 import { CartContext } from "~/contexts";
 import {
   cartWrapper,
@@ -29,11 +29,28 @@ import { createCheckoutSession } from "../api/createCheckoutSession";
 export default component$(() => {
   const cart = useContext(CartContext);
   const navigate = useNavigate();
+  const formSignal = useSignal({
+    firstName: "",
+    lastName: "",
+    address: "",
+    address2: "",
+    city: "",
+    state: "",
+    zip: "",
+  });
 
   const total = cart.value.items.reduce(
     (acc, item) => acc + item.qty * item.price,
     0
   );
+
+  const formIsValid =
+    formSignal.value.firstName.length > 0 &&
+    formSignal.value.lastName.length > 0 &&
+    formSignal.value.address.length > 0 &&
+    formSignal.value.city.length > 0 &&
+    formSignal.value.state.length > 0 &&
+    formSignal.value.zip.length > 0;
 
   return (
     <div class={cartWrapper}>
@@ -43,7 +60,7 @@ export default component$(() => {
       ) : (
         <Form class={formContainer}>
           <div class={checkoutFormInputs}>
-            <p>Fill out your shipping details</p>
+            <p>Fill out your shipping details {formSignal.value.firstName}</p>
             <div
               style={{
                 width: "80%",
@@ -55,54 +72,100 @@ export default component$(() => {
                 style={{
                   width: "45%",
                 }}
+                onInput$={(e) => {
+                  formSignal.value = {
+                    ...formSignal.value,
+                    firstName: (e.target as HTMLInputElement).value,
+                  };
+                }}
                 name="firstName"
                 placeholder="First Name"
                 class={[formInput, checkoutFormItem]}
                 type="text"
-                value={""}
+                value={formSignal.value.firstName}
               />
               <input
                 style={{
                   width: "45%",
                 }}
+                onInput$={(e) =>
+                  (formSignal.value = {
+                    ...formSignal.value,
+                    lastName: (e.target as HTMLInputElement).value,
+                  })
+                }
                 name="lastName"
                 placeholder="Last Name"
                 class={[formInput, checkoutFormItem]}
                 type="text"
-                value={""}
+                value={formSignal.value.lastName}
               />
             </div>
             <input
-              name="street"
-              placeholder="Street"
+              name="address"
+              onInput$={(e) =>
+                (formSignal.value = {
+                  ...formSignal.value,
+                  address: (e.target as HTMLInputElement).value,
+                })
+              }
+              placeholder="Address"
               class={[formInput, checkoutFormItem]}
               type="text"
-              value={""}
+              value={formSignal.value.address}
             />
             <input
               name="street2"
+              onInput$={(e) =>
+                (formSignal.value = {
+                  ...formSignal.value,
+                  address2: (e.target as HTMLInputElement).value,
+                })
+              }
               placeholder="Street 2"
               class={[formInput, checkoutFormItem]}
               type="text"
-              value={""}
+              value={formSignal.value.address2}
             />
 
             <div class={cityStateContainer}>
               <input
                 name="city"
+                onInput$={(e) =>
+                  (formSignal.value = {
+                    ...formSignal.value,
+                    city: (e.target as HTMLInputElement).value,
+                  })
+                }
                 placeholder="City"
                 class={formInput}
                 type="text"
-                value={""}
+                value={formSignal.value.city}
               />
               <input
                 name="zip"
+                onInput$={(e) =>
+                  (formSignal.value = {
+                    ...formSignal.value,
+                    zip: (e.target as HTMLInputElement).value,
+                  })
+                }
                 placeholder="Zip"
                 class={formInput}
                 type="text"
-                value={""}
+                value={formSignal.value.zip}
               />
-              <select value={"AK"} name="state" class={formInput}>
+              <select
+                value={formSignal.value.state}
+                onInput$={(e) =>
+                  (formSignal.value = {
+                    ...formSignal.value,
+                    state: (e.target as HTMLInputElement).value,
+                  })
+                }
+                name="state"
+                class={formInput}
+              >
                 <option value="AL">Alabama</option>
                 <option value="AK">Alaska</option>
               </select>
@@ -150,6 +213,9 @@ export default component$(() => {
               <p>Total: ${total ? (total / 100).toFixed(2) : "0.00"}</p>
               <button
                 class={checkoutBtn}
+                style={{
+                  cursor: formIsValid ? "pointer" : "not-allowed",
+                }}
                 type="button"
                 onClick$={async () => {
                   try {

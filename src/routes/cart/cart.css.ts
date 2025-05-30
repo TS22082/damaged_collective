@@ -81,8 +81,8 @@ export const qtyActions = style({
 export const removeBtn = style({
   background: "none",
   border: "none",
-  color: "#d33",
   cursor: "pointer",
+  color: "#d33",
   fontWeight: 700,
   fontSize: "1.2rem",
 });
