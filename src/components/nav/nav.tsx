@@ -71,16 +71,17 @@ export default component$(() => {
             styleArr.push(cartHasItems);
           }
 
+          const Icon = iconMap[item.label as keyof typeof iconMap];
+
           return (
             <Link key={item.label} class={navLink} href={item.path}>
               <button class={styleArr}>
-                {/* <item.icon
+                <Icon
                   style={{
                     height: "20px",
                     width: "20px",
                   }}
-                /> */}
-                {item.label}
+                />
               </button>
               {cart.value.items.length > 0 && item.label === "Cart" && (
                 <div class={cartItemIndicator}>{cart.value.items.length}</div>

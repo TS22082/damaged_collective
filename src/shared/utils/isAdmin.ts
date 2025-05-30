@@ -9,7 +9,6 @@ const checkIsAdmin = (
   if (!session.value?.user?.email) return false;
   if (typeof session.value.user.email !== "string") return false;
 
-  console.log("dafuq?");
   return adminList.includes(session.value.user.email);
 };
 

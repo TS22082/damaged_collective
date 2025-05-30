@@ -1,6 +1,3 @@
-import { type JSXNode } from "@builder.io/qwik/jsx-runtime";
-import type { IconProps } from "@qwikest/icons";
-
 export type ProductCardPropsType = {
   product: StripeProductType;
   priceMap: Map<string, StripePriceType>;
