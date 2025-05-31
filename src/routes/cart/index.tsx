@@ -1,5 +1,11 @@
 import { Form, useNavigate, type DocumentHead } from "@builder.io/qwik-city";
-import { $, component$, useContext, useSignal } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  useContext,
+  useSignal,
+  useTask$,
+} from "@builder.io/qwik";
 import { CartContext } from "~/contexts";
 import {
   cartWrapper,
@@ -43,6 +49,12 @@ export default component$(() => {
 
   const session = useSession();
   const signIn = useSignIn();
+  const signedInSignal = useSignal(false);
+
+  useTask$(({ track }) => {
+    const signedIn = track(() => session);
+    signedInSignal.value = !!signedIn.value?.user?.email;
+  });
 
   const updateForm = $((key: string, value: string) => {
     formSignal.value = {
@@ -72,7 +84,7 @@ export default component$(() => {
       ) : (
         <Form class={formContainer}>
           <div class={checkoutFormInputs}>
-            {session.value?.user ? (
+            {signedInSignal.value ? (
               <>
                 <p>
                   Fill out your shipping details {formSignal.value.firstName}
@@ -230,7 +242,7 @@ export default component$(() => {
             <div class={summary}>
               <p>Total: ${total ? (total / 100).toFixed(2) : "0.00"}</p>
 
-              {session.value?.user && (
+              {signedInSignal.value && (
                 <button
                   class={checkoutBtn}
                   style={{
