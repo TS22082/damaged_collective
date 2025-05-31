@@ -32,8 +32,6 @@ export const cartItem = style({
   display: "flex",
   alignItems: "center",
   gap: "2rem",
-  padding: "1.5rem 0",
-  borderBottom: "1px solid #ededed",
 });
 
 export const itemImage = style({
@@ -141,4 +139,11 @@ export const cartItems = style({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
+});
+
+export const divider = style({
+  width: "100%",
+  height: "1px",
+  background: "lightgray",
+  margin: "2rem 0",
 });

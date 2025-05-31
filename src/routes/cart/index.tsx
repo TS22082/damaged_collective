@@ -22,9 +22,11 @@ import {
   checkoutFormInputs,
   checkoutFormItem,
   cityStateContainer,
+  divider,
 } from "./cart.css";
 import { formInput } from "../new_board/new.css";
 import { createCheckoutSession } from "../api/createCheckoutSession";
+import { useSession } from "../plugin@auth";
 
 export default component$(() => {
   const cart = useContext(CartContext);
@@ -38,6 +40,8 @@ export default component$(() => {
     state: "",
     zip: "",
   });
+
+  const session = useSession();
 
   const updateForm = $((key: string, value: string) => {
     formSignal.value = {
@@ -67,132 +71,151 @@ export default component$(() => {
       ) : (
         <Form class={formContainer}>
           <div class={checkoutFormInputs}>
-            <p>Fill out your shipping details {formSignal.value.firstName}</p>
-            <div
-              style={{
-                width: "80%",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <input
-                style={{
-                  width: "45%",
-                }}
-                onInput$={(e) =>
-                  updateForm("firstName", (e.target as HTMLInputElement).value)
-                }
-                name="firstName"
-                placeholder="First Name"
-                class={[formInput, checkoutFormItem]}
-                type="text"
-                value={formSignal.value.firstName}
-              />
-              <input
-                style={{
-                  width: "45%",
-                }}
-                onInput$={(e) =>
-                  updateForm("lastName", (e.target as HTMLInputElement).value)
-                }
-                name="lastName"
-                placeholder="Last Name"
-                class={[formInput, checkoutFormItem]}
-                type="text"
-                value={formSignal.value.lastName}
-              />
-            </div>
-            <input
-              name="address"
-              onInput$={(e) =>
-                updateForm("address", (e.target as HTMLInputElement).value)
-              }
-              placeholder="Address"
-              class={[formInput, checkoutFormItem]}
-              type="text"
-              value={formSignal.value.address}
-            />
-            <input
-              name="street2"
-              onInput$={(e) =>
-                updateForm("address2", (e.target as HTMLInputElement).value)
-              }
-              placeholder="Apt, PO box, etc"
-              class={[formInput, checkoutFormItem]}
-              type="text"
-              value={formSignal.value.address2}
-            />
-
-            <div class={cityStateContainer}>
-              <input
-                name="city"
-                onInput$={(e) =>
-                  updateForm("city", (e.target as HTMLInputElement).value)
-                }
-                placeholder="City"
-                class={formInput}
-                type="text"
-                value={formSignal.value.city}
-              />
-              <input
-                name="zip"
-                onInput$={(e) =>
-                  updateForm("zip", (e.target as HTMLInputElement).value)
-                }
-                placeholder="Zip"
-                class={formInput}
-                type="text"
-                value={formSignal.value.zip}
-              />
-              <select
-                value={formSignal.value.state}
-                onInput$={(e) =>
-                  updateForm("state", (e.target as HTMLInputElement).value)
-                }
-                name="state"
-                class={formInput}
-              >
-                <option value="AL">Alabama</option>
-                <option value="AK">Alaska</option>
-              </select>
-            </div>
+            {session.value?.user ? (
+              <>
+                <p>
+                  Fill out your shipping details {formSignal.value.firstName}
+                </p>
+                <div
+                  style={{
+                    width: "80%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <input
+                    style={{
+                      width: "45%",
+                    }}
+                    onInput$={(e) =>
+                      updateForm(
+                        "firstName",
+                        (e.target as HTMLInputElement).value
+                      )
+                    }
+                    name="firstName"
+                    placeholder="First Name"
+                    class={[formInput, checkoutFormItem]}
+                    type="text"
+                    value={formSignal.value.firstName}
+                  />
+                  <input
+                    style={{
+                      width: "45%",
+                    }}
+                    onInput$={(e) =>
+                      updateForm(
+                        "lastName",
+                        (e.target as HTMLInputElement).value
+                      )
+                    }
+                    name="lastName"
+                    placeholder="Last Name"
+                    class={[formInput, checkoutFormItem]}
+                    type="text"
+                    value={formSignal.value.lastName}
+                  />
+                </div>
+                <input
+                  name="address"
+                  onInput$={(e) =>
+                    updateForm("address", (e.target as HTMLInputElement).value)
+                  }
+                  placeholder="Address"
+                  class={[formInput, checkoutFormItem]}
+                  type="text"
+                  value={formSignal.value.address}
+                />
+                <input
+                  name="street2"
+                  onInput$={(e) =>
+                    updateForm("address2", (e.target as HTMLInputElement).value)
+                  }
+                  placeholder="Apt, PO box, etc"
+                  class={[formInput, checkoutFormItem]}
+                  type="text"
+                  value={formSignal.value.address2}
+                />
+                <div class={cityStateContainer}>
+                  <input
+                    name="city"
+                    onInput$={(e) =>
+                      updateForm("city", (e.target as HTMLInputElement).value)
+                    }
+                    placeholder="City"
+                    class={formInput}
+                    type="text"
+                    value={formSignal.value.city}
+                  />
+                  <input
+                    name="zip"
+                    onInput$={(e) =>
+                      updateForm("zip", (e.target as HTMLInputElement).value)
+                    }
+                    placeholder="Zip"
+                    class={formInput}
+                    type="text"
+                    value={formSignal.value.zip}
+                  />
+                  <select
+                    value={formSignal.value.state}
+                    onInput$={(e) =>
+                      updateForm("state", (e.target as HTMLInputElement).value)
+                    }
+                    name="state"
+                    class={formInput}
+                  >
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                  </select>
+                </div>
+              </>
+            ) : (
+              <p>
+                You need to be signed in to checkout. Please log in to fill out
+                your shipping information.
+              </p>
+            )}
           </div>
           <div class={cartItems}>
             <ul class={cartList}>
               {cart.value.items.map((item) => (
-                <li key={item.product_id} class={cartItem}>
-                  <div
-                    style={{ backgroundImage: `url(${item.image})` }}
-                    class={itemImage}
-                  />
-                  <div class={itemInfo}>
-                    <p class={itemName}>{item.name}</p>
-                    <p class={itemDescription}>{item.description}</p>
-                    <p class={itemPrice}>${(item.price / 100).toFixed(2)}</p>
-                  </div>
-                  <div class={qtyActions}>
-                    <span class={itemQty}>x{item.qty}</span>
-                    <button
-                      class={removeBtn}
-                      aria-label="Remove from cart"
-                      onClick$={() => {
-                        cart.value = {
-                          ...cart.value,
-                          items: cart.value.items.filter(
-                            (ci) => ci.product_id !== item.product_id
-                          ),
-                        };
+                <>
+                  <li key={item.product_id} class={cartItem}>
+                    <div
+                      style={{ backgroundImage: `url(${item.image})` }}
+                      class={itemImage}
+                    />
+                    <div class={itemInfo}>
+                      <p class={itemName}>{item.name}</p>
+                      <p class={itemDescription}>{item.description}</p>
+                      <p class={itemPrice}>${(item.price / 100).toFixed(2)}</p>
+                    </div>
+                    <div class={qtyActions}>
+                      <span class={itemQty}>x{item.qty}</span>
+                      <button
+                        class={removeBtn}
+                        aria-label="Remove from cart"
+                        onClick$={() => {
+                          cart.value = {
+                            ...cart.value,
+                            items: cart.value.items.filter(
+                              (ci) => ci.product_id !== item.product_id
+                            ),
+                          };
 
-                        localStorage.setItem(
-                          "cart",
-                          JSON.stringify(cart.value.items)
-                        );
-                      }}
-                    >
-                      ×
-                    </button>
-                  </div>
-                </li>
+                          localStorage.setItem(
+                            "cart",
+                            JSON.stringify(cart.value.items)
+                          );
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </li>
+                  <div class={divider} />
+                </>
               ))}
             </ul>
             <div class={summary}>

@@ -1,6 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import { useSignOut } from "../plugin@auth";
-import { DocumentHead } from "@builder.io/qwik-city";
+import { type DocumentHead } from "@builder.io/qwik-city";
 
 export default component$(() => {
   const signOut = useSignOut();
