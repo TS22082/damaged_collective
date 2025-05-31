@@ -1,6 +1,6 @@
 import {
   component$,
-  JSXNode,
+  type JSXNode,
   useContext,
   useSignal,
   useTask$,
