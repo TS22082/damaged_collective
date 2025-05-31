@@ -1,4 +1,4 @@
-import { Form, useNavigate, type DocumentHead } from "@builder.io/qwik-city";
+import { useNavigate, type DocumentHead } from "@builder.io/qwik-city";
 import { component$, useContext } from "@builder.io/qwik";
 import { CartContext, UserContext } from "~/contexts";
 import {
@@ -26,7 +26,6 @@ import { createCheckoutSession } from "../api/createCheckoutSession";
 export default component$(() => {
   const cart = useContext(CartContext);
   const user = useContext(UserContext);
-
   const navigate = useNavigate();
 
   const total = cart.value.items.reduce(
@@ -40,7 +39,7 @@ export default component$(() => {
       {cart.value.items.length === 0 ? (
         <p class={emptyCart}>Your cart is empty.</p>
       ) : (
-        <Form class={formContainer}>
+        <div class={formContainer}>
           <div class={cartItems}>
             <ul class={cartList}>
               {cart.value.items.map((item) => (
@@ -105,7 +104,7 @@ export default component$(() => {
               )}
             </div>
           </div>
-        </Form>
+        </div>
       )}
     </div>
   );
