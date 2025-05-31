@@ -236,7 +236,10 @@ export default component$(() => {
                   class={checkoutBtn}
                   style={{
                     cursor: formIsValid ? "pointer" : "not-allowed",
+                    background: formIsValid ? "#000" : "#ccc",
+                    color: formIsValid ? "#fff" : "#000",
                   }}
+                  disabled={!formIsValid}
                   type="button"
                   onClick$={async () => {
                     try {

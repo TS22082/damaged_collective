@@ -100,12 +100,9 @@ export const checkoutBtn = style({
   marginTop: ".5rem",
   padding: ".8rem 2.5rem",
   borderRadius: "6px",
-  background: "#000",
-  color: "#fff",
   border: "none",
   fontWeight: 600,
   fontSize: "1rem",
-  cursor: "pointer",
 });
 
 export const formContainer = style({
