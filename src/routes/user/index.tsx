@@ -19,7 +19,15 @@ export default component$(() => {
       )}
 
       {session.value?.user?.email && (
-        <button onClick$={() => signOut.submit({})}>Sign Out</button>
+        <button
+          onClick$={() =>
+            signOut.submit({
+              redirectTo: "/",
+            })
+          }
+        >
+          Sign Out
+        </button>
       )}
     </>
   );
