@@ -1,6 +1,6 @@
 import { useNavigate, type DocumentHead } from "@builder.io/qwik-city";
 import { component$, useContext } from "@builder.io/qwik";
-import { CartContext, UserContext } from "~/contexts";
+import { CartContext } from "~/contexts";
 import {
   cartWrapper,
   title,
