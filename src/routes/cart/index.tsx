@@ -1,13 +1,6 @@
 import { Form, useNavigate, type DocumentHead } from "@builder.io/qwik-city";
-import {
-  $,
-  component$,
-  isBrowser,
-  useContext,
-  useSignal,
-  useTask$,
-} from "@builder.io/qwik";
-import { CartContext } from "~/contexts";
+import { $, component$, useContext, useSignal } from "@builder.io/qwik";
+import { CartContext, UserContext } from "~/contexts";
 import {
   cartWrapper,
   title,
@@ -33,10 +26,12 @@ import {
 } from "./cart.css";
 import { formInput } from "../new_board/new.css";
 import { createCheckoutSession } from "../api/createCheckoutSession";
-import { useSession, useSignIn } from "../plugin@auth";
+import { useSignIn } from "../plugin@auth";
 
 export default component$(() => {
   const cart = useContext(CartContext);
+  const user = useContext(UserContext);
+
   const navigate = useNavigate();
   const formSignal = useSignal({
     firstName: "",
@@ -48,16 +43,7 @@ export default component$(() => {
     zip: "",
   });
 
-  const session = useSession();
   const signIn = useSignIn();
-  const signedInSignal = useSignal(!!session.value?.user?.email);
-
-  useTask$(({ track }) => {
-    if (isBrowser) {
-      const signedIn = track(() => session);
-      signedInSignal.value = !!signedIn.value?.user?.email;
-    }
-  });
 
   const updateForm = $((key: string, value: string) => {
     formSignal.value = {
@@ -87,7 +73,7 @@ export default component$(() => {
       ) : (
         <Form class={formContainer}>
           <div class={checkoutFormInputs}>
-            {signedInSignal.value ? (
+            {user.value ? (
               <>
                 <p>
                   Fill out your shipping details {formSignal.value.firstName}
@@ -245,7 +231,7 @@ export default component$(() => {
             <div class={summary}>
               <p>Total: ${total ? (total / 100).toFixed(2) : "0.00"}</p>
 
-              {signedInSignal.value && (
+              {user.value && (
                 <button
                   class={checkoutBtn}
                   style={{

@@ -38,6 +38,12 @@ export type CartState = {
   items: CartItem[];
 };
 
+export type UserType = {
+  email: string;
+  name: string;
+  image: string;
+};
+
 export type StripePriceType = {
   id: string;
   product: string;

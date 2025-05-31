@@ -3,13 +3,15 @@ import {
   Slot,
   useContextProvider,
   useSignal,
+  useTask$,
   useVisibleTask$,
 } from "@builder.io/qwik";
 import type { RequestHandler } from "@builder.io/qwik-city";
 import Nav from "~/components/nav/nav";
 import Footer from "~/components/footer/footer";
-import { CartContext } from "~/contexts";
-import type { CartItem, CartState } from "~/shared/types";
+import { CartContext, UserContext } from "~/contexts";
+import type { CartItem, CartState, UserType } from "~/shared/types";
+import { useSession } from "./plugin@auth";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -27,6 +29,10 @@ export default component$(() => {
     items: [] as CartItem[],
   });
 
+  const user = useSignal<null | UserType>(null);
+
+  const session = useSession();
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const storedCart = localStorage.getItem("cart");
@@ -34,6 +40,16 @@ export default component$(() => {
     else localStorage.setItem("cart", JSON.stringify(cart.value.items));
   });
 
+  useTask$(({ track }) => {
+    const sessionTracking = track(() => session);
+    if (sessionTracking.value?.user?.email) {
+      user.value = sessionTracking.value.user as UserType;
+    } else {
+      user.value = null;
+    }
+  });
+
+  useContextProvider(UserContext, user);
   useContextProvider(CartContext, cart);
 
   return (
