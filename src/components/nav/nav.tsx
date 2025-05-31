@@ -1,10 +1,4 @@
-import {
-  component$,
-  type JSXNode,
-  useContext,
-  useSignal,
-  useTask$,
-} from "@builder.io/qwik";
+import { component$, useContext, useSignal, useTask$ } from "@builder.io/qwik";
 import { Link, useLocation } from "@builder.io/qwik-city";
 import {
   navContainer,
@@ -15,14 +9,12 @@ import {
   cartHasItems,
   cartItemIndicator,
 } from "./nav.css";
-import { BsHouse, BsPlus, BsCart, BsPerson } from "@qwikest/icons/bootstrap";
 import type { NavItemType } from "~/shared/types";
 import { useSession } from "~/routes/plugin@auth";
 import { btnPressed, btnHover, btnPink } from "~/shared/styles.css";
 import checkIsAdmin from "~/shared/utils/isAdmin";
 import { CartContext } from "~/contexts";
-import { type IconProps } from "@qwikest/icons";
-import { navItems, navItemsAdmin } from "~/shared/constants";
+import { iconMap, navItems, navItemsAdmin } from "~/shared/constants";
 
 export default component$(() => {
   const session = useSession();
@@ -36,14 +28,6 @@ export default component$(() => {
       ? (navItemsSignal.value = navItemsAdmin)
       : (navItemsSignal.value = navItems);
   });
-
-  const iconMap = {
-    Home: BsHouse as (props: IconProps) => JSXNode,
-    User: BsPerson as (props: IconProps) => JSXNode,
-    Admin: BsPerson as (props: IconProps) => JSXNode,
-    Cart: BsCart as (props: IconProps) => JSXNode,
-    "New Board": BsPlus as (props: IconProps) => JSXNode,
-  };
 
   return (
     <nav class={navContainer}>
