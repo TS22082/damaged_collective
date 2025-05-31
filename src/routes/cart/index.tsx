@@ -26,7 +26,7 @@ import {
 } from "./cart.css";
 import { formInput } from "../new_board/new.css";
 import { createCheckoutSession } from "../api/createCheckoutSession";
-import { useSession } from "../plugin@auth";
+import { useSession, useSignIn } from "../plugin@auth";
 
 export default component$(() => {
   const cart = useContext(CartContext);
@@ -42,6 +42,7 @@ export default component$(() => {
   });
 
   const session = useSession();
+  const signIn = useSignIn();
 
   const updateForm = $((key: string, value: string) => {
     formSignal.value = {
@@ -171,10 +172,11 @@ export default component$(() => {
                 </div>
               </>
             ) : (
-              <p>
-                You need to be signed in to checkout. Please log in to fill out
-                your shipping information.
-              </p>
+              <Form action={signIn}>
+                <input type="hidden" name="providerId" value="github" />
+                <input type="hidden" name="options.redirectTo" value="/cart/" />
+                <button>Sign In With Github</button>
+              </Form>
             )}
           </div>
           <div class={cartItems}>
@@ -220,23 +222,28 @@ export default component$(() => {
             </ul>
             <div class={summary}>
               <p>Total: ${total ? (total / 100).toFixed(2) : "0.00"}</p>
-              <button
-                class={checkoutBtn}
-                style={{
-                  cursor: formIsValid ? "pointer" : "not-allowed",
-                }}
-                type="button"
-                onClick$={async () => {
-                  try {
-                    const checkoutUrl = await createCheckoutSession(cart.value);
-                    await navigate(checkoutUrl);
-                  } catch (error) {
-                    console.error(error);
-                  }
-                }}
-              >
-                Checkout
-              </button>
+
+              {session.value?.user && (
+                <button
+                  class={checkoutBtn}
+                  style={{
+                    cursor: formIsValid ? "pointer" : "not-allowed",
+                  }}
+                  type="button"
+                  onClick$={async () => {
+                    try {
+                      const checkoutUrl = await createCheckoutSession(
+                        cart.value
+                      );
+                      await navigate(checkoutUrl);
+                    } catch (error) {
+                      console.error(error);
+                    }
+                  }}
+                >
+                  Checkout
+                </button>
+              )}
             </div>
           </div>
         </Form>
