@@ -21,7 +21,8 @@ import { useSession } from "~/routes/plugin@auth";
 import { btnPressed, btnHover, btnPink } from "~/shared/styles.css";
 import checkIsAdmin from "~/shared/utils/isAdmin";
 import { CartContext } from "~/contexts";
-import { IconProps } from "@qwikest/icons";
+import { type IconProps } from "@qwikest/icons";
+import { navItems, navItemsAdmin } from "~/shared/constants";
 
 export default component$(() => {
   const session = useSession();
@@ -29,25 +30,11 @@ export default component$(() => {
   const cart = useContext(CartContext);
   const navItemsSignal = useSignal<NavItemType[]>([]);
 
-  const navItems: NavItemType[] = [
-    { label: "Home", path: "/" },
-    { label: "User", path: "/user/" },
-    { label: "Cart", path: "/cart/", items: false },
-  ];
-  const navItemsAdmin: NavItemType[] = [
-    { label: "Home", path: "/" },
-    { label: "New Board", path: "/new_board/" },
-    { label: "Admin", path: "/dashboard/" },
-    { label: "Cart", path: "/cart/", items: false },
-  ];
-
   useTask$(({ track }) => {
     const sessionTracking = track(() => session);
-    if (checkIsAdmin(sessionTracking)) {
-      navItemsSignal.value = navItemsAdmin;
-    } else {
-      navItemsSignal.value = navItems;
-    }
+    checkIsAdmin(sessionTracking)
+      ? (navItemsSignal.value = navItemsAdmin)
+      : (navItemsSignal.value = navItems);
   });
 
   const iconMap = {
