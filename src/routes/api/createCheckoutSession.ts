@@ -23,6 +23,14 @@ export const createCheckoutSession = server$(async function (cart: CartState) {
       mode: "payment",
       success_url: `${domain}success`,
       cancel_url: domain,
+      shipping_address_collection: {
+        allowed_countries: ["US"],
+      },
+      automatic_tax: {
+        // to get this to work I need to set the tax code in the stripe dashboard
+        // https://dashboard.stripe.com/tax-settings
+        enabled: true,
+      },
     });
 
     return checkoutSession.url as string;
