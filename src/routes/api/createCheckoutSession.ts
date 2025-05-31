@@ -1,15 +1,10 @@
 import { server$ } from "@builder.io/qwik-city";
 import { getStripeClient } from "~/shared/stripeClient";
-import { type CartState } from "~/shared/types";
-
-type itemType = {
-  price_id: string;
-  qty: number;
-};
+import type { ItemType, CartState } from "~/shared/types";
 
 export const createCheckoutSession = server$(async function (cart: CartState) {
   try {
-    const itemsForStripe = cart.items.map((item: itemType) => ({
+    const itemsForStripe = cart.items.map((item: ItemType) => ({
       price: item.price_id,
       quantity: item.qty,
     }));

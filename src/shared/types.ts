@@ -50,3 +50,8 @@ export type StripePriceType = {
   currency: string;
   unit_amount: number;
 };
+
+export type ItemType = {
+  price_id: string;
+  qty: number;
+};

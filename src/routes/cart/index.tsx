@@ -25,7 +25,6 @@ import { createCheckoutSession } from "../api/createCheckoutSession";
 
 export default component$(() => {
   const cart = useContext(CartContext);
-  const user = useContext(UserContext);
   const navigate = useNavigate();
 
   const total = cart.value.items.reduce(
@@ -83,25 +82,20 @@ export default component$(() => {
             </ul>
             <div class={summary}>
               <p>Total: ${total ? (total / 100).toFixed(2) : "0.00"}</p>
-
-              {user.value && (
-                <button
-                  class={checkoutBtn}
-                  type="button"
-                  onClick$={async () => {
-                    try {
-                      const checkoutUrl = await createCheckoutSession(
-                        cart.value
-                      );
-                      await navigate(checkoutUrl);
-                    } catch (error) {
-                      console.error(error);
-                    }
-                  }}
-                >
-                  Checkout
-                </button>
-              )}
+              <button
+                class={checkoutBtn}
+                type="button"
+                onClick$={async () => {
+                  try {
+                    const checkoutUrl = await createCheckoutSession(cart.value);
+                    await navigate(checkoutUrl);
+                  } catch (error) {
+                    console.error(error);
+                  }
+                }}
+              >
+                Checkout
+              </button>
             </div>
           </div>
         </div>
