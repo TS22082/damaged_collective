@@ -2,6 +2,7 @@ import { Form, useNavigate, type DocumentHead } from "@builder.io/qwik-city";
 import {
   $,
   component$,
+  isBrowser,
   useContext,
   useSignal,
   useTask$,
@@ -49,11 +50,13 @@ export default component$(() => {
 
   const session = useSession();
   const signIn = useSignIn();
-  const signedInSignal = useSignal(false);
+  const signedInSignal = useSignal(!!session.value?.user?.email);
 
   useTask$(({ track }) => {
-    const signedIn = track(() => session);
-    signedInSignal.value = !!signedIn.value?.user?.email;
+    if (isBrowser) {
+      const signedIn = track(() => session);
+      signedInSignal.value = !!signedIn.value?.user?.email;
+    }
   });
 
   const updateForm = $((key: string, value: string) => {
