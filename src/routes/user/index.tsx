@@ -1,24 +1,25 @@
 import { Link, type DocumentHead } from "@builder.io/qwik-city";
-import { component$ } from "@builder.io/qwik";
-import { useSession, useSignOut } from "../plugin@auth";
+import { component$, useContext } from "@builder.io/qwik";
+import { useSignOut } from "../plugin@auth";
+import { UserContext } from "~/contexts";
 
 export default component$(() => {
-  const session = useSession();
   const signOut = useSignOut();
+  const user = useContext(UserContext);
 
   return (
     <>
       <h1>The User page</h1>
       <div>This is the demo user page</div>
-      {session.value?.user?.email ? (
-        <p>{session.value.user.email}</p>
+      {user.value?.email ? (
+        <p>{user.value.email}</p>
       ) : (
         <p>
           Not signed in, <Link href="/login">Sign In</Link>
         </p>
       )}
 
-      {session.value?.user?.email && (
+      {user.value?.email && (
         <button
           onClick$={() =>
             signOut.submit({
