@@ -11,6 +11,7 @@ export const onPost: RequestHandler = async (requestEvent) => {
 
   if (!signature) {
     requestEvent.json(400, { ok: false, msg: "no signature" });
+    console.log("no signature");
     return;
   }
 
@@ -30,7 +31,7 @@ export const onPost: RequestHandler = async (requestEvent) => {
 
     switch (event.type) {
       case "checkout.session.completed": {
-        console.log("checkout session completed", event);
+        console.log("checkout session completed", event.data.object);
         break;
       }
 
