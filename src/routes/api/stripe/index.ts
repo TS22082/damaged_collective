@@ -7,35 +7,49 @@ export const onPost: RequestHandler = async (requestEvent) => {
     apiVersion: "2025-04-30.basil",
   });
 
-  console.log("webhookSecret ==>", webhookSecret);
-  const stripeEvent = await requestEvent.request.json();
+  // const stripeEvent = await requestEvent.request.json();
 
-  if (!stripeEvent) {
-    return requestEvent.json(400, { ok: false });
-  }
+  // if (!stripeEvent) {
+  //   console.log("no stripe event");
+  //   requestEvent.json(400, { ok: false, msg: "no stripe event" });
+  //   return;
+  // }
 
   const signature = requestEvent.request.headers.get("stripe-signature");
 
+  console.log("signature ==>", signature);
+
   if (!signature) {
-    return requestEvent.json(400, { ok: false });
+    console.log("no signature");
+    requestEvent.json(400, { ok: false, msg: "no signature" });
+    return;
   }
 
   if (!webhookSecret) {
-    return requestEvent.json(400, { ok: false });
+    console.log("no webhook secret");
+    requestEvent.json(400, { ok: false, msg: "no webhook secret" });
+    return;
   }
 
   try {
+    const bodyBuffer = Buffer.from(await requestEvent.request.arrayBuffer());
+
     const event = await stripe.webhooks.constructEventAsync(
-      stripeEvent.raw,
-      signature,
-      webhookSecret
+      bodyBuffer,
+      signature as string,
+      webhookSecret as string
     );
 
-    console.log("event ==>", event);
+    console.log("Event ==>", event);
+
+    requestEvent.json(200, { ok: true });
+    return;
   } catch (e) {
-    return requestEvent.json(400, { ok: false });
+    console.log("Error ==>", e);
+    requestEvent.json(400, { ok: false, msg: e });
+    return;
   }
 
-  console.log("stripeEvent ==>", stripeEvent);
   requestEvent.json(200, { ok: true });
+  return;
 };
