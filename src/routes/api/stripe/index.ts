@@ -29,10 +29,16 @@ export const onPost: RequestHandler = async (requestEvent) => {
     );
 
     switch (event.type) {
-      case "customer.created": {
-        console.log("customer was created", event);
+      case "checkout.session.completed": {
+        console.log("checkout session completed", event);
         break;
       }
+
+      case "checkout.session.async_payment_failed": {
+        console.log("checkout session async_payment_failed", event);
+        break;
+      }
+
       default: {
         console.log("unknown event", event);
         break;
