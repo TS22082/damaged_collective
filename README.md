@@ -42,6 +42,14 @@ npm run qwik add # or `yarn qwik add`
 
 Development mode uses [Vite's development server](https://vitejs.dev/). The `dev` command will server-side render (SSR) the output during development.
 
+Edit: Stripe added to stack, and making use of webhooks (api/stripe)
+
+install stripe using homebrew or NPM and foward webhook traffic to correct endpoint
+
+```shell
+stripe listen --forward-to localhost:5173/api/stripe
+```
+
 ```shell
 npm start # or `yarn start`
 ```
