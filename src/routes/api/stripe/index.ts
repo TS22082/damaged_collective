@@ -49,7 +49,4 @@ export const onPost: RequestHandler = async (requestEvent) => {
     requestEvent.json(400, { ok: false, msg: e });
     return;
   }
-
-  requestEvent.json(200, { ok: true });
-  return;
 };
