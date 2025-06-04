@@ -50,9 +50,30 @@ export const onPost: RequestHandler = async (requestEvent) => {
           break;
         }
 
+        const sessionId = event.data.object.id;
+
+        const lineItems = await stripe.checkout.sessions.listLineItems(
+          sessionId,
+          {
+            limit: 100,
+          }
+        );
+
+        const session = event.data.object as Record<string, any>;
+
+        if (!session.shipping) {
+          console.log("no shipping", session);
+          break;
+        }
+
         await db.collection("orders").insertOne({
           eventId,
-          ...event.data.object,
+          sessionId,
+          shipping: session.shipping,
+          items: lineItems.data,
+          meta: {
+            ...event.data.object,
+          },
         });
 
         break;
