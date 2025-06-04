@@ -13,6 +13,17 @@ import { CartContext, UserContext } from "~/contexts";
 import type { CartItem, CartState, UserType } from "~/shared/types";
 import { useSession } from "./plugin@auth";
 
+const setCart = (cart: { value: CartState }, localStoredCart: CartItem[]) => {
+  cart.value = { items: localStoredCart };
+};
+
+const setUser = (
+  user: { value: null | UserType },
+  localStoredUser: null | UserType
+) => {
+  user.value = localStoredUser;
+};
+
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
   // https://qwik.dev/docs/caching/
@@ -30,23 +41,21 @@ export default component$(() => {
   });
 
   const user = useSignal<null | UserType>(null);
-
   const session = useSession();
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const storedCart = localStorage.getItem("cart");
-    if (storedCart) {
-      cart.value = { items: JSON.parse(storedCart) };
-      return;
-    }
+    if (storedCart) return setCart(cart, JSON.parse(storedCart));
     localStorage.setItem("cart", JSON.stringify(cart.value.items));
   });
 
   useTask$(({ track }) => {
     const sessionTracking = track(() => session);
-    if (sessionTracking.value?.user?.email) {
-      user.value = sessionTracking.value.user as UserType;
+    const emailFromSession = sessionTracking.value?.user?.email;
+
+    if (emailFromSession) {
+      setUser(user, sessionTracking.value?.user as UserType);
     } else {
       user.value = null;
     }
