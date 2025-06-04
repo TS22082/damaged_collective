@@ -53,12 +53,12 @@ export default component$(() => {
   useTask$(({ track }) => {
     const sessionTracking = track(() => session);
     const emailFromSession = sessionTracking.value?.user?.email;
+    const userFromSession = sessionTracking.value?.user as undefined | UserType;
 
-    if (emailFromSession) {
-      setUser(user, sessionTracking.value?.user as UserType);
-    } else {
-      user.value = null;
-    }
+    if (emailFromSession && userFromSession)
+      return setUser(user, userFromSession);
+
+    user.value = null;
   });
 
   useContextProvider(UserContext, user);
