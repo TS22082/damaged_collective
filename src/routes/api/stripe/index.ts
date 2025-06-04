@@ -1,8 +1,10 @@
 import { type RequestHandler } from "@builder.io/qwik-city";
 import Stripe from "stripe";
+import { getDb } from "~/shared/mongodb";
 
 export const onPost: RequestHandler = async (requestEvent) => {
   const webhookSecret = requestEvent.env.get("STRIPE_WEBHOOK_SECRET");
+  const mongoDbSecret = requestEvent.env.get("MONGO_URI") || "";
   const stripe = new Stripe(requestEvent.env.get("SECRET_STRIPE_KEY") || "", {
     apiVersion: "2025-04-30.basil",
   });
@@ -22,6 +24,7 @@ export const onPost: RequestHandler = async (requestEvent) => {
 
   try {
     const bodyBuffer = Buffer.from(await requestEvent.request.arrayBuffer());
+    const db = await getDb(mongoDbSecret);
 
     const event = await stripe.webhooks.constructEventAsync(
       bodyBuffer,
@@ -31,7 +34,27 @@ export const onPost: RequestHandler = async (requestEvent) => {
 
     switch (event.type) {
       case "checkout.session.completed": {
-        console.log("checkout session completed", event.data.object);
+        const eventId = event.id as string;
+
+        if (!eventId) {
+          console.log("No Event Id", event);
+          break;
+        }
+
+        const itemAlreadyExists = await db
+          .collection("orders")
+          .findOne({ eventId });
+
+        if (itemAlreadyExists) {
+          console.log("item already exists");
+          break;
+        }
+
+        await db.collection("orders").insertOne({
+          eventId,
+          ...event.data.object,
+        });
+
         break;
       }
 
@@ -41,7 +64,6 @@ export const onPost: RequestHandler = async (requestEvent) => {
       }
 
       default: {
-        console.log("unknown event", event);
         break;
       }
     }
