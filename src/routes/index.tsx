@@ -5,52 +5,25 @@ import {
   routeLoader$,
 } from "@builder.io/qwik-city";
 import ProductCard from "~/components/product-card";
-import type {
-  StripePriceType,
-  StripeProductType,
-  StripMetadataType,
-} from "~/shared/types";
-
+import type { StripeProductType } from "~/shared/types";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 import { getStripeClient } from "~/shared/stripeClient";
+import { DEFAULT_STRIPE_FILTER } from "~/shared/constants";
+import setMapFromArr from "~/shared/utils/createMapFromArr";
+import { formatProducts } from "~/shared/utils/formatProducts";
 
 export const useStripeProducts = routeLoader$(
   async (requestEvent: RequestEventLoader) => {
     const stripe = getStripeClient(requestEvent.env.get("SECRET_STRIPE_KEY"));
 
     try {
-      const productsReq = stripe.products.list({
-        limit: 100,
-        active: true,
-      });
-
-      const pricesReq = stripe.prices.list({
-        limit: 100,
-        active: true,
-      });
-
+      const productsReq = stripe.products.list(DEFAULT_STRIPE_FILTER);
+      const pricesReq = stripe.prices.list(DEFAULT_STRIPE_FILTER);
       const [products, prices] = await Promise.all([productsReq, pricesReq]);
+      const pricesMap = setMapFromArr(prices.data, "id");
+      const formattedProducts = formatProducts(products.data, pricesMap);
 
-      const pricesMap = new Map<string, StripePriceType>();
-
-      prices.data.forEach((price) => {
-        pricesMap.set(price.id as string, {
-          id: price.id as string,
-          product: price.product as string,
-          currency: price.currency as string,
-          unit_amount: price.unit_amount as number,
-        });
-      });
-
-      return products.data.map((product) => ({
-        id: product.id as string,
-        name: product.name as string,
-        description: product.description as string,
-        images: product.images as string[],
-        price: pricesMap.get(product.default_price as string),
-        default_price: product.default_price as string,
-        metadata: product.metadata as StripMetadataType,
-      }));
+      return formattedProducts;
     } catch (e) {
       throw new ServerError(500, e);
     }

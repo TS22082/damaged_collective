@@ -23,3 +23,8 @@ export const iconMap = {
   Cart: BsCart as (props: IconProps) => JSXNode,
   "New Board": BsPlus as (props: IconProps) => JSXNode,
 };
+
+export const DEFAULT_STRIPE_FILTER = {
+  limit: 100,
+  active: true,
+};
