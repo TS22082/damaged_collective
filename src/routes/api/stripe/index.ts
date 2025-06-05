@@ -46,33 +46,33 @@ export const onPost: RequestHandler = async (requestEvent) => {
           .findOne({ eventId });
 
         if (itemAlreadyExists) {
-          console.log("item already exists");
+          requestEvent.json(400, { ok: false, msg: "item already exists" });
           break;
         }
 
-        const sessionId = event.data.object.id;
+        const session = event.data.object as Record<string, any>;
 
         const lineItems = await stripe.checkout.sessions.listLineItems(
-          sessionId,
+          session.id as string,
           {
             limit: 100,
           }
         );
 
-        const session = event.data.object as Record<string, any>;
-
         if (!session.shipping) {
           console.log("no shipping", session);
+          requestEvent.json(400, { ok: false, msg: "no shipping" });
           break;
         }
 
         await db.collection("orders").insertOne({
           eventId,
-          sessionId,
+          sessionId: session.id,
           shipping: session.shipping,
           items: lineItems.data,
+          status: "open",
           meta: {
-            ...event.data.object,
+            ...session,
           },
         });
 

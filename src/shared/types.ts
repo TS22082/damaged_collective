@@ -20,7 +20,6 @@ export type StripeProductType = {
 export type NavItemType = {
   label: string;
   path: string;
-  // icon: (props: IconProps) => JSXNode;
   items?: boolean;
 };
 

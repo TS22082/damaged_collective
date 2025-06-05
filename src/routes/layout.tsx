@@ -65,10 +65,16 @@ export default component$(() => {
   useContextProvider(CartContext, cart);
 
   return (
-    <>
+    <div>
       <Nav />
-      <Slot />
+      <div
+        style={{
+          minHeight: "40vh",
+        }}
+      >
+        <Slot />
+      </div>
       <Footer />
-    </>
+    </div>
   );
 });

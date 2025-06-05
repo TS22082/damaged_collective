@@ -10,14 +10,11 @@ import {
   cartItemIndicator,
 } from "./nav.css";
 import type { NavItemType } from "~/shared/types";
-// import { useSession } from "~/routes/plugin@auth";
 import { btnPressed, btnHover, btnPink } from "~/shared/styles.css";
-// import checkIsAdmin from "~/shared/utils/isAdmin";
 import { CartContext, UserContext } from "~/contexts";
 import { iconMap, navItems, navItemsAdmin } from "~/shared/constants";
 
 export default component$(() => {
-  // const session = useSession();
   const location = useLocation();
   const cart = useContext(CartContext);
   const user = useContext(UserContext);
