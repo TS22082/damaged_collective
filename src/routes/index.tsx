@@ -32,9 +32,6 @@ export const useStripeProducts = routeLoader$(
 
 export default component$(() => {
   const stripeProducts = useStripeProducts();
-  const localProducts = useSignal<StripeProductType[]>(
-    stripeProducts.value as StripeProductType[]
-  );
 
   return (
     <div class="flex justify-center flex-wrap gap-2 mt-2">
@@ -43,7 +40,7 @@ export default component$(() => {
         onPending={() => <div>Loading...</div>}
         onRejected={(error) => <div>{error.message}</div>}
         onResolved={() =>
-          localProducts.value.map((product) => (
+          stripeProducts.value.map((product: StripeProductType) => (
             <ProductCard key={product.id} product={product} />
           ))
         }
