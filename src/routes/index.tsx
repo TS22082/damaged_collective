@@ -19,34 +19,17 @@ export const useStripeProducts = routeLoader$(
     const stripe = getStripeClient(requestEvent.env.get("SECRET_STRIPE_KEY"));
 
     try {
-      const products = await stripe.products.list({
+      const productsReq = stripe.products.list({
         limit: 100,
         active: true,
       });
 
-      return products.data.map((product) => ({
-        id: product.id as string,
-        name: product.name as string,
-        description: product.description as string,
-        images: product.images as string[],
-        default_price: product.default_price as string,
-        metadata: product.metadata as StripMetadataType,
-      }));
-    } catch (e) {
-      throw new ServerError(500, e);
-    }
-  }
-);
-
-export const useStripePrices = routeLoader$(
-  async (requestEvent: RequestEventLoader) => {
-    const stripe = getStripeClient(requestEvent.env.get("SECRET_STRIPE_KEY"));
-
-    try {
-      const prices = await stripe.prices.list({
+      const pricesReq = stripe.prices.list({
         limit: 100,
         active: true,
       });
+
+      const [products, prices] = await Promise.all([productsReq, pricesReq]);
 
       const pricesMap = new Map<string, StripePriceType>();
 
@@ -59,7 +42,15 @@ export const useStripePrices = routeLoader$(
         });
       });
 
-      return pricesMap;
+      return products.data.map((product) => ({
+        id: product.id as string,
+        name: product.name as string,
+        description: product.description as string,
+        images: product.images as string[],
+        price: pricesMap.get(product.default_price as string),
+        default_price: product.default_price as string,
+        metadata: product.metadata as StripMetadataType,
+      }));
     } catch (e) {
       throw new ServerError(500, e);
     }
@@ -68,8 +59,9 @@ export const useStripePrices = routeLoader$(
 
 export default component$(() => {
   const stripeProducts = useStripeProducts();
-  const localProducts = useSignal<StripeProductType[]>(stripeProducts.value);
-  const priceMap = useStripePrices();
+  const localProducts = useSignal<StripeProductType[]>(
+    stripeProducts.value as StripeProductType[]
+  );
 
   return (
     <div class="flex justify-center flex-wrap gap-2 mt-2">
@@ -79,11 +71,7 @@ export default component$(() => {
         onRejected={(error) => <div>{error.message}</div>}
         onResolved={() =>
           localProducts.value.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              priceMap={priceMap.value}
-            />
+            <ProductCard key={product.id} product={product} />
           ))
         }
       />

@@ -3,20 +3,17 @@ import type { ProductCardPropsType } from "~/shared/types";
 import { useNavigate } from "@builder.io/qwik-city";
 import { cardContainer, imageContainer } from "./product.css";
 
-export default component$<ProductCardPropsType>(({ product, priceMap }) => {
+export default component$<ProductCardPropsType>(({ product }) => {
   const nav = useNavigate();
 
   const imageStyles = {
     backgroundImage: `url(${product.images[0]})`,
   };
 
-  const priceAsNumber = priceMap.get(product.default_price)?.unit_amount;
-  const formattedPrice = priceAsNumber
-    ? new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(priceAsNumber * 0.01)
-    : "";
+  const formattedPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(product.price.unit_amount * 0.01);
 
   return (
     <button

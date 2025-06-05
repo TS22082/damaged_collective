@@ -1,6 +1,5 @@
 export type ProductCardPropsType = {
   product: StripeProductType;
-  priceMap: Map<string, StripePriceType>;
 };
 
 export type StripMetadataType = {
@@ -13,6 +12,7 @@ export type StripeProductType = {
   name: string;
   description: string;
   images: string[];
+  price: StripePriceType;
   default_price: string;
   metadata: StripMetadataType;
 };
