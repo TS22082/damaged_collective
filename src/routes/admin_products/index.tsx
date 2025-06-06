@@ -11,11 +11,11 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Orders",
+  title: "Admin Products",
   meta: [
     {
       name: "description",
-      content: "Orders",
+      content: "Admin Products",
     },
   ],
 };
