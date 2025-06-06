@@ -34,8 +34,8 @@ export const formBtnsContainer = style({
   marginTop: "15px",
 });
 
-export const nameAndPriceContainer = style({
+export const quantityAndPriceContainer = style({
   display: "grid",
-  gridTemplateColumns: "3fr 1fr",
+  gridTemplateColumns: "1fr 1fr",
   gap: "10px",
 });

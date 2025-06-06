@@ -26,6 +26,10 @@ export const btnPressed = style({
   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
 });
 
+export const shaddowed = style({
+  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+});
+
 export const btnHover = style({
   ":hover": {
     scale: "0.99",

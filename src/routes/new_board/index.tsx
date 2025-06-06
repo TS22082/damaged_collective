@@ -14,7 +14,7 @@ import {
   formInput,
   formLabel,
   newFormContainer,
-  nameAndPriceContainer,
+  quantityAndPriceContainer,
   formBtnsContainer,
 } from "./new.css";
 import { btnOrange, btnPink, btnHover, btn } from "~/shared/styles.css";
@@ -31,6 +31,7 @@ export const useCreateProduct = routeAction$(
         description: data.description as string,
         metadata: {
           primaryImg: data.img as string,
+          qty: data.quantity as string,
         },
       });
 
@@ -58,7 +59,15 @@ export const useCreateProduct = routeAction$(
       throw new ServerError(401, "Unauthorized");
     }
 
-    if (!data?.img || !data?.name || !data?.description || !data.price) {
+    console.log("data ==>", data);
+
+    if (
+      !data?.img ||
+      !data?.name ||
+      !data?.description ||
+      !data?.price ||
+      !data?.quantity
+    ) {
       throw new ServerError(400, "Missing required fields");
     }
 
@@ -75,25 +84,49 @@ export default component$(() => {
     if (created?.success === true) nav("/");
   });
 
-  const form = useSignal({ img: "", name: "", price: "", description: "" });
+  const form = useSignal({
+    img: "",
+    name: "",
+    quantity: "",
+    price: "",
+    description: "",
+  });
 
   return (
     <div class={container}>
       <Form action={createProduct} class={newFormContainer}>
-        <div class={nameAndPriceContainer}>
-          <label class={formLabel} for="name">
-            Name
+        <label class={formLabel} for="img">
+          Name
+        </label>
+        <input
+          name="name"
+          type="text"
+          value={form.value.name}
+          class={formInput}
+          onInput$={(e) =>
+            (form.value = {
+              ...form.value,
+              name: (e.target as HTMLInputElement).value,
+            })
+          }
+        />
+        <div class={quantityAndPriceContainer}>
+          <label class={formLabel} for="quantity">
+            Quantity
           </label>
           <label class={formLabel} for="price">
             Price
           </label>
           <input
-            name="name"
-            type="text"
-            value={form.value.name}
+            name="quantity"
+            type="number"
+            value={form.value.quantity || "1"}
             class={formInput}
             onInput$={(e) =>
-              (form.value.name = (e.target as HTMLInputElement).value)
+              (form.value = {
+                ...form.value,
+                quantity: (e.target as HTMLInputElement).value,
+              })
             }
           />
           <input
@@ -102,7 +135,10 @@ export default component$(() => {
             value={form.value.price}
             class={formInput}
             onInput$={(e) =>
-              (form.value.price = (e.target as HTMLInputElement).value)
+              (form.value = {
+                ...form.value,
+                price: (e.target as HTMLInputElement).value,
+              })
             }
           />
         </div>
@@ -115,7 +151,10 @@ export default component$(() => {
           value={form.value.img}
           class={formInput}
           onInput$={(e) =>
-            (form.value.img = (e.target as HTMLInputElement).value)
+            (form.value = {
+              ...form.value,
+              img: (e.target as HTMLInputElement).value,
+            })
           }
         />
         <label class={formLabel} for="description">

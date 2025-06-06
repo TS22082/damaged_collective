@@ -1,4 +1,4 @@
-import { component$, Resource, useSignal } from "@builder.io/qwik";
+import { component$, Resource } from "@builder.io/qwik";
 import {
   type DocumentHead,
   type RequestEventLoader,
@@ -19,6 +19,7 @@ export const useStripeProducts = routeLoader$(
     try {
       const productsReq = stripe.products.list(DEFAULT_STRIPE_FILTER);
       const pricesReq = stripe.prices.list(DEFAULT_STRIPE_FILTER);
+
       const [products, prices] = await Promise.all([productsReq, pricesReq]);
       const pricesMap = setMapFromArr(prices.data, "id");
       const formattedProducts = formatProducts(products.data, pricesMap);
