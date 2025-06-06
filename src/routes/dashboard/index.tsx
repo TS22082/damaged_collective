@@ -21,9 +21,9 @@ export default component$(() => {
   });
 
   const dashboardItems = [
-    { label: "New Product", path: "/new_board/" },
-    { label: "Orders", path: "/orders/" },
-    { label: "Products", path: "/" },
+    { label: "New Product", path: "/admin_new/" },
+    { label: "Orders", path: "/admin_orders/" },
+    { label: "Products", path: "/admin_products/" },
   ];
 
   return (
