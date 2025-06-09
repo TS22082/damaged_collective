@@ -11,7 +11,7 @@ export const navItems: NavItemType[] = [
 
 export const navItemsAdmin: NavItemType[] = [
   { label: "Home", path: "/" },
-  { label: "New Board", path: "/new_board/" },
+  { label: "New Board", path: "/admin_new/" },
   { label: "Admin", path: "/dashboard/" },
   { label: "Cart", path: "/cart/", items: false },
 ];

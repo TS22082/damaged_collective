@@ -1,13 +1,11 @@
 import { type RequestHandler } from "@builder.io/qwik-city";
-import Stripe from "stripe";
 import { getDb } from "~/shared/mongodb";
+import { getStripeClient } from "~/shared/stripeClient";
 
 export const onPost: RequestHandler = async (requestEvent) => {
   const webhookSecret = requestEvent.env.get("STRIPE_WEBHOOK_SECRET");
   const mongoDbSecret = requestEvent.env.get("MONGO_URI") || "";
-  const stripe = new Stripe(requestEvent.env.get("SECRET_STRIPE_KEY") || "", {
-    apiVersion: "2025-04-30.basil",
-  });
+  const stripe = getStripeClient(requestEvent.env.get("SECRET_STRIPE_KEY"));
 
   const signature = requestEvent.request.headers.get("stripe-signature");
 
