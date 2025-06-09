@@ -43,6 +43,5 @@ export const btn = style({
   border: "none",
   color: "#fff",
   cursor: "pointer",
-  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",
   transition: "0.25s",
 });

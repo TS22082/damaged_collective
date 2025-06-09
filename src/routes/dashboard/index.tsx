@@ -6,15 +6,7 @@ import {
   dashboardHeader,
   dashboardItemTile,
 } from "./dashboard.css";
-import {
-  btn,
-  btnHover,
-  btnOrange,
-  btnPink,
-  shaddowed,
-} from "~/shared/styles.css";
-import { BsArrowRight } from "@qwikest/icons/bootstrap";
-import { iconBtnBase } from "~/components/nav/nav.css";
+import { btn, btnHover, btnPink, shaddowed } from "~/shared/styles.css";
 
 export default component$(() => {
   const signOut = useSignOut();
@@ -38,7 +30,7 @@ export default component$(() => {
         <h1>Dashboard</h1>
 
         <button
-          class={[btn, btnPink, btnHover]}
+          class={[btn, btnPink, btnHover, shaddowed]}
           onClick$={() => handleSignOut()}
         >
           Sign Out
