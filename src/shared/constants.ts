@@ -6,14 +6,14 @@ import { type JSXNode } from "@builder.io/qwik/jsx-runtime";
 export const navItems: NavItemType[] = [
   { label: "Home", path: "/" },
   { label: "User", path: "/user/" },
-  { label: "Cart", path: "/cart/", items: false },
+  { label: "Cart", path: "/cart/" },
 ];
 
 export const navItemsAdmin: NavItemType[] = [
   { label: "Home", path: "/" },
   { label: "New Board", path: "/admin_new/" },
   { label: "Admin", path: "/dashboard/" },
-  { label: "Cart", path: "/cart/", items: false },
+  { label: "Cart", path: "/cart/" },
 ];
 
 export const iconMap = {
