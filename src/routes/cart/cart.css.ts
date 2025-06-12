@@ -3,7 +3,7 @@ import { style } from "@vanilla-extract/css";
 export const cartWrapper = style({
   width: "60%",
   minWidth: "400px",
-  margin: "0 auto",
+  margin: "20px auto",
   padding: "2rem",
   background: "#fff",
   borderRadius: "8px",

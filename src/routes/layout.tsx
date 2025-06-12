@@ -59,7 +59,7 @@ export default component$(() => {
   return (
     <div>
       <Nav />
-      <main style={mainContainer}>
+      <main class={mainContainer}>
         <Slot />
       </main>
       <Footer />
