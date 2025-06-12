@@ -1,3 +1,5 @@
+/* eslint-disable qwik/no-use-visible-task */
+
 import {
   component$,
   Slot,
@@ -12,8 +14,8 @@ import Footer from "~/components/footer/footer";
 import { CartContext, UserContext } from "~/contexts";
 import type { CartItem, CartState, UserType } from "~/shared/types";
 import { useSession } from "./plugin@auth";
-import { setCart } from "~/shared/utils/setCart";
-import { setUser } from "~/shared/utils/setUser";
+import { setCartContext } from "~/shared/utils/setCartContext";
+import { setUserContext } from "~/shared/utils/setUserContext";
 import { mainContainer } from "~/shared/styles.css";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
@@ -28,6 +30,7 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 };
 
 export default component$(() => {
+  // Initialize the cart as an empty array
   const cart = useSignal<CartState>({
     items: [] as CartItem[],
   });
@@ -35,10 +38,9 @@ export default component$(() => {
   const user = useSignal<null | UserType>(null);
   const session = useSession();
 
-  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const storedCart = localStorage.getItem("cart");
-    if (storedCart) return setCart(cart, JSON.parse(storedCart));
+    if (storedCart) return setCartContext(cart, JSON.parse(storedCart));
     localStorage.setItem("cart", JSON.stringify(cart.value.items));
   });
 
@@ -48,7 +50,7 @@ export default component$(() => {
     const userFromSession = sessionTracking.value?.user as undefined | UserType;
 
     if (emailFromSession && userFromSession)
-      return setUser(user, userFromSession);
+      return setUserContext(user, userFromSession);
 
     user.value = null;
   });

@@ -1,6 +1,6 @@
 import type { UserType } from "../types";
 
-export const setUser = (
+export const setUserContext = (
   user: { value: null | UserType },
   localStoredUser: null | UserType
 ) => {

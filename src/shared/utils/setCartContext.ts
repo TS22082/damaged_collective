@@ -1,6 +1,6 @@
 import type { CartItem, CartState } from "../types";
 
-export const setCart = (
+export const setCartContext = (
   cart: { value: CartState },
   localStoredCart: CartItem[]
 ) => {
