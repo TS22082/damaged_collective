@@ -9,7 +9,7 @@ import type { StripeProductType } from "~/shared/types";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 import { getStripeClient } from "~/shared/stripeClient";
 import { DEFAULT_STRIPE_FILTER } from "~/shared/constants";
-import setMapFromArr from "~/shared/utils/createMapFromArr";
+import createMapFromArr from "~/shared/utils/createMapFromArr";
 import { formatProducts } from "~/shared/utils/formatProducts";
 
 export const useStripeProducts = routeLoader$(
@@ -21,7 +21,7 @@ export const useStripeProducts = routeLoader$(
       const pricesReq = stripe.prices.list(DEFAULT_STRIPE_FILTER);
 
       const [products, prices] = await Promise.all([productsReq, pricesReq]);
-      const pricesMap = setMapFromArr(prices.data, "id");
+      const pricesMap = createMapFromArr(prices.data, "id");
       const formattedProducts = formatProducts(products.data, pricesMap);
 
       return formattedProducts;
