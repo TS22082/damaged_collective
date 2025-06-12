@@ -57,12 +57,12 @@ export default component$(() => {
   useContextProvider(CartContext, cart);
 
   return (
-    <div>
+    <>
       <Nav />
       <main class={mainContainer}>
         <Slot />
       </main>
       <Footer />
-    </div>
+    </>
   );
 });
