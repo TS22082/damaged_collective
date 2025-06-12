@@ -45,3 +45,7 @@ export const btn = style({
   cursor: "pointer",
   transition: "0.25s",
 });
+
+export const mainContainer = style({
+  minHeight: "40vh",
+});

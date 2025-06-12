@@ -10,11 +10,7 @@ export const useOrdersLoader = routeLoader$(async (requestEvent) => {
     const db = await getDb(uri);
     const ordersRobust = await db.collection("orders").find({}).toArray();
 
-    // console.log("ordersRobust ==>", ordersRobust[0].items);
-
     const orders = ordersRobust.map((order) => {
-      console.log("order ==>", order.items);
-
       const total = order.items.reduce((acc: number, item: any) => {
         return acc + item.quantity * item.price.unit_amount;
       }, 0);

@@ -12,17 +12,9 @@ import Footer from "~/components/footer/footer";
 import { CartContext, UserContext } from "~/contexts";
 import type { CartItem, CartState, UserType } from "~/shared/types";
 import { useSession } from "./plugin@auth";
-
-const setCart = (cart: { value: CartState }, localStoredCart: CartItem[]) => {
-  cart.value = { items: localStoredCart };
-};
-
-const setUser = (
-  user: { value: null | UserType },
-  localStoredUser: null | UserType
-) => {
-  user.value = localStoredUser;
-};
+import { setCart } from "~/shared/utils/setCart";
+import { setUser } from "~/shared/utils/setUser";
+import { mainContainer } from "~/shared/styles.css";
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -67,13 +59,9 @@ export default component$(() => {
   return (
     <div>
       <Nav />
-      <div
-        style={{
-          minHeight: "40vh",
-        }}
-      >
+      <main style={mainContainer}>
         <Slot />
-      </div>
+      </main>
       <Footer />
     </div>
   );
