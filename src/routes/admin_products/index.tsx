@@ -1,15 +1,41 @@
 import { component$, Resource } from "@builder.io/qwik";
-import { type DocumentHead } from "@builder.io/qwik-city";
-
-import ProductCard from "~/components/product-card";
-
-import { productsContainer } from "./products.css";
-import { useStripeProducts } from "..";
+import {
+  type RequestEventLoader,
+  routeLoader$,
+  type DocumentHead,
+} from "@builder.io/qwik-city";
+import { productRow, productsContainer } from "./products.css";
 import type { StripeProductType } from "~/shared/types";
-export { useStripeProducts } from "..";
+import { getStripeClient } from "~/shared/stripeClient";
+import { DEFAULT_STRIPE_FILTER } from "~/shared/constants";
+import createMapFromArr from "~/shared/utils/createMapFromArr";
+import { formatProducts } from "~/shared/utils/formatProducts";
+import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
+import { productContainer } from "../product/product.css";
+
+export const useStripeProducts = routeLoader$(
+  async (requestEvent: RequestEventLoader) => {
+    const stripe = getStripeClient(requestEvent.env.get("SECRET_STRIPE_KEY"));
+
+    try {
+      const productsReq = stripe.products.list(DEFAULT_STRIPE_FILTER);
+      const pricesReq = stripe.prices.list(DEFAULT_STRIPE_FILTER);
+
+      const [products, prices] = await Promise.all([productsReq, pricesReq]);
+      const pricesMap = createMapFromArr(prices.data, "id");
+      const formattedProducts = formatProducts(products.data, pricesMap);
+
+      return formattedProducts;
+    } catch (e) {
+      throw new ServerError(500, e);
+    }
+  }
+);
 
 export default component$(() => {
-  const stripeProducts = useStripeProducts();
+  const stripeProducts = useStripeProducts(); // work?
+
+  console.log("stripeProducts", stripeProducts.value);
 
   return (
     <div class={productsContainer}>
@@ -19,7 +45,16 @@ export default component$(() => {
         onRejected={(error) => <div>{error.message}</div>}
         onResolved={() =>
           stripeProducts.value.map((product: StripeProductType) => (
-            <ProductCard key={product.id} product={product} />
+            <div key={product.id} class={productRow}>
+              <p>{product.name}</p>
+              <p>{product.description}</p>
+              <p>
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(product.price.unit_amount * 0.01)}
+              </p>
+            </div>
           ))
         }
       />
