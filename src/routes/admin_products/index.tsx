@@ -1,12 +1,29 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, Resource } from "@builder.io/qwik";
 import { type DocumentHead } from "@builder.io/qwik-city";
 
+import ProductCard from "~/components/product-card";
+
+import { productsContainer } from "./products.css";
+import { useStripeProducts } from "..";
+import type { StripeProductType } from "~/shared/types";
+export { useStripeProducts } from "..";
+
 export default component$(() => {
+  const stripeProducts = useStripeProducts();
+
   return (
-    <>
-      <h1>Products</h1>
-      <p>This is the admin products page</p>
-    </>
+    <div class={productsContainer}>
+      <Resource
+        value={stripeProducts}
+        onPending={() => <div>Loading...</div>}
+        onRejected={(error) => <div>{error.message}</div>}
+        onResolved={() =>
+          stripeProducts.value.map((product: StripeProductType) => (
+            <ProductCard key={product.id} product={product} />
+          ))
+        }
+      />
+    </div>
   );
 });
 
