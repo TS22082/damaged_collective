@@ -11,7 +11,6 @@ import { DEFAULT_STRIPE_FILTER } from "~/shared/constants";
 import createMapFromArr from "~/shared/utils/createMapFromArr";
 import { formatProducts } from "~/shared/utils/formatProducts";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
-import { productContainer } from "../product/product.css";
 
 export const useStripeProducts = routeLoader$(
   async (requestEvent: RequestEventLoader) => {
