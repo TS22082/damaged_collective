@@ -1,4 +1,4 @@
-import { component$, useSignal, useTask$ } from "@builder.io/qwik";
+import { $, component$, useSignal, useTask$ } from "@builder.io/qwik";
 import type { RequestEvent } from "@builder.io/qwik-city";
 import {
   type JSONObject,
@@ -59,8 +59,6 @@ export const useCreateProduct = routeAction$(
       throw new ServerError(401, "Unauthorized");
     }
 
-    console.log("data ==>", data);
-
     if (
       !data?.img ||
       !data?.name ||
@@ -92,6 +90,13 @@ export default component$(() => {
     description: "",
   });
 
+  const handleFormChange = $((e: any) => {
+    form.value = {
+      ...form.value,
+      [e.target.name]: e.target.value,
+    };
+  });
+
   return (
     <div class={container}>
       <Form action={createProduct} class={newFormContainer}>
@@ -103,12 +108,7 @@ export default component$(() => {
           type="text"
           value={form.value.name}
           class={formInput}
-          onInput$={(e) =>
-            (form.value = {
-              ...form.value,
-              name: (e.target as HTMLInputElement).value,
-            })
-          }
+          onInput$={(e) => handleFormChange(e)}
         />
         <div class={quantityAndPriceContainer}>
           <label class={formLabel} for="quantity">
@@ -122,24 +122,14 @@ export default component$(() => {
             type="number"
             value={form.value.quantity || "1"}
             class={formInput}
-            onInput$={(e) =>
-              (form.value = {
-                ...form.value,
-                quantity: (e.target as HTMLInputElement).value,
-              })
-            }
+            onInput$={(e) => handleFormChange(e)}
           />
           <input
             name="price"
             type="number"
             value={form.value.price}
             class={formInput}
-            onInput$={(e) =>
-              (form.value = {
-                ...form.value,
-                price: (e.target as HTMLInputElement).value,
-              })
-            }
+            onInput$={(e) => handleFormChange(e)}
           />
         </div>
         <label class={formLabel} for="img">
@@ -150,12 +140,7 @@ export default component$(() => {
           type="text"
           value={form.value.img}
           class={formInput}
-          onInput$={(e) =>
-            (form.value = {
-              ...form.value,
-              img: (e.target as HTMLInputElement).value,
-            })
-          }
+          onInput$={(e) => handleFormChange(e)}
         />
         <label class={formLabel} for="description">
           Description
@@ -170,9 +155,7 @@ export default component$(() => {
           <button
             disabled={createProduct.isRunning}
             type="button"
-            onClick$={async () => {
-              await nav(-1);
-            }}
+            onClick$={() => nav(-1)}
             class={[btn, btnOrange, btnHover]}
           >
             Cancel
