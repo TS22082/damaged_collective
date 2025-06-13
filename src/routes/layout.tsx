@@ -30,7 +30,6 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
 };
 
 export default component$(() => {
-  // Initialize the cart as an empty array
   const cart = useSignal<CartState>({
     items: [] as CartItem[],
   });

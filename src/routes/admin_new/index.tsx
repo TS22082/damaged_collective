@@ -171,7 +171,7 @@ export default component$(() => {
             disabled={createProduct.isRunning}
             type="button"
             onClick$={async () => {
-              await nav("/");
+              await nav(-1);
             }}
             class={[btn, btnOrange, btnHover]}
           >
