@@ -1,8 +1,9 @@
-import { component$, Resource } from "@builder.io/qwik";
+import { $, component$, Resource, useSignal } from "@builder.io/qwik";
 import {
   type RequestEventLoader,
   routeLoader$,
   type DocumentHead,
+  routeAction$,
 } from "@builder.io/qwik-city";
 import { productRow, productsContainer } from "./products.css";
 import type { StripeProductType } from "~/shared/types";
@@ -11,6 +12,8 @@ import { DEFAULT_STRIPE_FILTER } from "~/shared/constants";
 import createMapFromArr from "~/shared/utils/createMapFromArr";
 import { formatProducts } from "~/shared/utils/formatProducts";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
+import { btn, btnHover, btnOrange, btnPink } from "~/shared/styles.css";
+import { deleteProduct } from "../api/deleteProduct";
 
 export const useStripeProducts = routeLoader$(
   async (requestEvent: RequestEventLoader) => {
@@ -31,10 +34,37 @@ export const useStripeProducts = routeLoader$(
   }
 );
 
-export default component$(() => {
-  const stripeProducts = useStripeProducts(); // work?
+export const useDeleteProduct = routeAction$(async (data) => {
+  try {
+    await deleteProduct(data.id as string);
+    return { success: true };
+  } catch (e) {
+    return { success: false };
+  }
+});
 
-  console.log("stripeProducts", stripeProducts.value);
+export default component$(() => {
+  const stripeProducts = useStripeProducts();
+  const localStripeProductsSignal = useSignal(stripeProducts.value);
+  const action = useDeleteProduct();
+
+  const handleDeleteClick = $(async (product: StripeProductType) => {
+    const confirmation = confirm(
+      "Are you sure you want to delete this product? This cannot be undone."
+    );
+
+    if (confirmation) {
+      try {
+        await action.submit({ id: product.id as string });
+        localStripeProductsSignal.value =
+          localStripeProductsSignal.value.filter(
+            (p: StripeProductType) => p.id !== product.id
+          );
+      } catch (e) {
+        console.log("Error deleting product", e);
+      }
+    }
+  });
 
   return (
     <div class={productsContainer}>
@@ -43,7 +73,7 @@ export default component$(() => {
         onPending={() => <div>Loading...</div>}
         onRejected={(error) => <div>{error.message}</div>}
         onResolved={() =>
-          stripeProducts.value.map((product: StripeProductType) => (
+          localStripeProductsSignal.value.map((product: StripeProductType) => (
             <div key={product.id} class={productRow}>
               <p>{product.name}</p>
               <p>{product.description}</p>
@@ -53,6 +83,13 @@ export default component$(() => {
                   currency: "USD",
                 }).format(product.price.unit_amount * 0.01)}
               </p>
+              <button class={[btn, btnPink, btnHover]}>Update</button>
+              <button
+                class={[btn, btnOrange, btnHover]}
+                onClick$={() => handleDeleteClick(product)}
+              >
+                Delete
+              </button>
             </div>
           ))
         }

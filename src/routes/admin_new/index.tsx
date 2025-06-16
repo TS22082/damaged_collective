@@ -35,10 +35,12 @@ export const useCreateProduct = routeAction$(
         },
       });
 
+      const formattedPrice = parseFloat(data.price as string);
+
       const price = await stripe.prices.create({
         product: product.id as string,
         currency: "usd",
-        unit_amount: 60.0 * 100,
+        unit_amount: formattedPrice * 100,
       });
 
       await stripe.products.update(product.id as string, {

@@ -1,4 +1,4 @@
-import { component$, Resource } from "@builder.io/qwik";
+import { component$, Resource, useSignal } from "@builder.io/qwik";
 import {
   type DocumentHead,
   type RequestEventLoader,
@@ -33,6 +33,7 @@ export const useStripeProducts = routeLoader$(
 
 export default component$(() => {
   const stripeProducts = useStripeProducts();
+  const localStripeProductsSignal = useSignal(stripeProducts.value);
 
   return (
     <div class="flex justify-center flex-wrap gap-2 mt-2">
@@ -41,7 +42,7 @@ export default component$(() => {
         onPending={() => <div>Loading...</div>}
         onRejected={(error) => <div>{error.message}</div>}
         onResolved={() =>
-          stripeProducts.value.map((product: StripeProductType) => (
+          localStripeProductsSignal.value.map((product: StripeProductType) => (
             <ProductCard key={product.id} product={product} />
           ))
         }

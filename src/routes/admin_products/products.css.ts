@@ -23,5 +23,4 @@ globalStyle(`${productRow} p`, {
   width: "300px",
   overflow: "hidden",
   textOverflow: "ellipsis",
-  backgroundColor: "lightblue",
 });
