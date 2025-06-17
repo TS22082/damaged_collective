@@ -9,7 +9,6 @@ import {
   type RequestEventLoader,
   routeLoader$,
   type DocumentHead,
-  routeAction$,
 } from "@builder.io/qwik-city";
 import { productRow, productsContainer } from "./products.css";
 import type { StripeProductType } from "~/shared/types";
