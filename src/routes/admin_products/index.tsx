@@ -34,19 +34,19 @@ export const useStripeProducts = routeLoader$(
   }
 );
 
-export const useDeleteProduct = routeAction$(async (data) => {
-  try {
-    await deleteProduct(data.id as string);
-    return { success: true };
-  } catch (e) {
-    return { success: false };
-  }
-});
+// export const useDeleteProduct = routeAction$(async (data) => {
+//   try {
+//     await deleteProduct(data.id as string);
+//     return { success: true };
+//   } catch (e) {
+//     return { success: false };
+//   }
+// });
 
 export default component$(() => {
   const stripeProducts = useStripeProducts();
   const localStripeProductsSignal = useSignal(stripeProducts.value);
-  const action = useDeleteProduct();
+  // const action = useDeleteProduct();
 
   const handleDeleteClick = $(async (product: StripeProductType) => {
     const confirmation = confirm(
@@ -55,7 +55,8 @@ export default component$(() => {
 
     if (confirmation) {
       try {
-        await action.submit({ id: product.id as string });
+        // await action.submit({ id: product.id as string });
+        await deleteProduct(product.id as string);
         localStripeProductsSignal.value =
           localStripeProductsSignal.value.filter(
             (p: StripeProductType) => p.id !== product.id
