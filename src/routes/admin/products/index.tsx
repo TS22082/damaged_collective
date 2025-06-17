@@ -10,8 +10,8 @@ import { productRow, productsContainer } from "./products.css";
 import type { StripeProductType } from "~/shared/types";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 import { btn, btnHover, btnOrange, btnPink } from "~/shared/styles.css";
-import { deleteProduct } from "../api/deleteProduct";
-import { getStripeItems } from "../api/getStripeItems";
+import { deleteProduct } from "../../api/deleteProduct";
+import { getStripeItems } from "../../api/getStripeItems";
 
 export default component$(() => {
   const localStripeProductsSignal = useSignal<StripeProductType[]>([]);

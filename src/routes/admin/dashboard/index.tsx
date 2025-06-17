@@ -1,5 +1,5 @@
 import { $, component$ } from "@builder.io/qwik";
-import { useSignOut } from "../plugin@auth";
+import { useSignOut } from "../../plugin@auth";
 import { useNavigate, type DocumentHead } from "@builder.io/qwik-city";
 import {
   dashBoardContainer,
@@ -7,6 +7,7 @@ import {
   dashboardItemTile,
 } from "./dashboard.css";
 import { btn, btnHover, btnPink, shaddowed } from "~/shared/styles.css";
+import { ADMIN_DASHBOARD_ITEMS } from "~/shared/constants";
 
 export default component$(() => {
   const signOut = useSignOut();
@@ -17,12 +18,6 @@ export default component$(() => {
       redirectTo: "/",
     });
   });
-
-  const dashboardItems = [
-    { label: "New Product", path: "/admin_new/" },
-    { label: "Orders", path: "/admin_orders/" },
-    { label: "Products", path: "/admin_products/" },
-  ];
 
   return (
     <>
@@ -38,7 +33,7 @@ export default component$(() => {
       </div>
 
       <div class={dashBoardContainer}>
-        {dashboardItems.map((item) => (
+        {ADMIN_DASHBOARD_ITEMS.map((item) => (
           <div
             class={[dashboardItemTile, shaddowed]}
             key={item.label}

@@ -11,9 +11,15 @@ export const navItems: NavItemType[] = [
 
 export const navItemsAdmin: NavItemType[] = [
   { label: "Home", path: "/" },
-  { label: "New Board", path: "/admin_new/" },
-  { label: "Admin", path: "/dashboard/" },
+  { label: "New Board", path: "/admin/new" },
+  { label: "Admin", path: "/admin/dashboard" },
   { label: "Cart", path: "/cart/" },
+];
+
+export const ADMIN_DASHBOARD_ITEMS = [
+  { label: "New Product", path: "/admin/new/" },
+  { label: "Orders", path: "/admin/orders/" },
+  { label: "Products", path: "/admin/products/" },
 ];
 
 export const iconMap = {
