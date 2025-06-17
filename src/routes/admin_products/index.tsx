@@ -26,21 +26,20 @@ export default component$(() => {
     }
   });
 
-  const handleDeleteClick = $(async (product: StripeProductType) => {
+  const handleDeleteClick = $(async (id: string) => {
     const confirmation = confirm(
       "Are you sure you want to delete this product? This cannot be undone."
     );
 
-    if (confirmation) {
-      try {
-        await deleteProduct(product.id as string);
-        localStripeProductsSignal.value =
-          localStripeProductsSignal.value.filter(
-            (p: StripeProductType) => p.id !== product.id
-          );
-      } catch (e) {
-        console.log("Error deleting product", e);
-      }
+    if (!confirmation) return;
+
+    try {
+      await deleteProduct(id as string);
+      localStripeProductsSignal.value = localStripeProductsSignal.value.filter(
+        (p: StripeProductType) => p.id !== id
+      );
+    } catch (e) {
+      console.log("Error deleting product", e);
     }
   });
 
@@ -51,25 +50,27 @@ export default component$(() => {
         onPending={() => <div>Loading...</div>}
         onRejected={(error) => <div>{error.message}</div>}
         onResolved={() =>
-          localStripeProductsSignal.value.map((product: StripeProductType) => (
-            <div key={product.id} class={productRow}>
-              <p>{product.name}</p>
-              <p>{product.description}</p>
-              <p>
-                {new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(product.price.unit_amount * 0.01)}
-              </p>
-              <button class={[btn, btnPink, btnHover]}>Update</button>
-              <button
-                class={[btn, btnOrange, btnHover]}
-                onClick$={() => handleDeleteClick(product)}
-              >
-                Delete
-              </button>
-            </div>
-          ))
+          localStripeProductsSignal.value.map(
+            ({ id, name, description, price }: StripeProductType) => (
+              <div key={id} class={productRow}>
+                <p>{name}</p>
+                <p>{description}</p>
+                <p>
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(price.unit_amount * 0.01)}
+                </p>
+                <button class={[btn, btnPink, btnHover]}>Update</button>
+                <button
+                  class={[btn, btnOrange, btnHover]}
+                  onClick$={() => handleDeleteClick(id)}
+                >
+                  Delete
+                </button>
+              </div>
+            )
+          )
         }
       />
     </div>
