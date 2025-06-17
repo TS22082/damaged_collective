@@ -1,4 +1,10 @@
-import { $, component$, Resource, useSignal } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  Resource,
+  useResource$,
+  useSignal,
+} from "@builder.io/qwik";
 import {
   type RequestEventLoader,
   routeLoader$,
@@ -14,6 +20,7 @@ import { formatProducts } from "~/shared/utils/formatProducts";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 import { btn, btnHover, btnOrange, btnPink } from "~/shared/styles.css";
 import { deleteProduct } from "../api/deleteProduct";
+import { getStripeItems } from "../api/getStripeItems";
 
 export const useStripeProducts = routeLoader$(
   async (requestEvent: RequestEventLoader) => {
@@ -34,19 +41,18 @@ export const useStripeProducts = routeLoader$(
   }
 );
 
-// export const useDeleteProduct = routeAction$(async (data) => {
-//   try {
-//     await deleteProduct(data.id as string);
-//     return { success: true };
-//   } catch (e) {
-//     return { success: false };
-//   }
-// });
-
 export default component$(() => {
-  const stripeProducts = useStripeProducts();
-  const localStripeProductsSignal = useSignal(stripeProducts.value);
-  // const action = useDeleteProduct();
+  const localStripeProductsSignal = useSignal([]);
+
+  const stripeProductsResource = useResource$<StripeProductType[]>(async () => {
+    try {
+      const stripeProducts = await getStripeItems();
+      localStripeProductsSignal.value = stripeProducts;
+      return stripeProducts;
+    } catch (error) {
+      throw new ServerError(500, error);
+    }
+  });
 
   const handleDeleteClick = $(async (product: StripeProductType) => {
     const confirmation = confirm(
@@ -55,7 +61,6 @@ export default component$(() => {
 
     if (confirmation) {
       try {
-        // await action.submit({ id: product.id as string });
         await deleteProduct(product.id as string);
         localStripeProductsSignal.value =
           localStripeProductsSignal.value.filter(
@@ -70,7 +75,7 @@ export default component$(() => {
   return (
     <div class={productsContainer}>
       <Resource
-        value={stripeProducts}
+        value={stripeProductsResource}
         onPending={() => <div>Loading...</div>}
         onRejected={(error) => <div>{error.message}</div>}
         onResolved={() =>

@@ -1,48 +1,28 @@
-import { component$, Resource, useSignal } from "@builder.io/qwik";
-import {
-  type DocumentHead,
-  type RequestEventLoader,
-  routeLoader$,
-} from "@builder.io/qwik-city";
+import { component$, Resource, useResource$ } from "@builder.io/qwik";
+import { type DocumentHead } from "@builder.io/qwik-city";
 import ProductCard from "~/components/product-card";
 import type { StripeProductType } from "~/shared/types";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
-import { getStripeClient } from "~/shared/stripeClient";
-import { DEFAULT_STRIPE_FILTER } from "~/shared/constants";
-import { createMapFromArr } from "~/shared/utils/createMapFromArr";
-import { formatProducts } from "~/shared/utils/formatProducts";
-
-export const useStripeProducts = routeLoader$(
-  async (requestEvent: RequestEventLoader) => {
-    const stripe = getStripeClient(requestEvent.env.get("SECRET_STRIPE_KEY"));
-
-    try {
-      const productsReq = stripe.products.list(DEFAULT_STRIPE_FILTER);
-      const pricesReq = stripe.prices.list(DEFAULT_STRIPE_FILTER);
-
-      const [products, prices] = await Promise.all([productsReq, pricesReq]);
-      const pricesMap = createMapFromArr(prices.data, "id");
-      const formattedProducts = formatProducts(products.data, pricesMap);
-
-      return formattedProducts;
-    } catch (e) {
-      throw new ServerError(500, e);
-    }
-  }
-);
+import { getStripeItems } from "./api/getStripeItems";
 
 export default component$(() => {
-  const stripeProducts = useStripeProducts();
-  const localStripeProductsSignal = useSignal(stripeProducts.value);
+  const stripeProductResource = useResource$<StripeProductType[]>(async () => {
+    try {
+      const stripeItems = await getStripeItems();
+      return stripeItems;
+    } catch (error) {
+      throw new ServerError(500, error);
+    }
+  });
 
   return (
     <div class="flex justify-center flex-wrap gap-2 mt-2">
       <Resource
-        value={stripeProducts}
+        value={stripeProductResource}
         onPending={() => <div>Loading...</div>}
         onRejected={(error) => <div>{error.message}</div>}
-        onResolved={() =>
-          localStripeProductsSignal.value.map((product: StripeProductType) => (
+        onResolved={(products) =>
+          products.map((product: StripeProductType) => (
             <ProductCard key={product.id} product={product} />
           ))
         }
