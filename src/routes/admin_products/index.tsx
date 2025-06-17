@@ -5,40 +5,13 @@ import {
   useResource$,
   useSignal,
 } from "@builder.io/qwik";
-import {
-  type RequestEventLoader,
-  routeLoader$,
-  type DocumentHead,
-} from "@builder.io/qwik-city";
+import { type DocumentHead } from "@builder.io/qwik-city";
 import { productRow, productsContainer } from "./products.css";
 import type { StripeProductType } from "~/shared/types";
-import { getStripeClient } from "~/shared/stripeClient";
-import { DEFAULT_STRIPE_FILTER } from "~/shared/constants";
-import createMapFromArr from "~/shared/utils/createMapFromArr";
-import { formatProducts } from "~/shared/utils/formatProducts";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 import { btn, btnHover, btnOrange, btnPink } from "~/shared/styles.css";
 import { deleteProduct } from "../api/deleteProduct";
 import { getStripeItems } from "../api/getStripeItems";
-
-export const useStripeProducts = routeLoader$(
-  async (requestEvent: RequestEventLoader) => {
-    const stripe = getStripeClient(requestEvent.env.get("SECRET_STRIPE_KEY"));
-
-    try {
-      const productsReq = stripe.products.list(DEFAULT_STRIPE_FILTER);
-      const pricesReq = stripe.prices.list(DEFAULT_STRIPE_FILTER);
-
-      const [products, prices] = await Promise.all([productsReq, pricesReq]);
-      const pricesMap = createMapFromArr(prices.data, "id");
-      const formattedProducts = formatProducts(products.data, pricesMap);
-
-      return formattedProducts;
-    } catch (e) {
-      throw new ServerError(500, e);
-    }
-  }
-);
 
 export default component$(() => {
   const localStripeProductsSignal = useSignal([]);
