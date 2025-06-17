@@ -14,17 +14,22 @@ import { deleteProduct } from "../api/deleteProduct";
 import { getStripeItems } from "../api/getStripeItems";
 
 export default component$(() => {
-  const localStripeProductsSignal = useSignal([]);
+  const localStripeProductsSignal = useSignal<StripeProductType[]>([]);
 
-  const stripeProductsResource = useResource$<StripeProductType[]>(async () => {
-    try {
-      const stripeProducts = await getStripeItems();
-      localStripeProductsSignal.value = stripeProducts;
-      return stripeProducts;
-    } catch (error) {
-      throw new ServerError(500, error);
+  const stripeProductsResource = useResource$<StripeProductType[]>(
+    async () => {
+      try {
+        const stripeProducts = await getStripeItems();
+        localStripeProductsSignal.value = stripeProducts;
+        return stripeProducts;
+      } catch (error) {
+        throw new ServerError(500, error);
+      }
+    },
+    {
+      timeout: 3000,
     }
-  });
+  );
 
   const handleDeleteClick = $(async (id: string) => {
     const confirmation = confirm(
