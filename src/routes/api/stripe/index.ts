@@ -67,6 +67,7 @@ export const onPost: RequestHandler = async (requestEvent) => {
           eventId,
           sessionId: session.id,
           shipping: session.shipping,
+          email: session.customer_details.email,
           items: lineItems.data,
           status: "open",
           meta: {

@@ -9,7 +9,6 @@ export default component$(() => {
   const orders = useResource$<OrderType[]>(async () => {
     try {
       const orders = await getOrders();
-
       return orders;
     } catch (error) {
       return [];

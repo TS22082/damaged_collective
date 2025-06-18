@@ -48,8 +48,9 @@ export default component$(() => {
     const emailFromSession = sessionTracking.value?.user?.email;
     const userFromSession = sessionTracking.value?.user as undefined | UserType;
 
-    if (emailFromSession && userFromSession)
+    if (emailFromSession && userFromSession) {
       return setUserContext(user, userFromSession);
+    }
 
     user.value = null;
   });
