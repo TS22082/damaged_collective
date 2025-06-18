@@ -22,7 +22,7 @@ export const ADMIN_DASHBOARD_ITEMS = [
   { label: "Products", path: "/admin/products/" },
 ];
 
-export const iconMap = {
+export const ICON_MAP = {
   Home: BsHouse as (props: IconProps) => JSXNode,
   User: BsPerson as (props: IconProps) => JSXNode,
   Admin: BsPerson as (props: IconProps) => JSXNode,

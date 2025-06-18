@@ -12,7 +12,7 @@ import {
 import type { NavItemType } from "~/shared/types";
 import { btnPressed, btnHover, btnPink } from "~/shared/styles.css";
 import { CartContext, UserContext } from "~/contexts";
-import { iconMap, navItems, navItemsAdmin } from "~/shared/constants";
+import { ICON_MAP, navItems, navItemsAdmin } from "~/shared/constants";
 
 export default component$(() => {
   const location = useLocation();
@@ -43,7 +43,7 @@ export default component$(() => {
             styleArr.push(cartHasItems);
           }
 
-          const Icon = iconMap[item.label as keyof typeof iconMap];
+          const Icon = ICON_MAP[item.label as keyof typeof ICON_MAP];
 
           return (
             <Link key={item.label} class={navLink} href={item.path}>
