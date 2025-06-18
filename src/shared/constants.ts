@@ -34,3 +34,8 @@ export const DEFAULT_STRIPE_FILTER = {
   limit: 100,
   active: true,
 };
+
+export const RESOURCE_TIMEOUT = { timeout: 3000 };
+
+export const DELETE_CONFIRMATION_MESSAGE =
+  "Are you sure you want to delete this product? This cannot be undone.";

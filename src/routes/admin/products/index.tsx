@@ -10,31 +10,28 @@ import { productRow, productsContainer } from "./products.css";
 import type { StripeProductType } from "~/shared/types";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 import { btn, btnHover, btnOrange, btnPink } from "~/shared/styles.css";
-import { deleteProduct } from "../../api/deleteProduct";
-import { getStripeItems } from "../../api/getStripeItems";
+import { deleteProduct } from "../../../server/deleteProduct";
+import { getStripeItems } from "../../../server/getStripeItems";
+import {
+  DELETE_CONFIRMATION_MESSAGE,
+  RESOURCE_TIMEOUT,
+} from "~/shared/constants";
 
 export default component$(() => {
   const localStripeProductsSignal = useSignal<StripeProductType[]>([]);
 
-  const stripeProductsResource = useResource$<StripeProductType[]>(
-    async () => {
-      try {
-        const stripeProducts = await getStripeItems();
-        localStripeProductsSignal.value = stripeProducts;
-        return stripeProducts;
-      } catch (error) {
-        throw new ServerError(500, error);
-      }
-    },
-    {
-      timeout: 3000,
+  const stripeProductsResource = useResource$<StripeProductType[]>(async () => {
+    try {
+      const stripeProducts = await getStripeItems();
+      localStripeProductsSignal.value = stripeProducts;
+      return stripeProducts;
+    } catch (error) {
+      throw new ServerError(500, error);
     }
-  );
+  }, RESOURCE_TIMEOUT);
 
   const handleDeleteClick = $(async (id: string) => {
-    const confirmation = confirm(
-      "Are you sure you want to delete this product? This cannot be undone."
-    );
+    const confirmation = confirm(DELETE_CONFIRMATION_MESSAGE);
 
     if (!confirmation) return;
 

@@ -11,6 +11,7 @@ export const productsContainer = style({
 
 export const productRow = style({
   display: "flex",
+  flexWrap: "wrap",
   flexDirection: "row",
   justifyContent: "space-between",
   border: "1px solid #ccc",

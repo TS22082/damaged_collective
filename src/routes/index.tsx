@@ -3,7 +3,7 @@ import { type DocumentHead } from "@builder.io/qwik-city";
 import ProductCard from "~/components/product-card";
 import type { StripeProductType } from "~/shared/types";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
-import { getStripeItems } from "./api/getStripeItems";
+import { getStripeItems } from "../server/getStripeItems";
 
 export default component$(() => {
   const stripeProductResource = useResource$<StripeProductType[]>(async () => {
