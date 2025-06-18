@@ -16,6 +16,7 @@ import {
   DELETE_CONFIRMATION_MESSAGE,
   RESOURCE_TIMEOUT,
 } from "~/shared/constants";
+import convertMoney from "~/shared/utils/convertMoney";
 
 export default component$(() => {
   const localStripeProductsSignal = useSignal<StripeProductType[]>([]);
@@ -57,12 +58,7 @@ export default component$(() => {
               <div key={id} class={productRow}>
                 <p>{name}</p>
                 <p>{description}</p>
-                <p>
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  }).format(price.unit_amount * 0.01)}
-                </p>
+                <p>{convertMoney(price.unit_amount as number)}</p>
                 <button class={[btn, btnPink, btnHover]}>Update</button>
                 <button
                   class={[btn, btnOrange, btnHover]}

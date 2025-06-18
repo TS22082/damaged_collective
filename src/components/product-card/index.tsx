@@ -2,6 +2,7 @@ import { component$ } from "@builder.io/qwik";
 import type { ProductCardPropsType } from "~/shared/types";
 import { useNavigate } from "@builder.io/qwik-city";
 import { cardContainer, imageContainer } from "./product.css";
+import convertMoney from "~/shared/utils/convertMoney";
 
 export default component$<ProductCardPropsType>(({ product }) => {
   const nav = useNavigate();
@@ -10,10 +11,7 @@ export default component$<ProductCardPropsType>(({ product }) => {
     backgroundImage: `url(${product.images[0]})`,
   };
 
-  const formattedPrice = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(product.price.unit_amount * 0.01);
+  const formattedPrice = convertMoney(product.price.unit_amount as number);
 
   return (
     <button

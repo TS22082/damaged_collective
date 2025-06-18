@@ -10,6 +10,7 @@ import {
 } from "../product.css";
 import { CartContext } from "~/contexts";
 import { btn, btnHover, btnPink } from "~/shared/styles.css";
+import convertMoney from "~/shared/utils/convertMoney";
 
 export const useProductLoader = routeLoader$(async (requestEvent) => {
   try {
@@ -17,10 +18,7 @@ export const useProductLoader = routeLoader$(async (requestEvent) => {
     const product = await stripe.products.retrieve(requestEvent.params.id);
     const price = await stripe.prices.retrieve(product.default_price as string);
 
-    const formattedPrice = new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format((price.unit_amount as number) * 0.01);
+    const formattedPrice = convertMoney(price.unit_amount as number);
 
     return {
       ...product,

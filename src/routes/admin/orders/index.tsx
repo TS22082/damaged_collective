@@ -4,7 +4,7 @@ import { orderContainer, ordersContainer } from "./admin.css";
 import { getOrders } from "~/server/getOrders";
 
 export default component$(() => {
-  const ordersArr = useResource$<any[]>(async () => {
+  const orders = useResource$<any[]>(async () => {
     try {
       const orders = await getOrders();
       return orders;
@@ -16,7 +16,7 @@ export default component$(() => {
   return (
     <div class={ordersContainer}>
       <Resource
-        value={ordersArr}
+        value={orders}
         onPending={() => <div>Loading...</div>}
         onRejected={(error) => <div>{error.message}</div>}
         onResolved={(ordersArr) =>
