@@ -1,12 +1,15 @@
 import { component$, Resource, useResource$ } from "@builder.io/qwik";
-import { type DocumentHead } from "@builder.io/qwik-city";
+import { useNavigate, type DocumentHead } from "@builder.io/qwik-city";
 import { orderContainer, ordersContainer } from "./admin.css";
 import { getOrders } from "~/server/getOrders";
+import { type OrderType } from "~/shared/types";
 
 export default component$(() => {
-  const orders = useResource$<any[]>(async () => {
+  const nav = useNavigate();
+  const orders = useResource$<OrderType[]>(async () => {
     try {
       const orders = await getOrders();
+
       return orders;
     } catch (error) {
       return [];
@@ -21,7 +24,11 @@ export default component$(() => {
         onRejected={(error) => <div>{error.message}</div>}
         onResolved={(ordersArr) =>
           ordersArr.map((order: any, index: number) => (
-            <button key={index} class={orderContainer}>
+            <button
+              key={index}
+              class={orderContainer}
+              onClick$={() => nav(`/admin/order/${order._id}`)}
+            >
               <p>{order.name}</p>
               <p>
                 {order.address.city}, {order.address.state}

@@ -54,3 +54,25 @@ export type ItemType = {
   price_id: string;
   qty: number;
 };
+
+export type AddressType = {
+  city: string;
+  country: string;
+  line1: string;
+  line2: null | string;
+  postal_code: string;
+  state: string;
+};
+
+export type OrderStatusType = "open" | "shipped" | "delivered" | "cancelled";
+
+export type OrderType = {
+  _id: string;
+  eventId: string;
+  sessionId: string;
+  name: string;
+  status: OrderStatusType;
+  address: AddressType;
+  itemsCount: number;
+  total: string;
+};
