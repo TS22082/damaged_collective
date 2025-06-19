@@ -9,13 +9,8 @@ import {
 } from "./nav.css";
 import type { NavItemType } from "~/shared/types";
 import { CartContext, UserContext } from "~/contexts";
-import {
-  ICON_MAP,
-  ICON_SIZE,
-  navItems,
-  navItemsAdmin,
-} from "~/shared/constants";
-import { getIconSyles } from "~/shared/utils/getLocationStyles";
+import { ICON_SIZE, navItems, navItemsAdmin } from "~/shared/constants";
+import { getIconSyles } from "~/shared/utils/getIconStyles";
 
 export default component$(() => {
   const location = useLocation();
@@ -37,21 +32,19 @@ export default component$(() => {
     <nav class={navContainer}>
       <section class={linkSection}>
         {navItemsSignal.value.map((item) => {
-          const [stylesArr, itemsInCart, onCartPage] = getIconSyles(
+          const { styleArr, showIndicator, Icon, cartCount } = getIconSyles({
             item,
             location,
-            cart
-          );
-
-          const Icon = ICON_MAP[item.label as keyof typeof ICON_MAP];
+            cart,
+          });
 
           return (
             <Link key={item.label} class={navLink} href={item.path}>
-              <button class={stylesArr as string[]}>
+              <button class={styleArr}>
                 <Icon style={ICON_SIZE} />
               </button>
-              {itemsInCart && onCartPage && (
-                <div class={cartItemIndicator}>{cart.value.items.length}</div>
+              {showIndicator && (
+                <div class={cartItemIndicator}>{cartCount}</div>
               )}
             </Link>
           );
