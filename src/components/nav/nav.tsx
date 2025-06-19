@@ -5,14 +5,12 @@ import {
   linkSection,
   navLink,
   titleLink,
-  iconBtnBase,
-  cartHasItems,
   cartItemIndicator,
 } from "./nav.css";
 import type { NavItemType } from "~/shared/types";
-import { btnPressed, btnHover, btnPink } from "~/shared/styles.css";
 import { CartContext, UserContext } from "~/contexts";
 import { ICON_MAP, navItems, navItemsAdmin } from "~/shared/constants";
+import { getIconSyles } from "~/shared/utils/getLocationStyles";
 
 export default component$(() => {
   const location = useLocation();
@@ -30,25 +28,11 @@ export default component$(() => {
     }
   });
 
-  const getIconSyles = (item: NavItemType) => {
-    const styleArr = [iconBtnBase, btnPink];
-
-    location.url.pathname !== item.path
-      ? styleArr.push(btnHover)
-      : styleArr.push(btnPressed);
-
-    if (cart.value.items.length > 0 && item.label === "Cart") {
-      styleArr.push(cartHasItems);
-    }
-
-    return styleArr;
-  };
-
   return (
     <nav class={navContainer}>
       <section class={linkSection}>
         {navItemsSignal.value.map((item) => {
-          const iconStylesArr = getIconSyles(item);
+          const iconStylesArr = getIconSyles(item, location, cart);
           const Icon = ICON_MAP[item.label as keyof typeof ICON_MAP];
 
           return (
