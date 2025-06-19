@@ -1,15 +1,10 @@
 import { type Signal } from "@builder.io/qwik";
-import { type Session } from "@auth/qwik";
+import { type UserType } from "../types";
 
-const checkIsAdmin = (
-  session: Readonly<Signal<null>> | Readonly<Signal<Session>>
-) => {
+const isAdmin = (user: Signal<UserType | null>) => {
   const adminList = ["ts22082@gmail.com"];
-
-  if (!session.value?.user?.email) return false;
-  if (typeof session.value.user.email !== "string") return false;
-
-  return adminList.includes(session.value.user.email);
+  if (!user.value?.email) return false;
+  return adminList.includes(user.value.email);
 };
 
-export default checkIsAdmin;
+export default isAdmin;

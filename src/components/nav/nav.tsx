@@ -11,6 +11,7 @@ import type { NavItemType } from "~/shared/types";
 import { CartContext, UserContext } from "~/contexts";
 import { ICON_SIZE, navItems, navItemsAdmin } from "~/shared/constants";
 import { getIconSyles } from "~/shared/utils/getIconStyles";
+import isAdmin from "~/shared/utils/isAdmin";
 
 export default component$(() => {
   const location = useLocation();
@@ -19,13 +20,11 @@ export default component$(() => {
   const navItemsSignal = useSignal<NavItemType[]>([]);
 
   useTask$(({ track }) => {
-    const userTracking = track(() => user);
+    const currentUser = track(() => user);
 
-    if (userTracking.value?.email === "ts22082@gmail.com") {
-      navItemsSignal.value = navItemsAdmin;
-    } else {
-      navItemsSignal.value = navItems;
-    }
+    isAdmin(currentUser)
+      ? (navItemsSignal.value = navItemsAdmin)
+      : (navItemsSignal.value = navItems);
   });
 
   return (
