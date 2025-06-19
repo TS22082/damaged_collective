@@ -42,9 +42,7 @@ export default component$(() => {
               <button class={styleArr}>
                 <Icon style={ICON_SIZE} />
               </button>
-              {showIndicator && (
-                <div class={cartItemIndicator}>{cartCount}</div>
-              )}
+              {showIndicator && <p class={cartItemIndicator}>{cartCount}</p>}
             </Link>
           );
         })}
