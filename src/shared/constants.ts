@@ -39,3 +39,8 @@ export const RESOURCE_TIMEOUT = { timeout: 3000 };
 
 export const DELETE_CONFIRMATION_MESSAGE =
   "Are you sure you want to delete this product? This cannot be undone.";
+
+export const ICON_SIZE = {
+  height: "20px",
+  width: "20px",
+};

@@ -20,5 +20,5 @@ export const getIconSyles = (
 
   if (itemsInCart && onCartPage) styleArr.push(cartHasItems);
 
-  return styleArr;
+  return [styleArr, itemsInCart, onCartPage];
 };
