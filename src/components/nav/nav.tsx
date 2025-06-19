@@ -21,10 +21,7 @@ export default component$(() => {
 
   useTask$(({ track }) => {
     const currentUser = track(() => user);
-
-    isAdmin(currentUser)
-      ? (navItemsSignal.value = navItemsAdmin)
-      : (navItemsSignal.value = navItems);
+    navItemsSignal.value = isAdmin(currentUser) ? navItemsAdmin : navItems;
   });
 
   return (
