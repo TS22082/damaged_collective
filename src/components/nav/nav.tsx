@@ -30,24 +30,30 @@ export default component$(() => {
     }
   });
 
+  const getIconSyles = (item: NavItemType) => {
+    const styleArr = [iconBtnBase, btnPink];
+
+    location.url.pathname !== item.path
+      ? styleArr.push(btnHover)
+      : styleArr.push(btnPressed);
+
+    if (cart.value.items.length > 0 && item.label === "Cart") {
+      styleArr.push(cartHasItems);
+    }
+
+    return styleArr;
+  };
+
   return (
     <nav class={navContainer}>
       <section class={linkSection}>
         {navItemsSignal.value.map((item) => {
-          const styleArr = [iconBtnBase, btnPink];
-          location.url.pathname !== item.path
-            ? styleArr.push(btnHover)
-            : styleArr.push(btnPressed);
-
-          if (cart.value.items.length > 0 && item.label === "Cart") {
-            styleArr.push(cartHasItems);
-          }
-
+          const iconStylesArr = getIconSyles(item);
           const Icon = ICON_MAP[item.label as keyof typeof ICON_MAP];
 
           return (
             <Link key={item.label} class={navLink} href={item.path}>
-              <button class={styleArr}>
+              <button class={iconStylesArr}>
                 <Icon
                   style={{
                     height: "20px",
