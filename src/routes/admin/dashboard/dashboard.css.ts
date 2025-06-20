@@ -15,7 +15,7 @@ export const dashboardItemTile = style({
   height: "200px",
   display: "flex",
   borderRadius: "10px",
-  backgroundColor: "lightgray",
+  backgroundColor: "#000",
   color: "#fff",
   flexDirection: "row",
   justifyContent: "center",
@@ -23,7 +23,7 @@ export const dashboardItemTile = style({
   cursor: "pointer",
   transition: "background-color 0.3s ease",
   ":hover": {
-    backgroundColor: "#000",
+    backgroundColor: "lightgray",
   },
 });
 

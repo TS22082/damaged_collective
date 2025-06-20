@@ -66,7 +66,7 @@ export type AddressType = {
 
 export type OrderStatusType = "open" | "shipped" | "delivered" | "cancelled";
 
-export type OrderType = {
+export type OrderSummaryType = {
   _id: string;
   eventId: string;
   sessionId: string;
@@ -75,4 +75,23 @@ export type OrderType = {
   address: AddressType;
   itemsCount: number;
   total: string;
+};
+
+export type ShippingType = {
+  address: AddressType;
+  carrier: string | null;
+  name: string;
+  phone: string | null;
+  tracking_number: string | null;
+};
+
+export type OrderRawType = {
+  _id: string;
+  eventId: string;
+  sessionId: string;
+  shipping: ShippingType;
+  status: OrderStatusType;
+  email: string;
+  itemsCount: number;
+  total: number;
 };

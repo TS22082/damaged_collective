@@ -2,11 +2,11 @@ import { component$, Resource, useResource$ } from "@builder.io/qwik";
 import { useNavigate, type DocumentHead } from "@builder.io/qwik-city";
 import { orderContainer, ordersContainer } from "./admin.css";
 import { getOrders } from "~/server/getOrders";
-import { type OrderType } from "~/shared/types";
+import { type OrderSummaryType } from "~/shared/types";
 
 export default component$(() => {
   const nav = useNavigate();
-  const orders = useResource$<OrderType[]>(async () => {
+  const orders = useResource$<OrderSummaryType[]>(async () => {
     try {
       const orders = await getOrders();
       return orders;
