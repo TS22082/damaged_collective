@@ -17,8 +17,8 @@ export default component$<ProductCardPropsType>(({ product }) => {
     <button
       aria-label="Product Card"
       class={cardContainer}
-      onClick$={async () => {
-        await nav(`/product/${product.id}`);
+      onClick$={() => {
+        nav(`/product/${product.id}`);
       }}
     >
       <div

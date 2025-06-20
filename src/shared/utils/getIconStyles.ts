@@ -5,27 +5,27 @@ import { btnHover, btnPink, btnPressed } from "../styles.css";
 import { type Signal } from "@builder.io/qwik";
 import { ICON_MAP } from "../constants";
 
-type IconStyles = {
+type IconStylesType = {
   item: NavItemType;
   location: RouteLocation;
   cart: Signal<CartState>;
 };
 
-export const getIconSyles = ({ item, location, cart }: IconStyles) => {
-  const styleArr = [iconBtnBase, btnPink];
+export const getIconSyles = ({ item, location, cart }: IconStylesType) => {
+  const iconStyles = [iconBtnBase, btnPink];
 
   location.url.pathname !== item.path
-    ? styleArr.push(btnHover)
-    : styleArr.push(btnPressed);
+    ? iconStyles.push(btnHover)
+    : iconStyles.push(btnPressed);
 
   const itemsInCart = cart.value.items.length > 0;
   const onCartPage = location.url.pathname === "/cart/";
   const showIndicator = itemsInCart && !onCartPage;
 
-  if (showIndicator) styleArr.push(cartHasItems);
+  if (showIndicator) iconStyles.push(cartHasItems);
 
   const Icon = ICON_MAP[item.label as keyof typeof ICON_MAP];
   const cartCount = cart.value.items.length || 0;
 
-  return { styleArr, showIndicator, Icon, cartCount };
+  return { iconStyles, showIndicator, Icon, cartCount };
 };

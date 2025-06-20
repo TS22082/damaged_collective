@@ -13,8 +13,6 @@ export const getOrders = server$(async function () {
         return acc + item.quantity * item.price.unit_amount;
       }, 0);
 
-      console.log("order ==>", order.meta.customer_details.email);
-
       return {
         _id: order._id.toString(),
         eventId: order.eventId,

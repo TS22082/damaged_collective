@@ -28,7 +28,7 @@ export default component$(() => {
     <nav class={navContainer}>
       <section class={linkSection}>
         {navItemsSignal.value.map((item) => {
-          const { styleArr, showIndicator, Icon, cartCount } = getIconSyles({
+          const { iconStyles, showIndicator, Icon, cartCount } = getIconSyles({
             item,
             location,
             cart,
@@ -36,7 +36,7 @@ export default component$(() => {
 
           return (
             <Link key={item.label} class={navLink} href={item.path}>
-              <button class={styleArr}>
+              <button class={iconStyles}>
                 <Icon style={ICON_SIZE} />
               </button>
               {showIndicator && <p class={cartItemIndicator}>{cartCount}</p>}
