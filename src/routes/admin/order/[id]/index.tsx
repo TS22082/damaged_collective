@@ -18,6 +18,7 @@ import {
   tableHeaderStyle,
   tableRowStyle,
 } from "../order.css";
+import { getStripeProductsById } from "~/services/getStripeProductsById";
 
 export default component$(() => {
   const loc = useLocation();
@@ -26,7 +27,14 @@ export default component$(() => {
   const orderResource = useResource$(async () => {
     try {
       const order = await getOrder(loc.params.id);
-      console.log("The orer full details ==>", order);
+
+      const productIds = (order as OrderRawType).items.map(
+        (item: any) => item.price.product
+      );
+
+      const products = await getStripeProductsById(productIds);
+      console.log("products ==>", products);
+
       orderSignal.value = order as OrderRawType;
     } catch (error) {
       console.log(error);
