@@ -85,6 +85,19 @@ export type ShippingType = {
   tracking_number: string | null;
 };
 
+export type ItemOrderType = {
+  id: string;
+  object: string;
+  amount_discount: number;
+  amount_subtotal: number;
+  amount_tax: number;
+  currency: string;
+  description: string;
+  amount_total: number;
+  price: StripePriceType;
+  quantity: number;
+};
+
 export type OrderRawType = {
   _id: string;
   eventId: string;
@@ -92,6 +105,7 @@ export type OrderRawType = {
   shipping: ShippingType;
   status: OrderStatusType;
   email: string;
+  items: ItemOrderType[];
   itemsCount: number;
   total: number;
 };
