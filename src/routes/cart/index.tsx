@@ -21,7 +21,7 @@ import {
   cartItems,
   divider,
 } from "./cart.css";
-import { createCheckoutSession } from "../../server/createCheckoutSession";
+import { createCheckoutSession } from "../../services/createCheckoutSession";
 
 export default component$(() => {
   const cart = useContext(CartContext);

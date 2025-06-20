@@ -5,7 +5,7 @@ import {
   useSignal,
 } from "@builder.io/qwik";
 import { useLocation } from "@builder.io/qwik-city";
-import { getOrder } from "~/server/getOrder";
+import { getOrder } from "~/services/getOrder";
 import { type OrderRawType } from "~/shared/types";
 import { orderContainer } from "../order.css";
 

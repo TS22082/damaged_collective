@@ -10,8 +10,8 @@ import { productRow, productsContainer } from "./products.css";
 import type { StripeProductType } from "~/shared/types";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 import { btn, btnHover, btnOrange, btnPink } from "~/shared/styles.css";
-import { deleteProduct } from "../../../server/deleteProduct";
-import { getStripeItems } from "../../../server/getStripeItems";
+import { deleteProduct } from "../../../services/deleteProduct";
+import { getStripeItems } from "../../../services/getStripeItems";
 import {
   DELETE_CONFIRMATION_MESSAGE,
   RESOURCE_TIMEOUT,

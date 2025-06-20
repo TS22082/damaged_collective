@@ -1,7 +1,7 @@
 import { component$, Resource, useResource$ } from "@builder.io/qwik";
 import { useNavigate, type DocumentHead } from "@builder.io/qwik-city";
 import { orderContainer, ordersContainer } from "./admin.css";
-import { getOrders } from "~/server/getOrders";
+import { getOrders } from "~/services/getOrders";
 import { type OrderSummaryType } from "~/shared/types";
 
 export default component$(() => {
