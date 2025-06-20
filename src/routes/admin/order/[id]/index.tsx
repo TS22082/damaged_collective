@@ -17,7 +17,6 @@ export default component$(() => {
     try {
       const order = await getOrder(loc.params.id);
       orderSignal.value = order as OrderRawType;
-      console.log("Order signal", orderSignal.value);
     } catch (error) {
       console.log(error);
     }
