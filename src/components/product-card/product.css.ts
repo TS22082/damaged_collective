@@ -14,6 +14,7 @@ export const cardContainer = style({
   width: "25%",
   minWidth: "300px",
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",
+  padding: "20px",
   cursor: "pointer",
   border: "none",
   backgroundColor: "transparent",
