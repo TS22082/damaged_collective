@@ -1,5 +1,4 @@
 import { type RequestHandler } from "@builder.io/qwik-city";
-import { deleteProduct } from "~/services/deleteProduct";
 import { getStripeProductsById } from "~/services/getStripeProductsById";
 import { getDb } from "~/shared/mongodb";
 import { getStripeClient } from "~/shared/stripeClient";
@@ -68,31 +67,6 @@ export const onPost: RequestHandler = async (requestEvent) => {
           const products = await getStripeProductsById(
             productsItems.map((item) => item.productId)
           );
-
-          // const updatedItems = products?.map((product) => {
-          //   const quantityUpdated = Number.parseInt(product.metadata.qty) - 1;
-
-          //   const item = {
-          //     ...product,
-          //     metadata: {
-          //       ...product.metadata,
-          //       qty: quantityUpdated.toString(),
-          //     },
-          //   };
-
-          //   return item;
-          // });
-
-          // const stripeUpdates = updatedItems?.map((item) => {
-          //   if (Number.parseInt(item.metadata.qty) <= 0) {
-          //     return stripe.products.update(item.id, {
-          //       active: false,
-          //     });
-          //   }
-          //   return stripe.products.update(item.id, {
-          //     metadata: item.metadata,
-          //   });
-          // });
 
           const stripeUpdates = products?.map((product) => {
             const quantityUpdated = Number.parseInt(product.metadata.qty) - 1;
