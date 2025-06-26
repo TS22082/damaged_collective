@@ -1,4 +1,6 @@
 import { type RequestHandler } from "@builder.io/qwik-city";
+import { deleteProduct } from "~/services/deleteProduct";
+import { getStripeProductsById } from "~/services/getStripeProductsById";
 import { getDb } from "~/shared/mongodb";
 import { getStripeClient } from "~/shared/stripeClient";
 
@@ -56,6 +58,59 @@ export const onPost: RequestHandler = async (requestEvent) => {
             limit: 100,
           }
         );
+
+        const productsItems = lineItems.data.map((item: any) => ({
+          productId: item.price.product as string,
+          qty: item.quantity,
+        }));
+
+        try {
+          const products = await getStripeProductsById(
+            productsItems.map((item) => item.productId)
+          );
+
+          // const updatedItems = products?.map((product) => {
+          //   const quantityUpdated = Number.parseInt(product.metadata.qty) - 1;
+
+          //   const item = {
+          //     ...product,
+          //     metadata: {
+          //       ...product.metadata,
+          //       qty: quantityUpdated.toString(),
+          //     },
+          //   };
+
+          //   return item;
+          // });
+
+          // const stripeUpdates = updatedItems?.map((item) => {
+          //   if (Number.parseInt(item.metadata.qty) <= 0) {
+          //     return stripe.products.update(item.id, {
+          //       active: false,
+          //     });
+          //   }
+          //   return stripe.products.update(item.id, {
+          //     metadata: item.metadata,
+          //   });
+          // });
+
+          const stripeUpdates = products?.map((product) => {
+            const quantityUpdated = Number.parseInt(product.metadata.qty) - 1;
+
+            if (quantityUpdated <= 0) {
+              return stripe.products.update(product.id, {
+                active: false,
+              });
+            }
+            return stripe.products.update(product.id, {
+              metadata: { ...product.metadata, qty: quantityUpdated },
+            });
+          });
+
+          await Promise.all(stripeUpdates as unknown[]);
+        } catch (error) {
+          console.log("Error ==>", error);
+        }
 
         if (!session.shipping) {
           console.log("no shipping", session);

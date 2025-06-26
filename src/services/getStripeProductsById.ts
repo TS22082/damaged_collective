@@ -10,7 +10,6 @@ export const getStripeProductsById = server$(async function (ids: string[]) {
       ids,
     });
 
-    console.log(products);
     return products.data;
   } catch (error) {
     new ServerError(500, error);

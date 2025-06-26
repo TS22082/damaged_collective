@@ -21,11 +21,12 @@ export default component$(() => {
         value={stripeProductResource}
         onPending={() => <div>Loading...</div>}
         onRejected={(error) => <div>{error.message}</div>}
-        onResolved={(products) =>
-          products.map((product: StripeProductType) => (
+        onResolved={(products) => {
+          if (!products.length) return <h1>There are no products</h1>;
+          return products.map((product: StripeProductType) => (
             <ProductCard key={product.id} product={product} />
-          ))
-        }
+          ));
+        }}
       />
     </div>
   );
