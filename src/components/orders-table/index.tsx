@@ -32,7 +32,7 @@ export default component$<OrderTableProps>(({ orders }) => {
               {order.address.city}, {order.address.state}
             </td>
             <td>{order.itemsCount}</td>
-            <td>{order.total}</td>
+            <td>${order.total}</td>
             <td>{order.status}</td>
           </tr>
         ))}

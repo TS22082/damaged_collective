@@ -26,6 +26,9 @@ globalStyle(`${tableHeaderStyles} th`, {
 export const tableContentRowStyles = style({
   textAlign: "left",
   borderBottom: "1px solid #ccc",
+  ":hover": {
+    backgroundColor: "#f5f5f5",
+  },
 });
 
 globalStyle(`${tableContentRowStyles} td`, {
