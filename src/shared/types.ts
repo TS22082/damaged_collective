@@ -109,3 +109,7 @@ export type OrderRawType = {
   itemsCount: number;
   total: number;
 };
+
+export type OrderTableProps = {
+  orders: OrderSummaryType[];
+};

@@ -11,6 +11,7 @@ export default component$(() => {
       const stripeItems = await getStripeItems();
       return stripeItems;
     } catch (error) {
+      console.log("error", error);
       throw new ServerError(500, error);
     }
   });
@@ -20,7 +21,7 @@ export default component$(() => {
       <Resource
         value={stripeProductResource}
         onPending={() => <div>Loading...</div>}
-        onRejected={(error) => <div>{error.message}</div>}
+        onRejected={(error) => <div>Error: {error.message}</div>}
         onResolved={(products) => {
           if (!products.length) return <h1>There are no products</h1>;
           return products.map((product: StripeProductType) => (
