@@ -1,7 +1,11 @@
-import { component$, useContext } from "@builder.io/qwik";
-import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
-import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
-import { getStripeClient } from "~/shared/stripeClient";
+import {
+  component$,
+  Resource,
+  useContext,
+  useResource$,
+} from "@builder.io/qwik";
+import { useLocation, type DocumentHead } from "@builder.io/qwik-city";
+
 import {
   productContainer,
   productImage,
@@ -10,68 +14,73 @@ import {
 } from "../product.css";
 import { CartContext } from "~/contexts";
 import { btn, btnHover, btnPink } from "~/shared/styles.css";
-import convertMoney from "~/shared/utils/convertMoney";
-
-export const useProductLoader = routeLoader$(async (requestEvent) => {
-  try {
-    const stripe = getStripeClient(requestEvent.env.get("SECRET_STRIPE_KEY"));
-    const product = await stripe.products.retrieve(requestEvent.params.id);
-    const price = await stripe.prices.retrieve(product.default_price as string);
-
-    const formattedPrice = convertMoney(price.unit_amount as number);
-
-    return {
-      ...product,
-      formattedPrice,
-      unformattedPrice: price.unit_amount,
-    };
-  } catch (e) {
-    throw new ServerError(500, e);
-  }
-});
+import { getProductById } from "~/services/getProductById";
+import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
 
 export default component$(() => {
-  const product = useProductLoader();
   const cart = useContext(CartContext);
+  const location = useLocation();
+
+  const productResource = useResource$(async () => {
+    const productId = location.params.id;
+
+    try {
+      const productData = await getProductById(productId);
+      console.log("productData", productData);
+      return productData;
+    } catch (error) {
+      throw new ServerError(500, error);
+    }
+  });
 
   return (
-    <div class={productPageContainer}>
-      <div class={productContainer}>
-        <div
-          style={{ backgroundImage: `url(${product.value.images[0]})` }}
-          class={productImage}
-        />
-        <div class={productInfo}>
-          <h1 style={{ margin: 0 }}>{product.value.name}</h1>
-          <h2 style={{ margin: 0 }}>{product.value.description}</h2>
-          <p style={{ margin: 0 }}>{product.value.formattedPrice}</p>
-          <button
-            class={[btn, btnPink, btnHover]}
-            onClick$={() => {
-              cart.value = {
-                ...cart.value,
-                items: [
-                  ...cart.value.items,
-                  {
-                    price_id: (product.value.default_price as string) || "",
-                    product_id: product.value.id || "",
-                    name: product.value.name || "",
-                    image: product.value.images[0] || "",
-                    description: product.value.description || "",
-                    price: product.value.unformattedPrice || 0,
-                    qty: 1,
-                  },
-                ],
-              };
+    <Resource
+      value={productResource}
+      onPending={() => <div>Loading...</div>}
+      onRejected={(error) => <div>{error.message}</div>}
+      onResolved={(product) => (
+        <div class={productPageContainer}>
+          <div class={productContainer}>
+            <div
+              style={{ backgroundImage: `url(${product.images[0]})` }}
+              class={productImage}
+            />
+            <div class={productInfo}>
+              <h1 style={{ margin: 0 }}>{product.name}</h1>
+              <h2 style={{ margin: 0 }}>{product.description}</h2>
+              <p style={{ margin: 0 }}>{product.formattedPrice}</p>
+              <button
+                class={[btn, btnPink, btnHover]}
+                onClick$={() => {
+                  cart.value = {
+                    ...cart.value,
+                    items: [
+                      ...cart.value.items,
+                      {
+                        price_id: (product.default_price as string) || "",
+                        product_id: product.id || "",
+                        name: product.name || "",
+                        image: product.images[0] || "",
+                        description: product.description || "",
+                        price: product.unformattedPrice || 0,
+                        qty: 1,
+                      },
+                    ],
+                  };
 
-              localStorage.setItem("cart", JSON.stringify(cart.value.items));
-            }}
-          >
-            Add to Cart
-          </button>
+                  localStorage.setItem(
+                    "cart",
+                    JSON.stringify(cart.value.items)
+                  );
+                }}
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    />
   );
 });
 
