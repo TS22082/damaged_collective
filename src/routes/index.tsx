@@ -20,8 +20,8 @@ export default component$(() => {
     <div class="flex justify-center flex-wrap gap-2 mt-2">
       <Resource
         value={stripeProductResource}
-        onPending={() => <div>Loading...</div>}
-        onRejected={(error) => <div>Error: {error.message}</div>}
+        onPending={() => <p>Loading...</p>}
+        onRejected={(error) => <p>Error: {error.message}</p>}
         onResolved={(products) => {
           if (!products.length) return <h1>There are no products</h1>;
           return products.map((product: StripeProductType) => (

@@ -45,8 +45,8 @@ export default component$(() => {
     <div class={orderContainer}>
       <Resource
         value={orderResource}
-        onPending={() => <div>Loading...</div>}
-        onRejected={(error) => <div>{error.message}</div>}
+        onPending={() => <p>Loading...</p>}
+        onRejected={(error) => <p>{error.message}</p>}
         onResolved={() => (
           <div class={orderDetailsContainer}>
             <div class={contactAndShippingContainer}>

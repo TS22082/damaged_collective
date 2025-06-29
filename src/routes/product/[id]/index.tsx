@@ -33,12 +33,12 @@ export default component$(() => {
   });
 
   return (
-    <Resource
-      value={productResource}
-      onPending={() => <div>Loading...</div>}
-      onRejected={(error) => <div>{error.message}</div>}
-      onResolved={(product) => (
-        <div class={productPageContainer}>
+    <div class={productPageContainer}>
+      <Resource
+        value={productResource}
+        onPending={() => <p>Loading...</p>}
+        onRejected={(error) => <p>{error.message}</p>}
+        onResolved={(product) => (
           <div class={productContainer}>
             <div
               style={{ backgroundImage: `url(${product.images[0]})` }}
@@ -72,9 +72,9 @@ export default component$(() => {
               </button>
             </div>
           </div>
-        </div>
-      )}
-    />
+        )}
+      />
+    </div>
   );
 });
 

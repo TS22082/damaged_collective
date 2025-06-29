@@ -50,8 +50,8 @@ export default component$(() => {
     <div class={productsContainer}>
       <Resource
         value={stripeProductsResource}
-        onPending={() => <div>Loading...</div>}
-        onRejected={(error) => <div>{error.message}</div>}
+        onPending={() => <p>Loading...</p>}
+        onRejected={(error) => <p>{error.message}</p>}
         onResolved={() =>
           localStripeProductsSignal.value.map(
             ({ id, name, description, price }: StripeProductType) => (
