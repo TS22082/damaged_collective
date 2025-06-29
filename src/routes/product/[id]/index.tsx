@@ -26,7 +26,6 @@ export default component$(() => {
 
     try {
       const productData = await getProductById(productId);
-      console.log("productData", productData);
       return productData;
     } catch (error) {
       throw new ServerError(500, error);
@@ -51,28 +50,23 @@ export default component$(() => {
               <p style={{ margin: 0 }}>{product.formattedPrice}</p>
               <button
                 class={[btn, btnPink, btnHover]}
-                onClick$={() => {
-                  cart.value = {
+                onClick$={() =>
+                  (cart.value = {
                     ...cart.value,
                     items: [
                       ...cart.value.items,
                       {
-                        price_id: (product.default_price as string) || "",
-                        product_id: product.id || "",
-                        name: product.name || "",
-                        image: product.images[0] || "",
+                        price_id: product.default_price as string,
+                        product_id: product.id,
+                        name: product.name,
+                        image: product.images[0],
                         description: product.description || "",
                         price: product.unformattedPrice || 0,
                         qty: 1,
                       },
                     ],
-                  };
-
-                  localStorage.setItem(
-                    "cart",
-                    JSON.stringify(cart.value.items)
-                  );
-                }}
+                  })
+                }
               >
                 Add to Cart
               </button>
