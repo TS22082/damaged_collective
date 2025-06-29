@@ -1,3 +1,5 @@
+import Stripe from "stripe";
+
 export type ProductCardPropsType = {
   product: StripeProductType;
 };
@@ -15,6 +17,7 @@ export type StripeProductType = {
   price: StripePriceType;
   default_price: string;
   metadata: StripMetadataType;
+  unformattedPrice?: number;
 };
 
 export type NavItemType = {
@@ -112,4 +115,17 @@ export type OrderRawType = {
 
 export type OrderTableProps = {
   orders: OrderSummaryType[];
+};
+
+export type ProductSingleViewtType = {
+  formattedPrice: string;
+  unformattedPrice: number | null;
+  name: string;
+  images: string[];
+  description: string;
+  id: string;
+  object: "product";
+  active: boolean;
+  created: number;
+  default_price?: string | Stripe.Price | null;
 };

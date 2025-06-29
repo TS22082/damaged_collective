@@ -1,6 +1,8 @@
 import {
+  $,
   component$,
   Resource,
+  type Signal,
   useContext,
   useResource$,
 } from "@builder.io/qwik";
@@ -16,6 +18,8 @@ import { CartContext } from "~/contexts";
 import { btn, btnHover, btnPink } from "~/shared/styles.css";
 import { getProductById } from "~/services/getProductById";
 import { ServerError } from "@builder.io/qwik-city/middleware/request-handler";
+import type { ProductSingleViewtType } from "~/shared/types";
+import { addToCart } from "./addToCart";
 
 export default component$(() => {
   const cart = useContext(CartContext);
@@ -31,6 +35,24 @@ export default component$(() => {
       throw new ServerError(500, error);
     }
   });
+
+  // const addToCart = $((cart: Signal, product: ProductSingleViewtType) => {
+  //   cart.value = {
+  //     ...cart.value,
+  //     items: [
+  //       ...cart.value.items,
+  //       {
+  //         price_id: product.default_price as string,
+  //         product_id: product.id,
+  //         name: product.name,
+  //         image: product.images[0],
+  //         description: product.description || "",
+  //         price: product.unformattedPrice || 0,
+  //         qty: 1,
+  //       },
+  //     ],
+  //   };
+  // });
 
   return (
     <div class={productPageContainer}>
@@ -51,21 +73,7 @@ export default component$(() => {
               <button
                 class={[btn, btnPink, btnHover]}
                 onClick$={() =>
-                  (cart.value = {
-                    ...cart.value,
-                    items: [
-                      ...cart.value.items,
-                      {
-                        price_id: product.default_price as string,
-                        product_id: product.id,
-                        name: product.name,
-                        image: product.images[0],
-                        description: product.description || "",
-                        price: product.unformattedPrice || 0,
-                        qty: 1,
-                      },
-                    ],
-                  })
+                  addToCart(cart, product as ProductSingleViewtType)
                 }
               >
                 Add to Cart
