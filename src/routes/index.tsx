@@ -17,10 +17,10 @@ export default component$(() => {
   });
 
   return (
-    <div class="flex justify-center flex-wrap gap-2 mt-2">
+    <div class="flex justify-center flex-wrap gap-2">
       <Resource
         value={stripeProductResource}
-        onPending={() => <p>Loading...</p>}
+        onPending={() => <p style={{ marginTop: "20px" }}>Loading...</p>}
         onRejected={(error) => <p>Error: {error.message}</p>}
         onResolved={(products) => {
           if (!products.length) return <h1>There are no products</h1>;

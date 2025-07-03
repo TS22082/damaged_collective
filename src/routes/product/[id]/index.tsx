@@ -38,7 +38,7 @@ export default component$(() => {
     <div class={productPageContainer}>
       <Resource
         value={productResource}
-        onPending={() => <p>Loading...</p>}
+        onPending={() => <p style={{ marginTop: "20px" }}>Loading...</p>}
         onRejected={(error) => <p>{error.message}</p>}
         onResolved={(product) => (
           <div class={productContainer}>

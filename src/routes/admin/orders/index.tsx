@@ -19,7 +19,7 @@ export default component$(() => {
     <div class={ordersContainer}>
       <Resource
         value={orders}
-        onPending={() => <div>Loading...</div>}
+        onPending={() => <p style={{ marginTop: "20px" }}>Loading...</p>}
         onResolved={(orders) => <OrdersTable orders={orders} />}
       />
     </div>

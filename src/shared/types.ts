@@ -1,4 +1,4 @@
-import Stripe from "stripe";
+import type Stripe from "stripe";
 
 export type ProductCardPropsType = {
   product: StripeProductType;
@@ -67,7 +67,7 @@ export type AddressType = {
   state: string;
 };
 
-export type OrderStatusType = "open" | "shipped" | "delivered" | "cancelled";
+export type OrderStatusType = "open" | "shipped" | "complete" | "cancelled";
 
 export type OrderSummaryType = {
   _id: string;

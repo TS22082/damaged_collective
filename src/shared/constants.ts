@@ -43,3 +43,10 @@ export const ICON_SIZE = {
   height: "20px",
   width: "20px",
 };
+
+export const SHIPPING_STATUS = {
+  OPEN: "open",
+  SHIPPED: "shipped",
+  COMPLETE: "complete",
+  CANCELLED: "cancelled",
+};

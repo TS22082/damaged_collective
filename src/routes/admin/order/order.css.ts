@@ -53,3 +53,9 @@ export const headerTextStyle = style({
 export const itemTextStyle = style({
   padding: "10px 5px",
 });
+
+export const formContainer = style({
+  marginTop: "20px",
+  display: "flex",
+  gap: 10,
+});
