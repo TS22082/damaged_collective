@@ -26,6 +26,12 @@ export const contactAndShippingContainer = style({
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-between",
+  "@media": {
+    "screen and (max-width: 600px)": {
+      flexDirection: "column",
+      gap: 20,
+    },
+  },
 });
 
 export const orderItemTable = style({
