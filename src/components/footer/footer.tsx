@@ -23,7 +23,7 @@ export default component$(() => {
           </div>
         </div>
       </div>
-      <p>© 2023 The Damaged Collective. All rights reserved.</p>
+      <p>© 2025 The Damaged Collective. All rights reserved.</p>
     </footer>
   );
 });
