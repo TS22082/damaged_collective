@@ -29,7 +29,6 @@ export const updateOrderStatus = server$(async function (
 
     return updateResponse;
   } catch (error) {
-    console.log("server: ERROR", error);
     return new ServerError(500, error);
   }
 });
