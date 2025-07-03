@@ -40,7 +40,6 @@ export default component$(() => {
       const order = await getOrder(orderId);
       orderSignal.value = order as OrderRawType;
     } catch (error) {
-      console.log("error ==>", error);
       throw new Error("Cannot get order");
     }
   });
@@ -62,11 +61,9 @@ export default component$(() => {
         } as OrderRawType;
       }
     } catch (error) {
-      console.error("uh oh", error);
+      throw new Error("cannot change status");
     }
   });
-
-  console.log("order status", orderSignal.value?.status);
 
   return (
     <div class={orderContainer}>

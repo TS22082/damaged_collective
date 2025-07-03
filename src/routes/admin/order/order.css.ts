@@ -55,7 +55,7 @@ export const itemTextStyle = style({
 });
 
 export const formContainer = style({
-  marginTop: "20px",
+  marginTop: "40px",
   display: "flex",
   gap: 10,
 });
